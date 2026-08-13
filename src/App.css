@@ -1,0 +1,524 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Saira:wght@400;500;600;700;800&display=swap');
+
+html { scroll-behavior: smooth; }
+
+/* Fullscreen — anulează marginile/limitările implicite (template Vite: index.css) */
+html, body { margin: 0; padding: 0; width: 100%; min-height: 100%; background: #fff; }
+body { display: block; place-items: initial; }
+#root { max-width: none; width: 100%; margin: 0; padding: 0; display: block; text-align: left; }
+
+/* ============================================================
+   HOSMAN ACCESSORIES — paletă: ALB + verde #628131
+   Doar nuanțe ale aceluiași verde pentru contrast (mobile-first)
+   ============================================================ */
+
+.hosman {
+  --green: #628131;      /* verdele principal */
+  --green-d: #4B6325;    /* nuanță mai închisă (text/adâncime) */
+  --green-dd: #374A1A;   /* cea mai închisă (gradient/hero) */
+  --ink: #3C4D22;        /* text verde închis */
+  --muted: #72805B;      /* text secundar, verde-gri */
+  --soft: #EDF1E4;       /* fundal verde foarte deschis */
+  --paper: #F6F8F1;      /* aproape alb, ușor verzui */
+  --card: #FFFFFF;
+  --line: rgba(98, 129, 49, 0.16);
+
+  font-family: 'Saira', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+.hosman *, .hosman *::before, .hosman *::after { box-sizing: border-box; }
+.hosman h1, .hosman h2, .hosman h3 { margin: 0; font-weight: 800; letter-spacing: -0.01em; line-height: 1.08; }
+.hosman p { margin: 0; }
+.hosman a { text-decoration: none; }
+
+.h-wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+.eyebrow {
+  color: var(--green);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+
+/* ---------- CADRU VERDE SUS (header + hero) ---------- */
+.topwrap {
+  background: var(--green);
+  padding: 10px 10px 0;
+}
+
+/* ---------- HEADER ---------- */
+.site-header {
+  position: sticky; top: 10px; z-index: 60;
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px 20px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+  box-shadow: 0 6px 24px -14px rgba(0, 0, 0, 0.35);
+}
+.brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.site-header .brand-logo { justify-self: start; }
+.site-header .brand-script { justify-self: center; text-align: center; }
+.brand-script {
+  font-family: 'Kaushan Script', cursive;
+  color: var(--green);
+  font-size: clamp(26px, 6.5vw, 42px);
+  line-height: 1.05;
+  font-weight: 400;
+}
+.brand-logo { height: 90px; width: auto; max-width: 240px; display: block; object-fit: contain; border-radius: 10px; }
+
+/* ---------- COMUTATOR DE LIMBĂ ---------- */
+.site-header .lang-switch { justify-self: end; display: flex; gap: 6px; align-items: center; }
+.pp-topbar-inner .lang-switch { justify-self: end; display: flex; gap: 6px; align-items: center; }
+.lang-btn {
+  border: 1px solid var(--line); background: var(--card); color: var(--green-d);
+  font-family: 'Saira', sans-serif; font-weight: 700; font-size: 13px; line-height: 1;
+  padding: 8px 11px; border-radius: 999px; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.lang-btn:hover { background: var(--soft); }
+.lang-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ascunde complet interfața și bara de sus Google Translate */
+#google_translate_element { display: none !important; }
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+iframe.skiptranslate {
+  display: none !important; visibility: hidden !important; height: 0 !important;
+}
+.goog-tooltip, #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+.goog-te-gadget { height: 0 !important; overflow: hidden !important; }
+body { top: 0 !important; position: static !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+.brand-name { font-weight: 800; font-size: 20px; color: var(--green-d); line-height: 1; }
+.brand-tag { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); margin-top: 3px; }
+
+.nav { display: none; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px 20px; flex: 1; }
+.nav a { color: var(--green-d); font-weight: 600; font-size: 15px; display: inline-flex; align-items: center; gap: 4px; transition: color .15s; }
+.nav a.long { max-width: 260px; line-height: 1.15; }
+.nav a:hover { color: var(--green); }
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 44px; height: 44px; border-radius: 12px; border: none; cursor: pointer;
+  background: var(--soft); color: var(--green-d); display: grid; place-items: center;
+  transition: background .15s;
+}
+.icon-btn:active { background: #dfe6d2; }
+.menu-btn { display: grid; }
+
+/* ---------- MENIU MOBIL ---------- */
+.mobile-menu {
+  position: fixed; inset: 150px 10px auto 10px; z-index: 58;
+  background: var(--card); border-radius: 20px; padding: 10px;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.4);
+  display: flex; flex-direction: column;
+  transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.mobile-menu a {
+  color: var(--green-d); font-weight: 700; font-size: 19px;
+  padding: 14px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+}
+.mobile-menu a:active { background: var(--soft); }
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  border-radius: 20px; margin-top: 10px;
+  min-height: 460px;
+  display: flex; align-items: flex-end;
+  background: var(--green-dd);
+}
+.hero-slides { position: absolute; inset: 0; z-index: 0; }
+.hero-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(30, 45, 15, 0.25) 0%, rgba(25, 40, 12, 0.55) 55%, rgba(18, 30, 10, 0.82) 100%);
+}
+.hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 42px; height: 42px; border-radius: 999px; border: none; cursor: pointer;
+  background: rgba(255, 255, 255, 0.85); color: var(--green-d);
+  display: grid; place-items: center; transition: background .15s;
+}
+.hero-arrow:hover { background: #fff; }
+.hero-arrow.left { left: 12px; }
+.hero-arrow.right { right: 12px; }
+.hero-dots { position: absolute; z-index: 3; bottom: 18px; right: 20px; display: flex; gap: 8px; }
+.hero-dots button { width: 10px; height: 10px; padding: 0; border: none; border-radius: 999px; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all .2s; }
+.hero-dots button.active { background: #fff; width: 26px; }
+.hero-inner { position: relative; z-index: 2; padding: 32px 22px 42px; max-width: 640px; }
+.hero-title {
+  color: #fff; font-weight: 800; text-transform: lowercase;
+  font-size: clamp(40px, 12vw, 84px); line-height: 0.98; letter-spacing: -0.02em;
+}
+.hero-sub { color: rgba(255, 255, 255, 0.94); font-size: clamp(16px, 4.5vw, 22px); font-weight: 500; margin-top: 18px; max-width: 460px; }
+.hero-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 24px;
+  background: #fff; color: var(--green-d);
+  font-weight: 700; font-size: 16px; letter-spacing: 0.01em;
+  padding: 15px 30px; border-radius: 999px;
+  box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.45);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.hero-btn:hover { background: var(--soft); transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5); }
+.hero-btn:active { transform: translateY(0); }
+
+/* ---------- PRODUSELE PE SCURT (verde) ---------- */
+.glance { background: var(--green); padding: 56px 0 64px; }
+.glance .eyebrow { color: #fff; opacity: 0.85; margin-bottom: 12px; display: block; }
+.glance h2 { color: #fff; font-size: clamp(28px, 8vw, 46px); max-width: 620px; }
+.glance-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 34px; }
+.cat-card {
+  background: var(--card); border-radius: 22px; padding: 26px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.cat-icon { width: 54px; height: 54px; color: var(--green); display: grid; place-items: center; }
+.cat-title { color: var(--green-d); font-size: 26px; }
+.cat-card.big .cat-title { font-size: 30px; }
+.cat-desc { color: var(--muted); font-size: 15px; font-weight: 500; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.pill { background: var(--green); color: #fff; font-weight: 700; font-size: 13px; padding: 7px 14px; border-radius: 999px; }
+.cat-card.big { gap: 16px; }
+.cat-card.big .cat-desc { font-size: 16px; }
+
+/* ---------- COLABORATORI (bandă în mișcare) ---------- */
+.partners { background: var(--card); padding: 52px 0 60px; overflow: hidden; }
+.partners .eyebrow { display: block; margin-bottom: 8px; }
+.hosman .partners-title { color: var(--green-d); font-size: clamp(24px, 6vw, 38px); margin-top: 40px; margin-bottom: 24px; text-align: center; }
+
+.hosman .marquee { padding-top: 50px; }
+.marquee {
+  position: relative; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.marquee-track {
+  display: flex; width: max-content;
+  animation: marquee 26s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.partner {
+  flex: 0 0 auto; margin-right: 26px;
+  height: 96px; min-width: 210px;
+  display: grid; place-items: center; padding: 0 30px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  text-decoration: none;
+}
+.partner-logo { max-height: 86px; max-width: 250px; width: auto; object-fit: contain; display: block; }
+.partner-name { font-family: 'Saira', sans-serif; font-weight: 700; font-size: 20px; color: var(--green-d); white-space: nowrap; text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ---------- CATALOG ---------- */
+.catalog { background: var(--paper); padding: 40px 0 64px; scroll-margin-top: 96px; }
+.catalog .eyebrow { display: block; margin-bottom: 8px; }
+.hosman .catalog-title { color: var(--green-d); font-size: clamp(24px, 6vw, 38px); margin-top: 0; margin-bottom: 28px; text-align: center; }
+
+.catalog-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+
+/* spațiu între categoriile din catalog */
+.catalog-cat + .catalog-cat { margin-top: 48px; }
+
+/* categorie cu puține produse (sub 3) -> cardurile se centrează,
+   păstrând aceeași lățime ca în grila de 3 coloane */
+.catalog-grid--center { display: flex; flex-wrap: wrap; justify-content: center; }
+.catalog-grid--center .product { flex: 1 1 280px; max-width: 384px; }
+
+/* categorie cu afișare câte 2 pe rând, centrate */
+.catalog-grid--2col {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  max-width: 800px; margin-left: auto; margin-right: auto;
+}
+.catalog-grid--2col .product { flex: 1 1 300px; max-width: 384px; }
+.product {
+  position: relative;
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 14px 14px 0;
+  display: flex; flex-direction: column;
+  box-shadow: 0 6px 20px -16px rgba(20, 40, 28, 0.5);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.product:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -20px rgba(20, 40, 28, 0.45); }
+
+.product { position: relative; }
+.product-media { aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: var(--soft); }
+.product-media img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.45); }
+
+/* Produs cu poză pe fundal alb (ex. echipamente): se vede ÎNTREG,
+   fără zoom-crop. Se activează cu fit: "contain" în PRODUCT_INFO. */
+.product-media.contain { background: #fff; }
+.product-media.contain img { object-fit: contain; transform: none; padding: 10px; }
+
+.product-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--soft), #dbe4cf); }
+
+.product-body { padding: 18px 6px 30px; display: flex; flex-direction: column; gap: 10px; }
+.product-name { color: var(--ink); font-size: 21px; font-weight: 800; line-height: 1.15; }
+.product-desc { color: var(--muted); font-size: 15px; font-weight: 500; line-height: 1.45; max-width: 42ch; }
+.product-price { margin-top: 2px; color: var(--green); font-weight: 800; font-size: 18px; }
+
+.catalog-empty { color: var(--muted); font-size: 15px; font-weight: 500; }
+.catalog-empty code { background: var(--soft); padding: 2px 7px; border-radius: 6px; font-family: monospace; }
+
+/* ---------- FOOTER ---------- */
+.site-footer { background: var(--paper); padding: 44px 0 30px; }
+.footer-inner { background: var(--card); border-radius: 24px; padding: 30px 24px; box-shadow: 0 6px 24px -16px rgba(0, 0, 0, 0.3); }
+.footer-top { display: flex; flex-direction: column; gap: 24px; }
+.footer-brand .brand-name { font-size: 26px; }
+.footer-brand .brand-logo { height: 50px; }
+.footer-brand p { color: var(--muted); font-size: 14px; font-weight: 500; margin-top: 10px; max-width: 260px; }
+.footer-nav { display: flex; flex-wrap: wrap; gap: 12px 22px; }
+.footer-nav a { color: var(--green-d); font-weight: 600; font-size: 15px; }
+.footer-nav a:hover { color: var(--green); }
+.footer-bottom {
+  display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+}
+.footer-legal { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.footer-legal a { color: var(--green-d); font-weight: 600; }
+.footer-social { display: inline-flex; align-items: center; gap: 10px; }
+.footer-social a { width: 38px; height: 38px; border-radius: 10px; background: var(--green); color: #fff; display: grid; place-items: center; }
+
+/* =================================================================
+   TABLETĂ ȘI DESKTOP
+   ================================================================= */
+@media (min-width: 720px) {
+  .h-wrap { padding: 0 24px; }
+  .catalog-grid { grid-template-columns: 1fr 1fr; gap: 22px; }
+  .topwrap { padding: 14px 14px 0; }
+  .site-header { padding: 28px 30px; border-radius: 26px; }
+  .hero { min-height: 560px; border-radius: 24px; }
+  .hero-inner { padding: 44px 44px 54px; }
+  .glance-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "big small1" "big small2";
+    gap: 20px;
+  }
+  .cat-card.big { grid-area: big; justify-content: flex-start; }
+  .cat-card.s1 { grid-area: small1; }
+  .cat-card.s2 { grid-area: small2; }
+  .cat-card.big .cat-icon { margin-bottom: 60px; }
+  .footer-top { flex-direction: row; align-items: flex-start; justify-content: space-between; }
+  .footer-bottom { flex-direction: row; align-items: center; justify-content: center; }
+}
+@media (min-width: 980px) {
+  .menu-btn { display: none; }
+  .nav { display: flex; }
+  .glance { padding: 80px 0 90px; }
+  .partners { padding: 76px 0 84px; }
+  .catalog { padding: 64px 0 90px; }
+  .catalog-grid { grid-template-columns: repeat(3, 1fr); }
+  .hosman .partners-title { margin-top: 40px; margin-bottom: 24px; }
+  .hosman .marquee { padding-top: 90px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu { transition: none; }
+}
+
+/* =================================================================
+   PAGINA DE PRODUS
+   ================================================================= */
+.product { cursor: pointer; }
+.product:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+.product-page { background: var(--card); }
+
+.pp-topbar { background: var(--card); padding: 16px 0; border-bottom: 1px solid var(--line); }
+.pp-topbar .h-wrap { max-width: none; margin: 0; padding: 0 16px; }
+.pp-topbar-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+.pp-back { justify-self: start; }
+.pp-brand { justify-self: center; display: inline-flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; padding: 0; }
+.pp-back {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: none; border: none; cursor: pointer;
+  color: var(--green-d); font-family: 'Saira', sans-serif; font-weight: 700; font-size: 18px;
+  padding: 6px 4px;
+}
+.pp-back:hover { color: var(--green); }
+
+/* HERO */
+.pp-hero { position: relative; background: var(--soft); overflow: hidden; }
+.pp-hero-inner { position: relative; z-index: 2; padding: 34px 16px 40px; }
+.pp-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 18px; }
+.pp-crumb-link { background: none; border: none; cursor: pointer; color: var(--muted); font: inherit; padding: 0; }
+.pp-crumb-link:hover { color: var(--green); }
+.pp-crumb-current { color: var(--green-d); }
+.pp-title { color: var(--ink); font-size: clamp(30px, 9vw, 56px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
+.pp-intro { color: var(--ink); font-size: clamp(15px, 4.4vw, 19px); font-weight: 500; margin-top: 16px; max-width: 620px; line-height: 1.5; }
+.pp-hero-img {
+  height: 220px; margin: 0 0 -1px; background: var(--green-dd);
+  background-size: cover; background-position: center;
+}
+
+/* AVANTAJE */
+.pp-highlights { background: var(--soft); padding: 0 0 40px; }
+.pp-highlights-inner { display: flex; flex-direction: column; gap: 22px; padding-top: 8px; }
+.pp-roll { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+.pp-roll img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pp-roll-show { position: relative; width: 100%; aspect-ratio: 16 / 10; }
+.pp-roll-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; border: 0; }
+.pp-roll-img:not(.active) { pointer-events: none; }
+.pp-roll-img.active { opacity: 1; }
+
+/* Poză de produs pe fundal alb: se vede ÎNTREAGĂ în slideshow-ul mare,
+   fără crop. Se activează cu fit: "contain" în PRODUCT_INFO. */
+.pp-roll-show.contain { background: #fff; }
+.pp-roll-show.contain .pp-roll-img { object-fit: contain; }
+.pp-roll-dots { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 2; display: flex; gap: 8px; }
+.pp-roll-dots button { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; background: rgba(60,77,34,.35); cursor: pointer; transition: all .2s; }
+.pp-roll-dots button.active { background: var(--green); width: 22px; }
+.pp-roll-sound {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  width: 40px; height: 40px; border-radius: 999px; border: none; cursor: pointer;
+  background: rgba(255,255,255,0.85); color: var(--green-d);
+  display: grid; place-items: center; transition: background .15s, transform .15s;
+}
+.pp-roll-sound:hover { background: #fff; transform: translateY(-1px); }
+.pp-roll-ph { width: 100%; aspect-ratio: 16 / 10; background: linear-gradient(135deg, #cdd8c0, #b7c6a6); }
+.pp-features {
+  list-style: none; margin: 0; padding: 24px;
+  background: var(--card); border-radius: 18px; border: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 18px;
+}
+.pp-features li { display: flex; align-items: center; gap: 14px; color: var(--green-d); font-weight: 700; font-size: 17px; }
+.pp-feature-ic { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 999px; background: var(--soft); color: var(--green); display: grid; place-items: center; }
+
+/* coloana din dreapta: caseta cu bife + eticheta MADE IN */
+.pp-side { display: flex; flex-direction: column; gap: 16px; }
+.pp-madein {
+  align-self: center;
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--card); border: 1px solid var(--line);
+  padding: 10px 18px; border-radius: 999px;
+  box-shadow: 0 6px 18px -12px rgba(20, 40, 28, 0.5);
+}
+.pp-flag { width: 36px; height: auto; border-radius: 4px; display: block; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.pp-madein-text { display: flex; flex-direction: column; line-height: 1.12; }
+.pp-madein-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--green); }
+.pp-madein-country { font-size: 17px; font-weight: 800; color: var(--green-d); }
+
+/* TITLU EVIDENȚIAT */
+.pp-cover { background: var(--card); padding: 44px 0 8px; }
+.pp-cover-title { color: var(--ink); font-size: clamp(22px, 6.5vw, 34px); font-weight: 800; line-height: 1.12; }
+.pp-cover-title mark { background: #F6D65B; color: var(--ink); padding: 0 6px; border-radius: 3px; }
+.pp-cover-text { color: var(--muted); font-weight: 500; font-size: clamp(15px, 4.2vw, 17px); line-height: 1.6; margin-top: 16px; max-width: 780px; }
+
+/* BLOCURI GENERICE */
+.pp-block { background: var(--card); padding: 30px 0; }
+.pp-h3 { color: var(--ink); font-size: clamp(20px, 5.5vw, 26px); font-weight: 800; margin-bottom: 18px; }
+
+/* APLICAȚII */
+.pp-apps-box { background: var(--soft); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 18px; }
+.pp-app { display: flex; align-items: center; gap: 14px; color: var(--green-d); font-weight: 700; font-size: 17px; }
+.pp-app-ic { color: var(--green); display: grid; place-items: center; }
+
+/* SPECIFICAȚII */
+.pp-specs { width: 100%; border-collapse: collapse; border-left: 3px solid var(--green); }
+.pp-specs tr:nth-child(even) { background: var(--soft); }
+.pp-specs th, .pp-specs td { text-align: left; padding: 13px 16px; font-size: 15px; vertical-align: top; }
+.pp-specs th { color: var(--green-d); font-weight: 700; width: 42%; }
+.pp-specs td { color: var(--muted); font-weight: 500; }
+.pp-note { color: var(--muted); font-size: 13px; margin-top: 12px; }
+
+/* tabel dimensiuni disponibile */
+.pp-sizes-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
+.pp-sizes { width: 100%; border-collapse: collapse; min-width: 520px; }
+.pp-sizes thead th { text-align: left; background: var(--green); color: #fff; font-weight: 700; font-size: 14px; padding: 13px 16px; white-space: nowrap; }
+.pp-sizes tbody td { padding: 13px 16px; font-size: 14px; color: var(--ink); border-top: 1px solid var(--line); white-space: nowrap; }
+.pp-sizes tbody tr:nth-child(even) { background: var(--soft); }
+
+/* liste beneficii / avantaje */
+.pp-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.pp-list li { display: flex; align-items: flex-start; gap: 12px; color: var(--ink); font-weight: 500; font-size: 16px; line-height: 1.5; }
+.pp-dot { flex: 0 0 auto; width: 9px; height: 9px; margin-top: 8px; border-radius: 999px; background: var(--green); }
+.pp-list-note { color: var(--muted); font-style: italic; font-size: 14px; margin-top: 16px; }
+
+/* FLYER */
+.pp-flyer { padding: 8px 16px 4px; }
+.pp-flyer a { display: inline-flex; align-items: center; gap: 10px; color: var(--green-d); font-weight: 700; font-size: 15px; }
+.pp-flyer a:hover { color: var(--green); }
+
+/* FORMULAR */
+.pp-contact { background: var(--card); padding: 34px 0 40px; }
+.pp-form { display: flex; flex-direction: column; gap: 14px; max-width: 640px; }
+.pp-form-row { display: flex; flex-direction: column; gap: 14px; }
+.pp-form input, .pp-form textarea {
+  width: 100%; font-family: 'Saira', sans-serif; font-size: 15px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+  outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.pp-form input:focus, .pp-form textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(98,129,49,0.15); }
+.pp-form textarea { resize: vertical; }
+.pp-send {
+  align-self: flex-start; background: var(--green); color: #fff; border: none; cursor: pointer;
+  font-family: 'Saira', sans-serif; font-weight: 800; letter-spacing: 0.04em; font-size: 15px;
+  padding: 14px 34px; border-radius: 999px; transition: background .15s, transform .15s;
+}
+.pp-send:hover { background: var(--green-d); transform: translateY(-1px); }
+
+/* GALERIE */
+.pp-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pp-gal { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.pp-gal img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 1 / 1; }
+
+/* --- tabletă / desktop pentru pagina de produs --- */
+@media (min-width: 760px) {
+  .pp-hero-inner { padding: 44px 24px 60px; max-width: 1200px; }
+  .pp-highlights-inner { flex-direction: row; align-items: flex-start; }
+  .pp-roll { flex: 1 1 55%; }
+  .pp-side { flex: 1 1 45%; margin-top: 24px; }
+  .pp-features { position: relative; z-index: 3; box-shadow: 0 20px 44px -26px rgba(20,40,28,.5); }
+  .pp-form-row { flex-direction: row; }
+  .pp-gallery { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Diagonala verde apare doar pe ecrane late, împinsă spre dreapta,
+   ca textul să rămână mereu pe zona deschisă și lizibil. */
+@media (min-width: 1100px) {
+  .pp-hero-img {
+    position: absolute; top: 0; right: 0; height: 100%; width: 50%; margin: 0;
+    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .pp-title { max-width: 620px; }
+  .pp-intro { max-width: 560px; }
+}
+
+/* =================================================================
+   BUTON FLOTANT „CONTACT US" (dreapta-jos, pe tot site-ul)
+   ================================================================= */
+.contact-fab {
+  position: fixed; right: 20px; bottom: 20px; z-index: 200;
+  display: inline-flex; align-items: center; gap: 12px;
+  background: #628131; color: #ffffff;
+  padding: 12px 22px; border-radius: 999px;
+  box-shadow: 0 12px 30px -10px rgba(20, 40, 28, 0.6);
+  font-family: 'Saira', sans-serif; text-decoration: none;
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.contact-fab:hover { background: #4B6325; transform: translateY(-2px); box-shadow: 0 16px 34px -10px rgba(20, 40, 28, 0.65); }
+.contact-fab-ic { flex: 0 0 auto; color: #ffffff; }
+.contact-fab-text { display: flex; flex-direction: column; line-height: 1.12; color: #ffffff; }
+.contact-fab-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; color: #ffffff; }
+.contact-fab-phone { font-size: 15px; font-weight: 800; white-space: nowrap; color: #ffffff; }
+
+@media (max-width: 480px) {
+  .contact-fab { right: 14px; bottom: 14px; padding: 11px 18px; gap: 10px; }
+  .contact-fab-phone { font-size: 14px; }
+}
