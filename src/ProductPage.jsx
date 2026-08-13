@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Check, Diamond, FileText, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, Check, Diamond, FileText, Volume2, VolumeX, ChevronLeft, ChevronRight } from "lucide-react";
 import "./App.css";
 
 /* Slideshow pentru imaginea produsului (poze + video, crossfade + puncte).
@@ -25,6 +25,8 @@ function RollSlideshow({ items, alt, fit, sound = true }) {
   }, [soundOn, i, items.length]);
 
   if (items.length === 0) return <div className="pp-roll-ph" />;
+
+  const go = (dir) => setI((p) => (p + dir + items.length) % items.length);
 
   return (
     <div className={`pp-roll-show${fit === "contain" ? " contain" : ""}`}>
@@ -60,6 +62,27 @@ function RollSlideshow({ items, alt, fit, sound = true }) {
             className={`pp-roll-img ${idx === i ? "active" : ""}`}
           />
         )
+      )}
+
+      {items.length > 1 && (
+        <>
+          <button
+            type="button"
+            className="pp-roll-arrow left"
+            aria-label="Imaginea anterioară"
+            onClick={() => go(-1)}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            className="pp-roll-arrow right"
+            aria-label="Imaginea următoare"
+            onClick={() => go(1)}
+          >
+            <ChevronRight size={20} />
+          </button>
+        </>
       )}
 
       {sound && items[i]?.video && (
