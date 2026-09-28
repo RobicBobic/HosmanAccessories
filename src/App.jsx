@@ -260,6 +260,7 @@ const PRODUCT_INFO = {
      ============================================================ */
   5: {
     name: "Ventilator pentru circulația aerului în sere",
+    origin: { country: "China", code: "cn" },
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Ventilator profesional pentru sere, cu structură rezistentă și palete din aluminiu, conceput pentru circulația eficientă a aerului și menținerea unui climat uniform, favorabil dezvoltării plantelor.",
     // --- pagina de detalii ---
@@ -288,6 +289,7 @@ const PRODUCT_INFO = {
   },
   6: {
     name: "Tavă de irigare prin inundare și drenaj",
+    origin: { country: "China", code: "cn" },
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Tavă de irigare Ebb & Flow pentru sere, concepută pentru inundarea și drenarea controlată a substratului, asigurând rădăcinilor un aport optim de apă, nutrienți și oxigen.",
     // --- pagina de detalii ---
@@ -395,6 +397,38 @@ const PRODUCT_INFO = {
     ],
     // flyer: "/flyere/produs8.pdf",
   },
+  9: {
+    name: "Găleată pătrată pentru transportul florilor",
+    origin: { country: "China", code: "cn" },
+    fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
+    desc: "Găleată pătrată din polipropilenă virgină, de tipul celor folosite la licitațiile de flori din Olanda, pentru transportul și păstrarea florilor tăiate în apă.",
+    // --- pagina de detalii ---
+    intro: "Găleată (container) pătrată pentru transportul și depozitarea florilor tăiate, de tipul celor folosite la licitațiile de flori din Olanda. Este fabricată din polipropilenă virgină, are baza cu picioare, care o ridică de la sol, și pereți înalți de 38 cm, astfel încât florile stau drepte, în apă, pe tot drumul de la seră până la client. Este disponibilă în culoarea bej sau albă, iar varianta albă poate fi livrată și cu extensie, pentru flori cu tija mai lungă.",
+    features: ["Pentru flori tăiate", "Polipropilenă virgină", "Extensie opțională", "40 × 33 × 38 cm"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+    // heroPos: "50% 30%", // opțional: ce parte din poza p9-hero se vede
+    // sound: false,       // videoclipurile din slideshow rulează fără sunet
+    // youtube: { 4: "https://youtu.be/XXXXXXXXXXX" }, // slide video YouTube (nr = poziția în slideshow)
+    advantages: [
+      "Păstrează florile tăiate drepte și în apă pe toată durata transportului",
+      "Format pătrat, de tipul celor folosite la licitațiile de flori din Olanda",
+      "Din polipropilenă virgină, rezistentă și ușor de curățat",
+      "Baza cu picioare ridică găleata de la sol și îi dă stabilitate",
+      "Forma se îngustează spre partea de sus, astfel încât gălețile goale intră una în alta și ocupă mai puțin spațiu",
+      "Varianta albă poate fi livrată cu extensie, pentru flori cu tija lungă",
+      "Potrivită pentru sere, depozite de flori, florării și comerț cu flori",
+    ],
+    specs: [
+      { k: "Tip", v: "Găleată pătrată pentru flori (tip licitație)" },
+      { k: "Material", v: "Polipropilenă virgină" },
+      { k: "Culoare", v: "Bej / Alb" },
+      { k: "Dimensiuni bază", v: "400 × 330 mm" },
+      { k: "Dimensiuni sus", v: "345 × 260 mm" },
+      { k: "Înălțime", v: "380 mm" },
+      { k: "Extensie", v: "Opțională (varianta albă)" },
+    ],
+    // flyer: "/flyere/produs9.pdf",
+  },
 };
 
 /* Imagini + VIDEO pentru PAGINA de produs - se încarcă tot automat din:
@@ -473,7 +507,7 @@ const DEMO_PRODUCTS = [
 const CATEGORIES = [
   { title: "Folii și plase pentru plante", nums: [1, 2] },
   { title: "Ventilatoare și pulverizatoare pentru seră", nums: [8, 3, 5, 4], cols: 2 },
-  { title: "Tăvi de irigare și lădițe", nums: [6, 7] },
+  { title: "Tăvi de irigare și lădițe", nums: [6, 7, 9] },
 ];
 
 export default function App() {
