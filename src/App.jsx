@@ -415,7 +415,6 @@ const PRODUCT_INFO = {
       "Din polipropilenă virgină, rezistentă și ușor de curățat",
       "Baza cu picioare ridică găleata de la sol și îi dă stabilitate",
       "Forma se îngustează spre partea de sus, astfel încât gălețile goale intră una în alta și ocupă mai puțin spațiu",
-      "Varianta albă poate fi livrată cu extensie, pentru flori cu tija lungă",
       "Potrivită pentru sere, depozite de flori, florării și comerț cu flori",
     ],
     specs: [
