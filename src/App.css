@@ -548,15 +548,18 @@ body { top: 0 !important; position: static !important; }
 .pp-back { white-space: nowrap; }
 @media (max-width: 719px) {
   /* header principal: totul pe un singur rând (logo | nume | limbi) */
+  /* coloanele din stânga și din dreapta au aceeași lățime,
+     ca numele din mijloc să fie fix în centrul headerului */
   .site-header {
-    grid-template-columns: auto 1fr auto;
-    column-gap: 10px; padding: 14px 14px;
+    grid-template-columns: 96px minmax(0, 1fr) 96px;
+    column-gap: 4px; padding: 14px 14px;
   }
-  .site-header .brand-logo { height: 52px; max-width: 64px; }
+  .site-header .brand-logo { justify-self: start; height: 52px; max-width: 64px; }
   .site-header .brand-script {
-    font-size: clamp(19px, 5.6vw, 26px);
-    line-height: 1.05; text-align: center;
+    justify-self: center; text-align: center;
+    font-size: clamp(18px, 5.4vw, 24px); line-height: 1.05;
   }
+  .site-header .lang-switch { justify-self: end; }
 
   /* limbile: un singur „buton” compact, cu cele 3 opțiuni în interior */
   .lang-switch {
@@ -566,7 +569,7 @@ body { top: 0 !important; position: static !important; }
   }
   .lang-btn {
     border: none; background: transparent;
-    font-size: 11.5px; padding: 7px 8px; min-width: 30px;
+    font-size: 11.5px; padding: 7px 4px; min-width: 28px;
   }
   .lang-btn.active { background: var(--green); color: #fff; }
 
