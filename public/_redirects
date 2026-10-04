@@ -1,0 +1,12 @@
+# Adresele site-ului vechi (încă apar în Google) -> pagina principală, redirect permanent
+/shop/*              /   301
+/shop                /   301
+/contacts/*          /   301
+/contacts            /   301
+/product/*           /   301
+/product-category/*  /   301
+/blog/*              /   301
+/category/*          /   301
+/ru/*                /   301
+/en/*                /   301
+/ro/*                /   301

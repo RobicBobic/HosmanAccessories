@@ -1938,10 +1938,10 @@ export default function App() {
           <img
             className="brand-logo"
             src="/logo.png"
-            alt="Hosman Accessories"
+            alt="Hosman Flowers & Accessories"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
-          <span className="brand-script notranslate" translate="no">Hosman Accessories</span>
+          <h1 className="brand-script notranslate" translate="no">Hosman Flowers</h1>
 
           <div className="lang-switch notranslate" translate="no">
             <button

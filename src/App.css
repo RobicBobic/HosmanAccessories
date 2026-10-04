@@ -593,3 +593,5 @@ body { top: 0 !important; position: static !important; }
 @media (max-width: 400px) {
   .pp-back-extra { display: none; }
 }
+/* SEO: numele din header e acum <h1>; păstrăm exact același aspect ca înainte */
+.hosman .site-header h1.brand-script { margin: 0; font-weight: 400; letter-spacing: normal; line-height: 1.05; }
