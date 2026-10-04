@@ -129,7 +129,7 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
       <div className="pp-topbar">
         <div className="h-wrap pp-topbar-inner">
           <button className="pp-back" onClick={onBack}>
-            <ArrowLeft size={20} /> Înapoi la catalog
+            <ArrowLeft size={20} /> <span>Înapoi<span className="pp-back-extra"> la catalog</span></span>
           </button>
           <button className="pp-brand" onClick={onBack} aria-label="Pagina principală">
             <span className="brand-script notranslate" translate="no">Hosman Accessories</span>
@@ -249,11 +249,13 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
       {p.applications?.length > 0 && (
         <section className="pp-block">
           <div className="h-wrap">
-            <h3 className="pp-h3">Aplicații</h3>
+            <h3 className="pp-h3">{p.applicationsTitle || "Aplicații"}</h3>
             <div className="pp-apps-box">
               {p.applications.map((a, i) => (
                 <div className="pp-app" key={i}>
-                  <span className="pp-app-ic"><Diamond size={18} /></span>
+                  {!p.applicationsNoIcon && (
+                    <span className="pp-app-ic"><Diamond size={18} /></span>
+                  )}
                   {a}
                 </div>
               ))}
@@ -274,6 +276,31 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
               ))}
             </ul>
             {p.benefitsNote && <p className="pp-list-note">{p.benefitsNote}</p>}
+          </div>
+        </section>
+      )}
+
+      {/* MOD DE UTILIZARE (pași numerotați) */}
+      {p.steps?.length > 0 && (
+        <section className="pp-block">
+          <div className="h-wrap">
+            <h3 className="pp-h3">{p.stepsTitle || "Mod de utilizare"}</h3>
+            <ol className="pp-steps">
+              {p.steps.map((s, i) => (
+                <li key={i}>
+                  <span className="pp-step-num">{i + 1}</span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ol>
+            {p.stepsAfter?.length > 0 && (
+              <ul className="pp-list pp-steps-after">
+                {p.stepsAfter.map((s, i) => (
+                  <li key={i}><span className="pp-dot" /> {s}</li>
+                ))}
+              </ul>
+            )}
+            {p.stepsNote && <p className="pp-list-note">{p.stepsNote}</p>}
           </div>
         </section>
       )}
@@ -324,6 +351,50 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
           </div>
         </section>
       )}
+
+      {/* RECOMANDĂRI DE UTILIZARE (tabel pe culturi)
+          Coloanele apar doar dacă cel puțin un rând are câmpul respectiv. */}
+      {p.usage?.length > 0 && (() => {
+        const cols = [
+          { key: "cultura", label: "Cultură" },
+          { key: "boli", label: p.usageTargetLabel || "Boli combătute", wrap: true },
+          { key: "doza", label: "Doză" },
+          { key: "apa", label: "Cantitate apă" },
+          { key: "perioada", label: "Perioada de aplicare", wrap: true },
+          { key: "tratamente", label: "Nr. max. tratamente" },
+          { key: "interval", label: "Interval" },
+          { key: "pauza", label: "Pauză până la recoltare" },
+        ].filter((c) => p.usage.some((u) => u[c.key]))
+          .map((c) => ({ ...c, label: p.usageLabels?.[c.key] || c.label }));
+        return (
+          <section className="pp-block">
+            <div className="h-wrap">
+              <h3 className="pp-h3">{p.usageTitle || "Recomandări de utilizare"}</h3>
+              <div className="pp-sizes-wrap">
+                <table className="pp-sizes pp-usage">
+                  <thead>
+                    <tr>
+                      {cols.map((c) => <th key={c.key}>{c.label}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {p.usage.map((u, idx) => (
+                      <tr key={idx}>
+                        {cols.map((c) => (
+                          <td key={c.key} className={c.wrap ? "pp-usage-wrap" : undefined}>
+                            {c.key === "cultura" ? <strong>{u[c.key]}</strong> : (u[c.key] || "–")}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {p.usageNote && <p className="pp-list-note">{p.usageNote}</p>}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* DIMENSIUNI DISPONIBILE */}
       {p.sizes?.length > 0 && (
