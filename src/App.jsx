@@ -1,4 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
+
+/* Derulare INSTANT (fără animație). Site-ul are „scroll-behavior: smooth”,
+   iar derularea animată se oprea uneori la mijlocul paginii când se schimba
+   conținutul (de ex. la deschiderea unui produs). */
+function jumpTo(top = 0) {
+  const root = document.documentElement;
+  const prev = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  void root.offsetHeight; // aplică imediat stilul de mai sus
+  try {
+    window.scrollTo({ top, left: 0, behavior: "instant" });
+  } catch {
+    window.scrollTo(0, top);
+  }
+  root.style.scrollBehavior = prev;
+}
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductPage from "./ProductPage";
 import ContactButton from "./ContactButton";
@@ -1866,7 +1882,6 @@ export default function App() {
       const p = src.find((x) => x.num === Number(saved));
       if (p) {
         setOpenProduct(p);
-        window.scrollTo({ top: 0 });
       }
     }
   }, []);
@@ -1876,15 +1891,28 @@ export default function App() {
 
   const openProductPage = (p) => {
     setOpenProduct(p);
-    window.scrollTo({ top: 0, behavior: "auto" });
   };
+
+  // de fiecare dată când se deschide un produs, pagina începe de sus
+  useLayoutEffect(() => {
+    if (!openProduct) return;
+    jumpTo(0);
+    // încă o dată după ce se încarcă pozele / traducerea, pentru siguranță
+    const t1 = setTimeout(() => jumpTo(0), 60);
+    return () => clearTimeout(t1);
+  }, [openProduct]);
+
+  // browserul să nu „țină minte” poziția veche la reîncărcare
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+  }, []);
   const closeProductPage = () => {
     setOpenProduct(null);
     // după ce revine pagina principală, derulăm la secțiunea catalog
     requestAnimationFrame(() => {
       const el = document.getElementById("catalog");
-      if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
-      else window.scrollTo({ top: 0 });
+      if (el) jumpTo(el.getBoundingClientRect().top + window.scrollY);
+      else jumpTo(0);
     });
   };
 
