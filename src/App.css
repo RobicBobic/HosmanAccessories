@@ -547,18 +547,28 @@ body { top: 0 !important; position: static !important; }
    ================================================================= */
 .pp-back { white-space: nowrap; }
 @media (max-width: 719px) {
-  /* header principal: logo + nume pe primul rând, limbile pe al doilea */
+  /* header principal: totul pe un singur rând (logo | nume | limbi) */
   .site-header {
-    grid-template-columns: auto 1fr;
-    grid-template-areas: "logo name" "lang lang";
-    row-gap: 14px; padding: 16px 16px;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10px; padding: 14px 14px;
   }
-  .site-header .brand-logo { grid-area: logo; height: 60px; max-width: 130px; }
-  .site-header .brand-script { grid-area: name; justify-self: center; }
-  .site-header .lang-switch { grid-area: lang; justify-self: center; }
+  .site-header .brand-logo { height: 52px; max-width: 64px; }
+  .site-header .brand-script {
+    font-size: clamp(19px, 5.6vw, 26px);
+    line-height: 1.05; text-align: center;
+  }
 
-  /* butoanele de limbă puțin mai mici pe telefon */
-  .lang-btn { font-size: 12px; padding: 8px 12px; }
+  /* limbile: un singur „buton” compact, cu cele 3 opțiuni în interior */
+  .lang-switch {
+    gap: 0 !important; padding: 3px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card);
+  }
+  .lang-btn {
+    border: none; background: transparent;
+    font-size: 11.5px; padding: 7px 8px; min-width: 30px;
+  }
+  .lang-btn.active { background: var(--green); color: #fff; }
 
   /* săgețile sliderului: sus, ca să nu acopere textul */
   .hero-arrow { top: 14px; transform: none; width: 38px; height: 38px; }
