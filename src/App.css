@@ -595,3 +595,25 @@ body { top: 0 !important; position: static !important; }
 }
 /* SEO: numele din header e acum <h1>; păstrăm exact același aspect ca înainte */
 .hosman .site-header h1.brand-script { margin: 0; font-weight: 400; letter-spacing: normal; line-height: 1.05; }
+
+/* TELEFON: catalogul afișează câte 2 produse pe rând */
+@media (max-width: 719px) {
+  .catalog-grid,
+  .catalog-grid--center,
+  .catalog-grid--2col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .catalog-grid--center .product,
+  .catalog-grid--2col .product { max-width: none; }
+  /* un produs rămas singur pe ultimul rând se centrează */
+  .catalog-grid--center .product:last-child:nth-child(odd),
+  .catalog-grid--2col .product:last-child:nth-child(odd) {
+    grid-column: 1 / -1; justify-self: center; width: calc(50% - 5px);
+  }
+  .product { padding: 8px 8px 0; border-radius: 14px; }
+  .product-media { border-radius: 10px; }
+  .product-body { padding: 10px 2px 14px; gap: 6px; }
+  .product-name { font-size: 15px; }
+  .product-desc { font-size: 12.5px; line-height: 1.35; }
+  .product-price { font-size: 15px; }
+}
