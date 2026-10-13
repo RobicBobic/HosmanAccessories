@@ -617,3 +617,37 @@ body { top: 0 !important; position: static !important; }
   .product-desc { font-size: 12.5px; line-height: 1.35; }
   .product-price { font-size: 15px; }
 }
+
+/* =================================================================
+   CUPRINSUL CATALOGULUI (toate categoriile, înainte de produse)
+   ================================================================= */
+.cat-index { margin-bottom: 56px; }
+.hosman .cat-index-title { margin-bottom: 22px; }
+.cat-index-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.cat-index-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 10px 16px 10px 10px; text-decoration: none; color: var(--ink);
+  box-shadow: 0 6px 20px -16px rgba(20, 40, 28, 0.5);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.cat-index-card:hover { transform: translateY(-2px); border-color: var(--green); box-shadow: 0 14px 30px -18px rgba(20, 40, 28, 0.45); }
+.cat-index-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.cat-index-media {
+  flex: 0 0 auto; width: 64px; height: 64px; border-radius: 12px; overflow: hidden;
+  background: var(--soft);
+}
+.cat-index-media img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.45); }
+.cat-index-media.contain { background: #fff; }
+.cat-index-media.contain img { object-fit: contain; transform: none; padding: 4px; }
+.cat-index-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto; }
+.cat-index-name { font-size: 16px; font-weight: 800; line-height: 1.2; color: var(--ink); }
+.cat-index-count { font-size: 13px; font-weight: 600; color: var(--green); }
+.cat-index-arrow { flex: 0 0 auto; color: var(--green); }
+.catalog-cat { scroll-margin-top: 24px; }
+@media (min-width: 720px) {
+  .cat-index-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+@media (min-width: 980px) {
+  .cat-index-grid { grid-template-columns: repeat(3, 1fr); }
+}

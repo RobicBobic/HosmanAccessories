@@ -2050,7 +2050,34 @@ export default function App() {
       {/* CATALOG pe categorii */}
       <section className="catalog" id="catalog">
         <div className="h-wrap">
-          {CATEGORIES.map((cat) => {
+          {/* CUPRINS: toate categoriile din catalog, cu link spre fiecare */}
+          <div className="cat-index">
+            <h2 className="catalog-title cat-index-title">Catalog</h2>
+            <div className="cat-index-grid">
+              {CATEGORIES.map((cat, ci) => {
+                const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
+                const items = cat.nums.map((n) => list.find((p) => p.num === n)).filter(Boolean);
+                if (items.length === 0) return null;
+                const first = items.find((p) => p.img) || items[0];
+                return (
+                  <a className="cat-index-card" href={`#cat-${ci + 1}`} key={cat.title}>
+                    <span className={`cat-index-media${first.fit === "contain" ? " contain" : ""}`}>
+                      {first.img ? <img src={first.img} alt="" loading="lazy" /> : null}
+                    </span>
+                    <span className="cat-index-text">
+                      <span className="cat-index-name">{cat.title}</span>
+                      <span className="cat-index-count">
+                        {items.length} {items.length === 1 ? "produs" : "produse"}
+                      </span>
+                    </span>
+                    <ChevronRight className="cat-index-arrow" size={20} aria-hidden="true" />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          {CATEGORIES.map((cat, ci) => {
             const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
             const items = cat.nums
               .map((n) => list.find((p) => p.num === n))
@@ -2063,7 +2090,7 @@ export default function App() {
                 ? "catalog-grid catalog-grid--center"
                 : "catalog-grid";
             return (
-              <div className="catalog-cat" key={cat.title}>
+              <div className="catalog-cat" id={`cat-${ci + 1}`} key={cat.title}>
                 <h2 className="catalog-title">{cat.title}</h2>
                 <div className={gridClass}>
                   {items.map((p) => (
