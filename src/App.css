@@ -763,7 +763,7 @@ body { top: 0 !important; position: static !important; }
   }
   .hero-row .hero { margin-top: 0; }
   .cat-side {
-    display: flex; flex-direction: column; justify-content: center;
+    display: flex; flex-direction: column; align-self: start;
     background: var(--card); border-radius: 20px; padding: 10px;
     box-shadow: 0 6px 24px -14px rgba(0, 0, 0, 0.35);
   }
