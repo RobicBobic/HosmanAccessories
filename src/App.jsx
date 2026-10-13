@@ -2058,19 +2058,12 @@ export default function App() {
                 const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
                 const items = cat.nums.map((n) => list.find((p) => p.num === n)).filter(Boolean);
                 if (items.length === 0) return null;
-                const first = items.find((p) => p.img) || items[0];
                 return (
                   <a className="cat-index-card" href={`#cat-${ci + 1}`} key={cat.title}>
-                    <span className={`cat-index-media${first.fit === "contain" ? " contain" : ""}`}>
-                      {first.img ? <img src={first.img} alt="" loading="lazy" /> : null}
+                    <span className="cat-index-name">{cat.title}</span>
+                    <span className="cat-index-count">
+                      {items.length} {items.length === 1 ? "produs" : "produse"}
                     </span>
-                    <span className="cat-index-text">
-                      <span className="cat-index-name">{cat.title}</span>
-                      <span className="cat-index-count">
-                        {items.length} {items.length === 1 ? "produs" : "produse"}
-                      </span>
-                    </span>
-                    <ChevronRight className="cat-index-arrow" size={20} aria-hidden="true" />
                   </a>
                 );
               })}

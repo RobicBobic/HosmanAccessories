@@ -619,35 +619,37 @@ body { top: 0 !important; position: static !important; }
 }
 
 /* =================================================================
-   CUPRINSUL CATALOGULUI (toate categoriile, înainte de produse)
+   CUPRINSUL CATALOGULUI: toate categoriile pe un singur rând
+   (pe telefon rândul se derulează orizontal cu degetul)
    ================================================================= */
 .cat-index { margin-bottom: 56px; }
 .hosman .cat-index-title { margin-bottom: 22px; }
-.cat-index-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.cat-index-grid {
+  display: flex; gap: 10px;
+  overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 10px; scrollbar-width: none;
+}
+.cat-index-grid::-webkit-scrollbar { display: none; }
 .cat-index-card {
-  display: flex; align-items: center; gap: 14px;
+  flex: 0 0 auto; scroll-snap-align: start;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  min-height: 84px; width: 168px; padding: 14px 14px; text-align: center;
   background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-  padding: 10px 16px 10px 10px; text-decoration: none; color: var(--ink);
+  text-decoration: none; color: var(--ink);
   box-shadow: 0 6px 20px -16px rgba(20, 40, 28, 0.5);
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
 }
-.cat-index-card:hover { transform: translateY(-2px); border-color: var(--green); box-shadow: 0 14px 30px -18px rgba(20, 40, 28, 0.45); }
+.cat-index-card:hover { transform: translateY(-2px); background: var(--green); border-color: var(--green); }
+.cat-index-card:hover .cat-index-name,
+.cat-index-card:hover .cat-index-count { color: #fff; }
 .cat-index-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-.cat-index-media {
-  flex: 0 0 auto; width: 64px; height: 64px; border-radius: 12px; overflow: hidden;
-  background: var(--soft);
-}
-.cat-index-media img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.45); }
-.cat-index-media.contain { background: #fff; }
-.cat-index-media.contain img { object-fit: contain; transform: none; padding: 4px; }
-.cat-index-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto; }
-.cat-index-name { font-size: 16px; font-weight: 800; line-height: 1.2; color: var(--ink); }
-.cat-index-count { font-size: 13px; font-weight: 600; color: var(--green); }
-.cat-index-arrow { flex: 0 0 auto; color: var(--green); }
+.cat-index-name { font-size: 15px; font-weight: 800; line-height: 1.2; color: var(--ink); text-wrap: balance; }
+.cat-index-count { font-size: 12.5px; font-weight: 600; color: var(--green); }
 .catalog-cat { scroll-margin-top: 24px; }
-@media (min-width: 720px) {
-  .cat-index-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-}
-@media (min-width: 980px) {
-  .cat-index-grid { grid-template-columns: repeat(3, 1fr); }
+
+/* tabletă și calculator: toate 5 încap pe un rând, lățimi egale */
+@media (min-width: 900px) {
+  .cat-index-grid { overflow: visible; gap: 14px; padding: 4px 0 0; }
+  .cat-index-card { flex: 1 1 0; width: auto; min-width: 0; min-height: 96px; }
+  .cat-index-name { font-size: 16px; }
 }
