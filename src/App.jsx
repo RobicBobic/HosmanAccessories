@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 /* Derulare INSTANT (fără animație). Site-ul are „scroll-behavior: smooth”,
    iar derularea animată se oprea uneori la mijlocul paginii când se schimba
@@ -15,7 +15,7 @@ function jumpTo(top = 0) {
   }
   root.style.scrollBehavior = prev;
 }
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu, Search, Phone, X } from "lucide-react";
 import ProductPage from "./ProductPage";
 import ContactButton from "./ContactButton";
 import "./App.css";
@@ -1811,10 +1811,50 @@ const CATEGORIES = [
   { title: "Protecția plantelor", nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
 ];
 
+// Lista de categorii cu numărul de produse (pentru meniul „Catalog produse” și bara laterală)
+const ALL_PRODUCTS = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
+const CAT_LINKS = CATEGORIES.map((cat, ci) => ({
+  title: cat.title,
+  id: `cat-${ci + 1}`,
+  count: cat.nums.filter((n) => ALL_PRODUCTS.some((p) => p.num === n)).length,
+})).filter((c) => c.count > 0);
+
+// căutare fără diacritice: „protectia” găsește „protecția”
+const norm = (t) =>
+  (t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 export default function App() {
   const [active, setActive] = useState(0);
   const [openProduct, setOpenProduct] = useState(null);
   const [lang, setLangState] = useState("ro");
+  const [catOpen, setCatOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const shopRef = useRef(null);
+
+  // închide meniul și rezultatele la clic în afara barei sau la Escape
+  useEffect(() => {
+    const onDown = (e) => {
+      if (shopRef.current && !shopRef.current.contains(e.target)) {
+        setCatOpen(false);
+        setSearchOpen(false);
+      }
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") { setCatOpen(false); setSearchOpen(false); }
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const q = norm(query.trim());
+  const results = q.length < 2 ? [] : ALL_PRODUCTS.filter((p) =>
+    norm(`${p.name || ""} ${p.desc || ""}`).includes(q)
+  ).slice(0, 8);
 
   useEffect(() => {
     if (SLIDES.length <= 1) return; // nimic de rotit dacă e 0 sau 1 imagine
@@ -1965,7 +2005,89 @@ export default function App() {
           </div>
         </header>
 
-        {/* HERO - slider de imagini */}
+        {/* BARA DE MAGAZIN: catalog, căutare, telefon */}
+        <div className="shopbar" ref={shopRef}>
+          <div className="shopbar-cat">
+            <button
+              className={`shopbar-catbtn${catOpen ? " open" : ""}`}
+              onClick={() => { setCatOpen((o) => !o); setSearchOpen(false); }}
+              aria-expanded={catOpen}
+              aria-controls="cat-dropdown"
+            >
+              {catOpen ? <X size={20} /> : <Menu size={20} />}
+              <span>Catalog produse</span>
+            </button>
+            {catOpen && (
+              <nav className="cat-dropdown" id="cat-dropdown" aria-label="Categorii">
+                {CAT_LINKS.map((c) => (
+                  <a key={c.id} href={`#${c.id}`} onClick={() => setCatOpen(false)}>
+                    <span>{c.title}</span>
+                    <ChevronRight size={18} aria-hidden="true" />
+                  </a>
+                ))}
+              </nav>
+            )}
+          </div>
+
+          <div className="shopbar-search">
+            <Search className="shopbar-search-ic" size={19} aria-hidden="true" />
+            <input
+              id="cautare-produse"
+              type="search"
+              placeholder="Caută folii, substraturi, îngrășăminte..."
+              aria-label="Caută produse"
+              autoComplete="off"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setSearchOpen(true); setCatOpen(false); }}
+              onFocus={() => setSearchOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && results[0]) {
+                  openProductPage(results[0]);
+                  setSearchOpen(false);
+                }
+              }}
+            />
+            {searchOpen && q.length >= 2 && (
+              <div className="search-results" role="listbox" aria-label="Rezultate">
+                {results.length === 0 ? (
+                  <div className="search-empty">Niciun produs găsit pentru „{query.trim()}”.</div>
+                ) : (
+                  results.map((p) => (
+                    <button
+                      key={p.num}
+                      className="search-item"
+                      role="option"
+                      aria-selected="false"
+                      onClick={() => { openProductPage(p); setSearchOpen(false); }}
+                    >
+                      <span className={`search-thumb${p.fit === "contain" ? " contain" : ""}`}>
+                        {p.img ? <img src={p.img} alt="" loading="lazy" /> : null}
+                      </span>
+                      <span className="search-name">{p.name || `Produs ${p.num}`}</span>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+
+          <a className="shopbar-phone" href="tel:+37379434108" aria-label="Sună: +373 794 34 108">
+            <Phone size={20} aria-hidden="true" />
+            <span className="shopbar-phone-num">+373 794 34 108</span>
+          </a>
+        </div>
+
+        {/* BARA LATERALĂ CU CATEGORII + SLIDER */}
+        <div className="hero-row">
+          <nav className="cat-side" aria-label="Categorii de produse">
+            {CAT_LINKS.map((c) => (
+              <a key={c.id} href={`#${c.id}`}>
+                <span>{c.title}</span>
+                <ChevronRight size={18} aria-hidden="true" />
+              </a>
+            ))}
+          </nav>
+
         <section className="hero">
           <div className="hero-slides">
             {SLIDES.map((s, idx) => (
@@ -2010,6 +2132,7 @@ export default function App() {
             </div>
           )}
         </section>
+        </div>
       </div>
 
       {/* COLABORATORI - bandă în mișcare continuă */}
