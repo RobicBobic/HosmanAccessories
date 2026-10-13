@@ -769,3 +769,32 @@ body { top: 0 !important; position: static !important; }
   }
   .cat-side a { padding: 13px 14px; }
 }
+
+/* PREȚ pe pagina de produs */
+.pp-price {
+  display: inline-block; margin-top: 14px;
+  color: var(--green-d); background: var(--soft);
+  font-size: clamp(20px, 5.5vw, 26px); font-weight: 800;
+  padding: 6px 16px; border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =================================================================
+   PREȚUL PE CARDUL PRODUSULUI: centrat, într-un chenar verde
+   ================================================================= */
+.product-body { flex: 1 1 auto; }
+.product-price {
+  align-self: center; margin-top: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 120px; padding: 8px 22px;
+  border: 2px solid var(--green); border-radius: 12px;
+  background: var(--soft); color: var(--green-d);
+  font-size: 20px; font-weight: 800; line-height: 1.1;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.product-desc + .product-price,
+.product-name + .product-price { margin-top: auto; }
+.product-body > :nth-last-child(2) { margin-bottom: 6px; }
+@media (max-width: 719px) {
+  .product-price { min-width: 0; padding: 6px 14px; font-size: 16px; border-radius: 10px; }
+}
