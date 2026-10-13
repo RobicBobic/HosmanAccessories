@@ -1927,6 +1927,7 @@ export default function App() {
       const src = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
       const p = src.find((x) => x.num === Number(saved));
       if (p) {
+        returnTo.current = { num: p.num };
         setOpenProduct(p);
       }
     }
@@ -1935,7 +1936,10 @@ export default function App() {
   const goTo = (i) =>
     SLIDES.length > 0 && setActive((i + SLIDES.length) % SLIDES.length);
 
+  // ținem minte de unde a fost deschis produsul, ca „Înapoi” să ducă tot acolo
+  const returnTo = useRef(null);
   const openProductPage = (p) => {
+    returnTo.current = { num: p.num, y: window.scrollY };
     setOpenProduct(p);
   };
 
@@ -1953,13 +1957,26 @@ export default function App() {
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
   }, []);
   const closeProductPage = () => {
+    const back = returnTo.current;
     setOpenProduct(null);
-    // după ce revine pagina principală, derulăm la secțiunea catalog
-    requestAnimationFrame(() => {
-      const el = document.getElementById("catalog");
-      if (el) jumpTo(el.getBoundingClientRect().top + window.scrollY);
-      else jumpTo(0);
-    });
+    // după ce revine pagina principală, ne întoarcem la produsul pe care s-a apăsat
+    const goBack = () => {
+      const card = back && document.getElementById(`prod-${back.num}`);
+      if (card) {
+        const r = card.getBoundingClientRect();
+        // produsul ajunge pe mijlocul ecranului (sau sus, dacă e mai înalt decât ecranul)
+        const offset = Math.max(16, (window.innerHeight - r.height) / 2);
+        jumpTo(Math.max(0, r.top + window.scrollY - offset));
+      } else if (back) {
+        jumpTo(back.y);
+      } else {
+        const el = document.getElementById("catalog");
+        jumpTo(el ? el.getBoundingClientRect().top + window.scrollY : 0);
+      }
+    };
+    requestAnimationFrame(goBack);
+    // încă o dată după ce se încarcă pozele, ca poziția să rămână exactă
+    setTimeout(goBack, 150);
   };
 
   // Dacă un produs e deschis, afișăm pagina lui în locul paginii principale.
@@ -2218,6 +2235,7 @@ export default function App() {
                   {items.map((p) => (
                     <article
                       className="product"
+                      id={`prod-${p.num}`}
                       key={p.num}
                       onClick={() => openProductPage(p)}
                       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openProductPage(p)}

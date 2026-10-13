@@ -798,3 +798,8 @@ body { top: 0 !important; position: static !important; }
 @media (max-width: 719px) {
   .product-price { min-width: 0; padding: 6px 14px; font-size: 16px; border-radius: 10px; }
 }
+
+/* Produs fără imagine de header: fără fâșia verde goală, textul ocupă toată lățimea */
+.pp-hero--noimg .pp-title,
+.pp-hero--noimg .pp-intro { max-width: 900px; }
+.pp-hero--noimg .pp-hero-inner { padding-bottom: 32px; }

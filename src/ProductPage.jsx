@@ -132,7 +132,7 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
             <ArrowLeft size={20} /> <span>Înapoi<span className="pp-back-extra"> la catalog</span></span>
           </button>
           <button className="pp-brand" onClick={onBack} aria-label="Pagina principală">
-            <span className="brand-script notranslate" translate="no">Hosman Accessories</span>
+            <span className="brand-script notranslate" translate="no">Hosman Flowers</span>
           </button>
           <div className="lang-switch notranslate" translate="no">
             <button
@@ -159,31 +159,31 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
 
       {/* HERO: text + imagine diagonală */}
       <section
-        className="pp-hero"
+        className={`pp-hero${p.heroImg ? "" : " pp-hero--noimg"}`}
         style={p.heroFit === "contain" ? { background: "#fff" } : undefined}
       >
         <div className="pp-hero-inner h-wrap">
           <h1 className="pp-title">{title}</h1>
+          {p.price && <p className="pp-price">{p.price}</p>}
           {p.intro && <p className="pp-intro">{p.intro}</p>}
         </div>
-        <div
-          className="pp-hero-img"
-          style={
-            p.heroImg
-              ? {
-                  backgroundImage: `url('${p.heroImg}')`,
-                  ...(p.heroPos ? { backgroundPosition: p.heroPos } : {}),
-                  ...(p.heroFit === "contain"
-                    ? {
-                        backgroundSize: "contain",
-                        backgroundRepeat: "no-repeat",
-                        backgroundColor: p.heroBg || "#fff",
-                      }
-                    : {}),
-                }
-              : undefined
-          }
-        />
+        {/* fâșia cu imagine apare doar dacă produsul are o imagine de header */}
+        {p.heroImg && (
+          <div
+            className="pp-hero-img"
+            style={{
+              backgroundImage: `url('${p.heroImg}')`,
+              ...(p.heroPos ? { backgroundPosition: p.heroPos } : {}),
+              ...(p.heroFit === "contain"
+                ? {
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundColor: p.heroBg || "#fff",
+                  }
+                : {}),
+            }}
+          />
+        )}
       </section>
 
       {/* AVANTAJE: imaginea produsului + caseta cu bife */}
