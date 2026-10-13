@@ -1357,6 +1357,7 @@ const PRODUCT_INFO = {
   },
   26: {
     name: "Prokka WP – insecticid cu acțiune rapidă și de lungă durată",
+    price: "610 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Insecticid translaminar și de contact, cu emamectin benzoat și lambda-cihalotrin, împotriva viermelui mărului, a omizilor, a afidelor și a altor dăunători.",
@@ -1427,6 +1428,7 @@ const PRODUCT_INFO = {
   },
   27: {
     name: "Accelerator NPK – îngrășământ foliar cu microelemente chelatate",
+    price: "81 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Îngrășământ foliar complex NPK cu microelemente chelatate (EDTA), care se absorb foarte repede. Pentru pomi, viță-de-vie, legume și culturi de câmp.",
@@ -1485,6 +1487,7 @@ const PRODUCT_INFO = {
   },
   28: {
     name: "Universal TIO 82,5 WP – fungicid cu tebuconazol și sulf",
+    price: "200 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Fungicid sistemic, de contact și de fumigație, cu tebuconazol și sulf, pentru grâu, orz, rapiță și ceapă. Acționează în 2–3 ore și are și efect asupra acarienilor.",
@@ -1558,6 +1561,7 @@ const PRODUCT_INFO = {
   },
   29: {
     name: "Abaco 18 EC – insectoacaricid de origine biologică",
+    price: "350 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Insectoacaricid cu abamectină, de origine biologică, împotriva acarienilor (păianjenilor), a minierilor, a tripșilor și a altor dăunători, la plantele de grădină și de interior.",
@@ -1616,6 +1620,7 @@ const PRODUCT_INFO = {
   },
   30: {
     name: "Heksoran SC – acaricid cu efect de lungă durată",
+    price: "1000 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Acaricid cu hexitiazox, de contact și prin ingestie, cu efect translaminar și de lungă durată, împotriva celor mai răspândite specii de acarieni.",
@@ -1669,6 +1674,7 @@ const PRODUCT_INFO = {
   },
   31: {
     name: "Brodvei SC – fungicid pentru viță-de-vie",
+    price: "650 lei",
     // origin: { country: "Moldova", code: "md" }, // completează țara de fabricație, dacă o știi
     fit: "contain", // șterge dacă poza trebuie să umple cardul (fundal ne-alb)
     desc: "Fungicid cu azoxistrobin, cu acțiune preventivă, curativă și de eradicare, care protejează vița-de-vie de mană, făinare și putregaiul cenușiu.",
