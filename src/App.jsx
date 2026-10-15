@@ -1777,6 +1777,10 @@ function parseYouTube(url) {
   return { youtube: id, start: start ? Number(start) : undefined };
 }
 
+// PREȚURI: false = ascunse pe tot site-ul (rămân scrise în PRODUCT_INFO).
+// Pune true ca să apară din nou.
+const SHOW_PRICES = false;
+
 const PRODUCTS = Object.entries(productImages)
   .map(([path, img]) => {
     const num = parseInt(path.match(/produs(\d+)/i)?.[1] ?? "0", 10);
@@ -1788,7 +1792,7 @@ const PRODUCTS = Object.entries(productImages)
       ...parseYouTube(url),
     }));
     const slides = [...detail.slides, ...ytSlides].sort((a, b) => a.n - b.n);
-    return { num, img, ...detail, ...info, slides };
+    return { num, img, ...detail, ...info, slides, price: SHOW_PRICES ? info.price : undefined };
   })
   .sort((a, b) => a.num - b.num);
 
@@ -1813,17 +1817,19 @@ const CATEGORIES = [
   { title: "Folii și plase pentru plante", nums: [1, 2] },
   { title: "Ventilatoare și pulverizatoare pentru seră", nums: [8, 3, 5, 4], cols: 2 },
   { title: "Tăvi de irigare și lădițe", nums: [6, 7, 9] },
-  { title: "Nutriția plantelor", nums: [12, 23, 25, 24, 27, 14, 16, 22, 17, 20] }, // adaugă aici numerele produselor de nutriție
-  { title: "Protecția plantelor", nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
+  { title: "Recomandări pentru nutriția plantelor", inMenu: false, nums: [12, 23, 25, 24, 27, 14, 16, 22, 17, 20] }, // adaugă aici numerele produselor de nutriție
+  { title: "Recomandări pentru protecția plantelor", inMenu: false, nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
 ];
 
 // Lista de categorii cu numărul de produse (pentru meniul „Catalog produse” și bara laterală)
 const ALL_PRODUCTS = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
+// inMenu: false = categoria nu apare în meniul „Catalog produse” și nici în secțiunea „Catalog” (produsele rămân pe pagină)
 const CAT_LINKS = CATEGORIES.map((cat, ci) => ({
   title: cat.title,
   id: `cat-${ci + 1}`,
+  inMenu: cat.inMenu !== false,
   count: cat.nums.filter((n) => ALL_PRODUCTS.some((p) => p.num === n)).length,
-})).filter((c) => c.count > 0);
+})).filter((c) => c.count > 0 && c.inMenu);
 
 // căutare fără diacritice: „protectia” găsește „protecția”
 const norm = (t) =>
@@ -2201,6 +2207,7 @@ export default function App() {
             <h2 className="catalog-title cat-index-title">Catalog</h2>
             <div className="cat-index-grid">
               {CATEGORIES.map((cat, ci) => {
+                if (cat.inMenu === false) return null;
                 const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
                 const items = cat.nums.map((n) => list.find((p) => p.num === n)).filter(Boolean);
                 if (items.length === 0) return null;
