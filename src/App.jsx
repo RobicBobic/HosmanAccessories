@@ -1734,6 +1734,695 @@ const PRODUCT_INFO = {
     ],
     // flyer: "/flyere/produs31.pdf",
   },
+  32: {
+    name: "Ghiveci rotund din plastic",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghivece rotunde din plastic pentru producția de plante în seră și răsadniță, cu diametre de 9–13 cm, găuri de drenaj la bază și 11 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghivece rotunde din plastic, folosite în producția profesională de flori și plante în ghiveci. Sunt disponibile în 11 modele, cu diametre de 9 până la 13 cm și volume de 0,33 până la 1 litru, în 5 culori standard și 6 culori la comandă. Baza are găuri de drenaj care lasă excesul de apă să se scurgă, iar decupajele de la bază ajută la aerisirea rădăcinilor.",
+    features: ["Diametru 9–13 cm", "Volum 0,33–1 l", "Găuri de drenaj", "11 culori"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p32-color-<key>.png), hex = culoarea bulinei,
+    // custom: true = culoare la comandă. defaultColor = culoarea aleasă la deschidere.
+    defaultColor: "gri",
+    colors: [
+      { key: "gri-deschis", name: "Gri deschis", hex: "#DEDFE0" },
+      { key: "gri", name: "Gri", hex: "#9B9B9B" },
+      { key: "antracit", name: "Antracit", hex: "#57595B" },
+      { key: "negru", name: "Negru", hex: "#111111" },
+      { key: "terracotta", name: "Teracotă", hex: "#D36E29" },
+      { key: "rosu", name: "Roșu", hex: "#E52529", custom: true },
+      { key: "magenta", name: "Magenta", hex: "#E500A0", custom: true },
+      { key: "violet", name: "Violet", hex: "#9402D8", custom: true },
+      { key: "albastru", name: "Albastru", hex: "#1F3FC1", custom: true },
+      { key: "verde", name: "Verde", hex: "#007F3F", custom: true },
+      { key: "lime", name: "Verde lime", hex: "#AEED57", custom: true },
+    ],
+
+    advantages: [
+      "11 modele, de la 9 la 13 cm diametru, pentru plante de diferite mărimi",
+      "5 culori standard: gri deschis, gri, antracit, negru și teracotă",
+      "6 culori la comandă: roșu, magenta, violet, albastru, verde și verde lime",
+      "3 tipuri de bază (ANZ, AN, ANY), cu găuri de drenaj pentru scurgerea excesului de apă",
+      "Decupaje la bază, care ajută la scurgere și la aerisirea rădăcinilor",
+      "Model special pentru orhidee (12 BKS)",
+      "Se pot realiza și cu imprimare personalizată (logo)",
+      "Livrare în cutii sau pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Formă", v: "Rotundă" },
+      { k: "Diametru", v: "9–13 cm" },
+      { k: "Înălțime", v: "7,2–11 cm" },
+      { k: "Volum", v: "0,33–1,00 l" },
+      { k: "Culori standard", v: "Gri deschis, gri, antracit, negru, teracotă" },
+      { k: "Culori la comandă", v: "Roșu, magenta, violet, albastru, verde, verde lime" },
+      { k: "Bază", v: "Cu găuri de drenaj (tipurile ANZ, AN, ANY)" },
+    ],
+
+    // tabel cu modelele disponibile (coloane libere: cols = titlurile, rows = rândurile)
+    table: {
+      title: "Modele disponibile",
+      cols: ["Model", "Diametru (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / cutie", "Buc. / palet"],
+      rows: [
+        ["9 ANZ", "9", "7,2", "0,33", "1540", "31250"],
+        ["10 ANZ", "10", "7,2", "0,40", "1242", "38400"],
+        ["10,5 ANY", "10,5", "7,8", "0,45", "860", "26750"],
+        ["11 VOL", "10,5", "9,0", "0,50", "840", "30250"],
+        ["11 ANY", "11", "8,3", "0,50", "990", "31800"],
+        ["12 VOL", "11", "9,7", "0,60", "702", "24380"],
+        ["12 ANY", "11,6", "9,0", "0,60", "825", "26100"],
+        ["12 AN", "12", "9,0", "0,65", "585", "20010"],
+        ["12 BKS (orhidee)", "12", "10,7", "0,75", "–", "28500"],
+        ["13 ANY", "13", "9,5", "0,85", "624", "19250"],
+        ["13 BKZE slot", "12,8", "11", "1,00", "–", "15400"],
+      ],
+    },
+    // flyer: "/flyere/produs32.pdf",
+  },
+  33: {
+    name: "Ghiveci tip bol din plastic",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghiveci larg și scund, tip bol, pentru aranjamente și plante cu multe tulpini, cu diametre de 17,5–25 cm, disponibil în 7 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghiveci rotund din plastic, larg și scund, în formă de bol, potrivit pentru aranjamente, flori de sezon și plante cu multe tulpini. Este disponibil în 4 modele, cu diametre de 17,5 până la 25 cm și volume de 1,5 până la 4 litri, în 4 culori standard și 3 culori la comandă. Ghivecele se stivuiesc unul în altul, deci ocupă puțin loc la transport și depozitare.",
+    features: ["Diametru 17,5–25 cm", "Volum 1,5–4 l", "7 culori", "Se stivuiesc"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p33-color-<key>.png), hex = culoarea bulinei.
+    // custom: true = culoare la comandă (apare în grupul „Culori la comandă”).
+    // O culoare fără poză apare tot în listă, dar poza produsului nu se schimbă.
+    colors: [
+      { key: "terracotta", name: "Teracotă", hex: "#D96A2B" },
+      { key: "gri-deschis", name: "Gri deschis", hex: "#DEDFE0" },
+      { key: "gri", name: "Gri", hex: "#9B9B9B" },
+      { key: "antracit", name: "Antracit", hex: "#57595B" },
+      { key: "magenta", name: "Magenta", hex: "#E500A0", custom: true },
+      { key: "violet", name: "Violet", hex: "#9402D8", custom: true },
+      { key: "lime", name: "Verde lime", hex: "#AEED57", custom: true },
+    ],
+
+    advantages: [
+      "Formă de bol, largă și scundă, potrivită pentru aranjamente și plante cu multe tulpini",
+      "4 modele, de la 17,5 la 25 cm diametru",
+      "4 culori standard: teracotă, gri deschis, gri și antracit",
+      "3 culori la comandă: magenta, violet și verde lime",
+      "Găuri de drenaj la bază, pentru scurgerea excesului de apă",
+      "Se stivuiesc unul în altul, deci ocupă puțin loc la transport și depozitare",
+      "Livrare în cutii sau pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Formă", v: "Rotundă, tip bol" },
+      { k: "Diametru", v: "17,5–25 cm" },
+      { k: "Înălțime", v: "8,5–11 cm" },
+      { k: "Volum", v: "1,5–4 l" },
+      { k: "Culori standard", v: "Teracotă, gri deschis, gri, antracit" },
+      { k: "Culori la comandă", v: "Magenta, violet, verde lime" },
+      { k: "Bază", v: "Cu găuri de drenaj" },
+    ],
+
+    table: {
+      title: "Modele disponibile",
+      cols: ["Model", "Diametru (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / cutie", "Buc. / palet"],
+      rows: [
+        ["17 M-CH", "17,5", "8,5", "1,50", "80", "9600"],
+        ["19 M-CH", "20", "9,5", "2,00", "80", "7200"],
+        ["21 M-CH", "22", "10,3", "3,00", "80", "6000"],
+        ["25 M-CH", "25", "11", "4,00", "60", "3420"],
+      ],
+    },
+    // flyer: "/flyere/produs33.pdf",
+  },
+  34: {
+    name: "Ghiveci suspendat cu cârlig (Optima)",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghiveci de agățat, cu suport și cârlig, pentru flori curgătoare și plante de balcon, cu diametre de 21–27 cm și 7 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghiveci de agățat din plastic, cu suport și cârlig, potrivit pentru petunii, surfinii și alte flori curgătoare, pe balcon, terasă sau în seră. Este disponibil în 4 mărimi, cu diametre de 21 până la 27 cm și volume de 3 până la 6 litri, iar suportul se prinde de buza ghiveciului și vine în două lungimi: 38 și 46 cm.",
+    features: ["Diametru 21–27 cm", "Volum 3–6 l", "Cu suport și cârlig", "7 culori"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p34-color-<key>.png), custom: true = la comandă.
+    defaultColor: "terracotta",
+    colors: [
+      { key: "alb", name: "Alb", hex: "#FFFFFF" },
+      { key: "terracotta", name: "Teracotă", hex: "#D36E29" },
+      { key: "antracit", name: "Antracit", hex: "#383E42" },
+      { key: "rosu", name: "Roșu", hex: "#E52529", custom: true },
+      { key: "magenta", name: "Magenta", hex: "#E500A0", custom: true },
+      { key: "violet", name: "Violet", hex: "#9402D8", custom: true },
+      { key: "lime", name: "Verde lime", hex: "#AEED57", custom: true },
+    ],
+
+    advantages: [
+      "Suport cu cârlig, pentru agățat pe balcon, terasă sau în seră",
+      "Suportul se prinde de buza ghiveciului și vine în două lungimi: 38 și 46 cm",
+      "4 mărimi, de la 21 la 27 cm diametru",
+      "3 culori standard: alb, teracotă și antracit",
+      "4 culori la comandă: roșu, magenta, violet și verde lime",
+      "Orificii de drenaj la bază, pentru scurgerea excesului de apă",
+      "Livrare în cutii sau pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Tip", v: "Ghiveci suspendat, cu suport și cârlig" },
+      { k: "Diametru", v: "21–27 cm" },
+      { k: "Înălțime", v: "13,5–16,4 cm" },
+      { k: "Volum", v: "3–6 l" },
+      { k: "Lungime suport", v: "38 cm sau 46 cm" },
+      { k: "Culori standard", v: "Alb, teracotă, antracit" },
+      { k: "Culori la comandă", v: "Roșu, magenta, violet, verde lime" },
+      { k: "Bază", v: "Cu orificii de drenaj (tip OPTIMA)" },
+    ],
+
+    // mai multe tabele: tables = [{ title, cols, rows }, ...]
+    tables: [
+      {
+        title: "Modele disponibile",
+        cols: ["Model", "Diametru (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / cutie", "Buc. / palet"],
+        rows: [
+          ["OPTIMA 21", "21", "13,5", "3,00", "50", "4200"],
+          ["OPTIMA 23", "23", "14,8", "4,00", "50", "3450"],
+          ["OPTIMA 25", "25", "15,5", "5,00", "50", "2850"],
+          ["OPTIMA 27", "27", "16,4", "6,00", "50", "2700"],
+        ],
+      },
+      {
+        title: "Suporturi cu cârlig",
+        cols: ["Model", "Lungime (cm)", "Buc. / cutie"],
+        rows: [
+          ["W 46", "46", "200"],
+          ["W 38", "38", "200"],
+        ],
+      },
+    ],
+    // flyer: "/flyere/produs34.pdf",
+  },
+  35: {
+    name: "Ghiveci înalt din plastic (RO)",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghiveci rotund și înalt, pentru plante cu rădăcini adânci, cu diametre de 14–18 cm și 10 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghiveci rotund din plastic, mai înalt decât lat, potrivit pentru plante cu rădăcini adânci. Este disponibil în 3 mărimi, cu diametre de 14 până la 18 cm și volume de 2 până la 4 litri, în 5 culori standard și 5 culori la comandă. Baza are 8 găuri de drenaj, iar decupajele de la bază ajută la scurgerea apei și la aerisire.",
+    features: ["Diametru 14–18 cm", "Volum 2–4 l", "Formă înaltă", "10 culori"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p35-color-<key>.png), custom: true = la comandă.
+    defaultColor: "gri-deschis",
+    colors: [
+      { key: "gri-deschis", name: "Gri deschis", hex: "#DEDFE0" },
+      { key: "gri", name: "Gri", hex: "#9B9B9B" },
+      { key: "antracit", name: "Antracit", hex: "#57595B" },
+      { key: "negru", name: "Negru", hex: "#221F20" },
+      { key: "terracotta", name: "Teracotă", hex: "#D36E29" },
+      { key: "rosu", name: "Roșu", hex: "#E52529", custom: true },
+      { key: "magenta", name: "Magenta", hex: "#E500A0", custom: true },
+      { key: "violet", name: "Violet", hex: "#9402D8", custom: true },
+      { key: "verde", name: "Verde", hex: "#007F3F", custom: true },
+      { key: "lime", name: "Verde lime", hex: "#AEED57", custom: true },
+    ],
+
+    advantages: [
+      "Formă înaltă, potrivită pentru plante cu rădăcini adânci",
+      "3 mărimi, de la 14 la 18 cm diametru",
+      "5 culori standard: gri deschis, gri, antracit, negru și teracotă",
+      "5 culori la comandă: roșu, magenta, violet, verde și verde lime",
+      "Bază cu 8 găuri de drenaj (tip RO), pentru scurgerea excesului de apă",
+      "Decupaje la bază, care ajută la scurgere și la aerisirea rădăcinilor",
+      "Livrare pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Formă", v: "Rotundă, înaltă" },
+      { k: "Diametru", v: "14–18 cm" },
+      { k: "Înălțime", v: "18–21,5 cm" },
+      { k: "Volum", v: "2–4 l" },
+      { k: "Culori standard", v: "Gri deschis, gri, antracit, negru, teracotă" },
+      { k: "Culori la comandă", v: "Roșu, magenta, violet, verde, verde lime" },
+      { k: "Bază", v: "Cu 8 găuri de drenaj (tip RO)" },
+    ],
+
+    table: {
+      title: "Modele disponibile",
+      cols: ["Model", "Diametru (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / palet"],
+      rows: [
+        ["14 RO", "14", "18", "2,00", "8000"],
+        ["16 RO", "16", "20,5", "3,00", "5760"],
+        ["18 RO", "18", "21,5", "4,00", "3600"],
+      ],
+    },
+    // flyer: "/flyere/produs35.pdf",
+  },
+  36: {
+    name: "Ghiveci pătrat din plastic (KW)",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghiveci pătrat pentru producția de răsaduri și plante tinere, de la 7×7 la 11×11 cm, cu loc pentru etichetă și 9 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghiveci pătrat din plastic, folosit în producția profesională de răsaduri și plante tinere. Forma pătrată ocupă eficient spațiul pe mese și în tăvi. Este disponibil în 5 mărimi, de la 7×7 la 11×11 cm și de la 0,28 la 2 litri, inclusiv o variantă înaltă de 21,5 cm. Modelele „slot” au o fantă pentru etichetă, iar baza are găuri de drenaj pe toată marginea.",
+    features: ["De la 7×7 la 11×11 cm", "Volum 0,28–2 l", "Fantă pentru etichetă", "9 culori"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p36-color-<key>.png), custom: true = la comandă.
+    defaultColor: "gri",
+    colors: [
+      { key: "antracit", name: "Antracit", hex: "#57595B" },
+      { key: "negru", name: "Negru", hex: "#221F20" },
+      { key: "gri-deschis", name: "Gri deschis", hex: "#DEDFE0", custom: true },
+      { key: "gri", name: "Gri", hex: "#9B9B9B", custom: true },
+      { key: "terracotta", name: "Teracotă", hex: "#D36E29", custom: true },
+      { key: "rosu", name: "Roșu", hex: "#E52529", custom: true },
+      { key: "magenta", name: "Magenta", hex: "#E500A0", custom: true },
+      { key: "violet", name: "Violet", hex: "#9402D8", custom: true },
+      { key: "lime", name: "Verde lime", hex: "#AEED57", custom: true },
+    ],
+
+    advantages: [
+      "Formă pătrată, care ocupă eficient spațiul pe mese și în tăvi",
+      "5 mărimi, de la 7×7 la 11×11 cm, inclusiv o variantă înaltă de 21,5 cm",
+      "Modelele „slot” au fantă pentru etichetă",
+      "Bază cu găuri de drenaj pe toată marginea (tip KW)",
+      "2 culori standard: antracit și negru",
+      "7 culori la comandă: gri deschis, gri, teracotă, roșu, magenta, violet și verde lime",
+      "Livrare în cutii sau pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Formă", v: "Pătrată" },
+      { k: "Dimensiuni", v: "7×7 – 11×11 cm" },
+      { k: "Înălțime", v: "7,5–21,5 cm" },
+      { k: "Volum", v: "0,28–2 l" },
+      { k: "Culori standard", v: "Antracit, negru" },
+      { k: "Culori la comandă", v: "Gri deschis, gri, teracotă, roșu, magenta, violet, verde lime" },
+      { k: "Bază", v: "Cu găuri de drenaj (tip KW)" },
+    ],
+
+    table: {
+      title: "Modele disponibile",
+      cols: ["Model", "Dimensiune (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / cutie", "Buc. / palet"],
+      rows: [
+        ["7×7×8", "7×7", "8", "0,28", "1680", "–"],
+        ["7,5×7,5×7,5", "7,5×7,5", "7,5", "0,38", "1540", "–"],
+        ["9×9×9,5 slot", "9×9", "9,5", "0,50", "960", "28600"],
+        ["11×11×12 slot", "11×11", "12", "1,00", "450", "17820"],
+        ["11×11×21,5 slot", "11×11", "21,5", "2,00", "–", "9900"],
+      ],
+    },
+    // flyer: "/flyere/produs36.pdf",
+  },
+  37: {
+    name: "Ghiveci mare tip container (CF)",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Ghiveci mare tip container, pentru arbuști și plante mari, cu volume de 5–10 litri și 9 culori.",
+    // --- pagina de detalii ---
+    intro: "Ghiveci rotund din plastic, de tip container, pentru arbuști, plante mari și plante de pepinieră. Este disponibil în 3 mărimi, de 5, 8 și 10 litri, cu diametre de 23 până la 26 cm. Modelele de 5 și 8 litri sunt în varianta ușoară (light), iar peretele interior are nervuri verticale.",
+    features: ["Volum 5–10 l", "Diametru 23–26 cm", "Pentru plante mari", "9 culori"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: key = numele pozei (p37-color-<key>.png), custom: true = la comandă.
+    defaultColor: "negru",
+    colors: [
+      { key: "gri", name: "Gri", hex: "#DCDDDE" },
+      { key: "antracit", name: "Antracit", hex: "#383E42" },
+      { key: "negru", name: "Negru", hex: "#000000" },
+      { key: "rosu", name: "Roșu", hex: "#E52529", custom: true },
+      { key: "magenta", name: "Magenta", hex: "#FF00FF", custom: true },
+      { key: "violet", name: "Violet", hex: "#B803FF", custom: true },
+      { key: "albastru", name: "Albastru", hex: "#00AAE6", custom: true },
+      { key: "verde", name: "Verde", hex: "#427A3A", custom: true },
+      { key: "galben", name: "Galben", hex: "#EDED36", custom: true },
+    ],
+
+    advantages: [
+      "Volum mare, de 5 până la 10 litri, pentru arbuști și plante mari",
+      "Variantă ușoară (light) pentru modelele de 5 și 8 litri",
+      "Nervuri verticale pe peretele interior",
+      "3 culori standard: gri, antracit și negru",
+      "6 culori la comandă: roșu, magenta, violet, albastru, verde și galben",
+      "Livrare pe palet, potrivită pentru comenzi en-gros",
+    ],
+
+    specs: [
+      { k: "Material", v: "Plastic" },
+      { k: "Formă", v: "Rotundă, tip container" },
+      { k: "Diametru", v: "23–26,2 cm" },
+      { k: "Înălțime", v: "20–25 cm" },
+      { k: "Volum", v: "5–10 l" },
+      { k: "Culori standard", v: "Gri, antracit, negru" },
+      { k: "Culori la comandă", v: "Roșu, magenta, violet, albastru, verde, galben" },
+    ],
+
+    table: {
+      title: "Modele disponibile",
+      cols: ["Model", "Diametru (cm)", "Înălțime (cm)", "Volum (l)", "Buc. / palet"],
+      rows: [
+        ["CFL 5 (light)", "23", "20", "5,00", "4600"],
+        ["CFL 8 (light)", "26,2", "21", "8,00", "3600"],
+        ["CF 10", "26", "25", "10,00", "3240"],
+      ],
+    },
+    // flyer: "/flyere/produs37.pdf",
+  },
+  38: {
+    name: "Chrysal Leafshine – spray pentru luciul frunzelor",
+    origin: { country: "Netherlands", code: "nl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Spray profesional care dă frunzelor un luciu natural și de durată, le curăță de praf și le protejează. 250 ml.",
+    // --- pagina de detalii ---
+    intro: "Chrysal Leafshine este un spray profesional care dă frunzelor și plantelor decorative un aspect curat, sănătos și strălucitor. Formula lui îndepărtează praful și formează un strat protector, care scoate în evidență culoarea naturală și prelungește frumusețea plantelor. Reduce și pierderea de apă, așa că plantele în ghiveci rămân proaspete mai mult timp în transport și la vânzare.",
+    features: ["Luciu instant", "Respinge praful", "Efect de durată", "250 ml"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    coverTitle: "Plante proaspete mai mult timp",
+    coverText:
+      "Leafshine reduce evaporarea apei din frunze, așa că plantele în ghiveci, cum sunt azaleele, crizantemele și trandafirii, se deshidratează mai puțin în timpul transportului și pe raft. Plantele arată proaspăt și atrăgător mai mult timp, pot sta expuse fără udări dese și se pierd mai puține. Spray-ul face invizibile și petele de calcar de pe frunze.",
+
+    applicationsTitle: "Potrivit pentru",
+    applications: [
+      "Plante în ghiveci (azalee, crizanteme, trandafiri)",
+      "Plante decorative cu frunze",
+      "Frunziș tăiat și flori",
+    ],
+
+    advantages: [
+      "Dă un luciu natural, cu efect de durată",
+      "Curăță frunzele și le protejează de praf",
+      "Scoate în evidență frumusețea naturală a plantelor și florilor",
+      "Reduce deshidratarea plantelor în transport și la vânzare",
+      "Face invizibile petele de calcar",
+      "Ușor de folosit, cu rezultat imediat",
+      "Potrivit pentru toate tipurile de plante și frunziș",
+    ],
+
+    steps: [
+      "Agitați bine flaconul înainte de folosire.",
+      "Pulverizați de la aproximativ 30 cm, direct pe frunze.",
+      "Lăsați să se usuce. Nu ștergeți.",
+    ],
+    stepsAfterTitle: "Măsuri de precauție",
+    stepsAfter: [
+      "Numai pentru uz extern.",
+      "Feriți de razele directe ale soarelui și de surse de căldură.",
+      "Nu lăsați la îndemâna copiilor.",
+      "Nu inhalați aerosolul.",
+      "Recipient sub presiune: poate exploda dacă este încălzit.",
+    ],
+
+    specs: [
+      { k: "Brand", v: "Chrysal Professional" },
+      { k: "Denumire", v: "Chrysal Leafshine Aerosol" },
+      { k: "Tip", v: "Spray pentru luciul frunzelor" },
+      { k: "Conținut", v: "250 ml (+25% extra)" },
+      { k: "Parfum", v: "Prospețime discretă" },
+      { k: "Producător", v: "Chrysal International B.V." },
+      { k: "Țara de origine", v: "Olanda" },
+    ],
+    // flyer: "/flyere/produs38.pdf",
+  },
+  39: {
+    name: "Chrysal Glory – spray pentru flori și frunze",
+    origin: { country: "Netherlands", code: "nl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Spray gata de utilizare care protejează florile și frunzele, le păstrează proaspete mai mult timp și le menține culorile vii.",
+    // --- pagina de detalii ---
+    intro: "Chrysal Glory este un spray gata de utilizare, special formulat pentru a proteja florile și frunzele, prelungind prospețimea și păstrând aspectul natural al aranjamentelor florale. Creează un scut invizibil care ajută la menținerea frumuseții și vitalității florilor și frunzișului.",
+    features: ["Gata de utilizare", "Scut protector invizibil", "Prospețime de durată", "Culori vii"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    coverTitle: "Aranjamente proaspete mai mult timp",
+    coverText:
+      "Glory păstrează creațiile tale proaspete și hidratate, fie că sunt în vază, fie în buretele floral. Este potrivit pentru toate florile tăiate, mai ales pentru cele care nu au o sursă de apă, cum sunt buchetele de mireasă și corsajele. Pe lângă faptul că scoate în evidență culorile, reduce evaporarea și păstrează frunzele verzi.",
+
+    applicationsTitle: "Potrivit pentru",
+    applications: [
+      "Flori tăiate, în vază sau în burete floral",
+      "Buchete de mireasă și corsaje",
+      "Plante și frunziș",
+      "Flori și frunze naturale și artificiale",
+    ],
+
+    advantages: [
+      "Protejează florile și frunzele",
+      "Prelungește prospețimea și durata de viață",
+      "Păstrează aspectul natural și culoarea vibrantă",
+      "Formează un strat protector invizibil",
+      "Reduce evaporarea și păstrează frunzele verzi",
+      "Ideal pentru toate tipurile de aranjamente florale și frunziș",
+    ],
+
+    steps: [
+      "Agitați bine înainte de utilizare.",
+      "Pulverizați de la o distanță de 20–30 cm pe flori și frunze.",
+      "Lăsați să se usuce. Nu ștergeți.",
+      "Utilizați ori de câte ori este necesar pentru protecție optimă.",
+    ],
+    stepsAfterTitle: "Atenționări",
+    stepsAfter: [
+      "A se păstra departe de copii.",
+      "Evitați contactul cu ochii.",
+      "Nu inhalați aerosolul.",
+      "A se utiliza doar în spații bine ventilate.",
+      "Recipient sub presiune. Protejați de razele solare și nu expuneți la temperaturi peste 50°C.",
+    ],
+
+    specs: [
+      { k: "Brand", v: "Chrysal Professional" },
+      { k: "Denumire", v: "Chrysal Glory" },
+      { k: "Tip", v: "Spray pentru flori și frunze" },
+      { k: "Conținut", v: "750 ml" },
+      { k: "Utilizare", v: "Flori și frunze naturale și artificiale" },
+      { k: "Producător", v: "Chrysal International" },
+      { k: "Țara de origine", v: "Olanda" },
+    ],
+    // flyer: "/flyere/produs39.pdf",
+  },
+  40: {
+    name: "Chrysal Professional 2 – soluție pentru transport și expunere",
+    origin: { country: "Netherlands", code: "nl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Soluție nutritivă profesională pentru florile tăiate în vaze și găleți, care reduce pierderile cu 50% și păstrează florile frumoase mai mult timp.",
+    // --- pagina de detalii ---
+    intro: "Chrysal Professional 2 a fost creat special pentru angrosiști, florării, cei care fac buchete și magazine, pentru vazele și gălețile cu toate tipurile de flori tăiate. Conține exact cât trebuie substanțe nutritive pentru dezvoltarea naturală a florilor, fără să le lase să se deschidă prea repede. Formula îmbunătățită stimulează absorbția apei și păstrează florile și frunzele proaspete și frumoase.",
+    features: ["Doză: 5 ml/l", "Pentru transport și expunere", "Soluția ține până la 5 zile", "Pierderi cu 50% mai mici"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    coverTitle: "Mai puține pierderi, flori frumoase mai mult timp",
+    coverText:
+      "Soluția poate fi folosită până la 5 zile, așa că apa nu mai trebuie schimbată atât de des. Față de apa simplă, Professional 2 reduce pierderile în medie cu 50% și păstrează florile frumoase cu până la 50% mai mult timp, ceea ce lasă mai mult timp pentru distribuție și vânzare.",
+
+    applicationsTitle: "Potrivit pentru",
+    applications: [
+      "Angrosiști și distribuitori de flori",
+      "Florării și cei care fac buchete",
+      "Magazine care vând flori",
+      "Vaze și găleți cu toate tipurile de flori tăiate",
+    ],
+
+    advantages: [
+      "Reduce pierderile în medie cu 50% față de apa simplă",
+      "Permite o perioadă mai lungă de distribuție și vânzare",
+      "Păstrează florile frumoase cu până la 50% mai mult timp față de apa simplă",
+      "Economisești timp și bani, pentru că soluția se poate folosi până la 5 zile",
+      "Stimulează absorbția apei și păstrează proaspete florile și frunzele",
+      "Împiedică deschiderea prea rapidă a florilor",
+    ],
+
+    steps: [
+      "Adăugați 5 ml de soluție la fiecare litru de apă.",
+      "Puneți florile tăiate în vaza sau găleata cu soluție.",
+      "Soluția se poate folosi până la 5 zile.",
+    ],
+
+    specs: [
+      { k: "Brand", v: "Chrysal Professional" },
+      { k: "Denumire", v: "Chrysal Professional 2 – Transport & Display" },
+      { k: "Tip", v: "Soluție nutritivă pentru flori tăiate" },
+      { k: "Doză", v: "5 ml la 1 l de apă" },
+      { k: "Durata soluției", v: "Până la 5 zile" },
+      { k: "Utilizare", v: "Vaze și găleți, la transport și expunere" },
+      { k: "Țara de origine", v: "Olanda" },
+    ],
+    // flyer: "/flyere/produs40.pdf",
+  },
+  41: {
+    name: "Chrysal Universal – hrană pentru flori tăiate, plic compostabil",
+    price: "3 lei",
+    origin: { country: "Netherlands", code: "nl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Hrană pentru flori tăiate, sub formă de pudră, care păstrează florile frumoase cu până la 60% mai mult timp, într-un plic 100% compostabil.",
+    // --- pagina de detalii ---
+    intro: "Hrana pentru flori Chrysal, cu formula 99% de origine biologică, acum într-un ambalaj 100% compostabil acasă. Plicul este făcut dintr-o folie compostabilă din 2 straturi organice, așa că poate fi aruncat împreună cu resturile din grădină și deșeurile organice. Hrana păstrează florile frumoase cu până la 60% mai mult timp.",
+    features: ["60% mai multă prospețime", "Formulă 99% bio", "Plic 100% compostabil", "Pudră"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    coverTitle: "Se descompune la fel de repede ca o coajă de banană",
+    coverText:
+      "Grija pentru mediu devine tot mai importantă, iar Chrysal caută mereu moduri de a contribui la un mediu mai bun. După teste cu mai multe materiale, a lansat plicul de hrană pentru flori compostabil. Plicul se descompune în compostul de acasă în 26 de săptămâni și în compostul industrial în 12 săptămâni, la fel de repede ca o coajă de banană sau de portocală.",
+
+    advantages: [
+      "Păstrează aranjamentele florale proaspete și frumoase cu până la 60% mai mult timp",
+      "Ajută florile și bobocii să se deschidă",
+      "Formulă 99% de origine biologică",
+      "Ambalaj 100% compostabil acasă, în 26 de săptămâni",
+      "Contribuie la o economie bazată pe resurse biologice",
+      "Certificat conform normei europene EN 13432",
+    ],
+
+    specs: [
+      { k: "Brand", v: "Chrysal" },
+      { k: "Denumire", v: "Chrysal Universal – plic compostabil" },
+      { k: "Tip", v: "Hrană pentru flori tăiate" },
+      { k: "Formă", v: "Pudră" },
+      { k: "Formulă", v: "99% de origine biologică" },
+      { k: "Ambalaj", v: "Plic 100% compostabil (2 straturi organice)" },
+      { k: "Compostare", v: "26 săptămâni acasă, 12 săptămâni industrial" },
+      { k: "Certificare", v: "EN 13432" },
+      { k: "Țara de origine", v: "Olanda" },
+    ],
+    // flyer: "/flyere/produs41.pdf",
+  },
+  42: {
+    name: "Chrysal Universal – hrană pentru flori tăiate, plic reciclabil (praf sau lichid)",
+    origin: { country: "Netherlands", code: "nl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Hrană pentru flori tăiate, sub formă de pudră sau lichid, care păstrează florile frumoase cu până la 60% mai mult timp, într-un plic reciclabil.",
+    // --- pagina de detalii ---
+    intro: "Hrana pentru flori Chrysal, cu formula 99% de origine biologică, într-un plic din plastic complet reciclabil, care contribuie la o economie circulară. Este disponibilă sub formă de pudră și de lichid. Florile și bobocii se deschid mai frumos, iar hrana conține toate substanțele necesare pentru dezvoltarea completă a bobocilor și a florilor.",
+    features: ["60% mai multă prospețime", "Pudră sau lichid", "Formulă 99% bio", "Plic reciclabil"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    coverTitle: "Prima hrană lichidă pentru flori într-un ambalaj sustenabil",
+    coverText:
+      "Varianta lichidă este primul ambalaj sustenabil din lume pentru hrană lichidă pentru flori. Se amestecă ușor și rămâne limpede în apă, nu are miros și oferă toate substanțele de care au nevoie bobocii și florile ca să se dezvolte complet. Pentru cel mai bun rezultat, doza trebuie respectată, așa că e bine să le oferi clienților și sfaturile de îngrijire potrivite.",
+
+    advantages: [
+      "Păstrează florile frumoase cu până la 60% mai mult timp",
+      "Florile și bobocii se deschid mai frumos",
+      "Disponibilă sub formă de pudră sau de lichid",
+      "Varianta lichidă se amestecă ușor, rămâne limpede în apă și nu are miros",
+      "Plic din plastic complet reciclabil",
+      "Formulă 99% de origine biologică",
+      "Contribuie la o economie circulară și bazată pe resurse biologice",
+      "Design modern",
+    ],
+
+    steps: [
+      "Folosiți un plic de 1 litru la fiecare litru de apă din vază (sau un plic de 0,5 litri la jumătate de litru).",
+      "Pentru vazele mai mari, adăugați mai multe plicuri.",
+      "Când completați apa din vază, adăugați din nou hrană pentru flori.",
+    ],
+
+    specs: [
+      { k: "Brand", v: "Chrysal" },
+      { k: "Denumire", v: "Chrysal Universal – plic reciclabil" },
+      { k: "Tip", v: "Hrană pentru flori tăiate" },
+      { k: "Formă", v: "Pudră sau lichid" },
+      { k: "Formulă", v: "99% de origine biologică" },
+      { k: "Ambalaj", v: "Plic din plastic complet reciclabil" },
+      { k: "Țara de origine", v: "Olanda" },
+    ],
+
+    table: {
+      title: "Variante disponibile",
+      cols: ["Variantă", "Plic pentru", "Plicuri / cutie"],
+      rows: [
+        ["Pudră", "1 litru de apă", "400–1.000"],
+        ["Lichid", "1 litru de apă", "1.200"],
+        ["Lichid", "0,5 litri de apă", "2.000"],
+      ],
+    },
+    // flyer: "/flyere/produs42.pdf",
+  },
+  43: {
+    name: "Colorant pentru flori tăiate",
+    origin: { country: "Poland", code: "pl" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Colorant pentru flori tăiate, care se absoarbe prin tulpină, în 13 culori. Cu hormon vegetal pentru o colorare rapidă și foarte puțină sare.",
+    // --- pagina de detalii ---
+    intro: "Colorant profesional pentru flori tăiate, care se absoarbe prin tulpină, disponibil în 13 culori. Conține un hormon vegetal care face planta să absoarbă lichidul mai repede, așa că florile se colorează mai rapid. Are cea mai mică cantitate de sare de pe piață (2–3%), înlocuită cu zaharuri care au un efect bun asupra florilor tăiate.",
+    features: ["13 culori", "Colorare rapidă", "Doar 2–3% sare", "50 g"],
+    heroFit: "contain", // poza de hero e pe fundal alb -> se vede ÎNTREAGĂ (nu zoomată)
+
+    // CULORI: fiecare culoare are poza ei (p43-color-<key>.png), cu fâșia
+    // de pe etichetă colorată în culoarea respectivă.
+    defaultColor: "albastru-inchis",
+    colors: [
+      { key: "sampanie", name: "Șampanie", hex: "#EED9AE" },
+      { key: "negru", name: "Negru", hex: "#111111" },
+      { key: "rosu", name: "Roșu", hex: "#D7192A" },
+      { key: "lavanda", name: "Lavandă", hex: "#B79CD9" },
+      { key: "lila", name: "Lila (Milka)", hex: "#9A7FC0" },
+      { key: "albastru", name: "Albastru", hex: "#2F6FD6" },
+      { key: "albastru-inchis", name: "Albastru închis", hex: "#1C2F8F" },
+      { key: "portocaliu", name: "Portocaliu", hex: "#F28C1E" },
+      { key: "purpuriu", name: "Purpuriu", hex: "#7E1E6E" },
+      { key: "roz", name: "Roz", hex: "#F07AA8" },
+      { key: "verde", name: "Verde", hex: "#2E9E44" },
+      { key: "somon", name: "Somon", hex: "#F59A7E" },
+      { key: "galben", name: "Galben", hex: "#F7D417" },
+    ],
+
+    coverTitle: "De ce contează cantitatea de sare?",
+    coverText:
+      "Când colorezi flori, folosește un colorant făcut special pentru asta. Alți coloranți au în jur de 30–40% sare, care deteriorează tulpina și frunzele și scurtează viața florilor. Acest colorant are doar 2–3% sare, restul fiind înlocuit cu zaharuri, care ajută florile tăiate.",
+
+    applicationsTitle: "Flori care pot fi colorate",
+    applicationsNoIcon: true,
+    applications: [
+      "Agapanthus, Allium, Alstroemeria, Anemone, Anthurium, Astilbe",
+      "Bouvardia, Cymbidium, Dahlia, Chrysanthemum, Dianthus, Eustoma",
+      "Fresia, Gerbera, Gladiolus, Helianthus, Hippeastrum, Hyacinthus",
+      "Iris, Lathyrus, Lysimachia, Muscari, Narcissus, Ornithogalum",
+      "Paeonia, Phlox, Physostegia, Rosa, Tulipa, Viburnum, Zantedeschia",
+    ],
+
+    advantages: [
+      "Conține un hormon vegetal care grăbește absorbția și colorarea",
+      "Doar 2–3% sare, față de 30–40% la alți coloranți",
+      "Sarea e înlocuită cu zaharuri, care ajută florile tăiate",
+      "Nu deteriorează tulpina și frunzele",
+      "13 culori, de la șampanie și somon până la albastru închis și negru",
+      "Intensitatea culorii se poate regla după cantitatea de colorant",
+      "Potrivit pentru peste 30 de tipuri de flori",
+    ],
+
+    steps: [
+      "Folosiți flori care nu au stat înainte în apă: florile „însetate” absorb colorantul mai repede. Dacă plănuiți colorarea, nu udați plantele înainte de tăiere.",
+      "Dizolvați aproximativ 16 g de colorant în 1 litru de apă fierbinte (cca. 70°C). Puteți pune mai mult sau mai puțin, după intensitatea dorită, dar prea mult colorant face soluția prea vâscoasă ca să mai fie absorbită.",
+      "Tăiați 2–4 cm din tulpină și puneți florile în soluția caldă (nu fierbinte, până la 40°C), cu 2–3 cm de lichid în vas. Așteptați până se ajunge la culoarea dorită. Florile continuă să se coloreze o vreme și după ce le scoateți din soluție.",
+      "Clătiți capetele tulpinilor cu apă puternic clorinată, apoi puneți florile în apă curată, cu hrană pentru flori tăiate.",
+    ],
+    stepsAfterTitle: "Condiții pentru colorare",
+    stepsAfter: [
+      "Temperatura trebuie să fie peste 10°C. Sub 10°C florile nu absorb soluția.",
+      "La 10–15°C absorbția e medie, iar la 15–25°C e cea mai rapidă.",
+      "Umiditatea aerului nu trebuie să depășească 70%.",
+      "Florile absorb mai bine colorantul la lumină.",
+      "Păstrați colorantul într-un loc uscat și răcoros.",
+    ],
+
+    specs: [
+      { k: "Tip", v: "Colorant pentru flori tăiate, absorbit prin tulpină" },
+      { k: "Culori", v: "Șampanie, negru, roșu, lavandă, lila (Milka), albastru, albastru închis, portocaliu, purpuriu, roz, verde, somon, galben" },
+      { k: "Cantitate", v: "50 g" },
+      { k: "Doză", v: "Cca. 16 g la 1 l de apă (70°C)" },
+      { k: "Conținut de sare", v: "2–3%" },
+      { k: "Producător", v: "Royal Brinkman Polska Sp. z o.o." },
+    ],
+    // flyer: "/flyere/produs43.pdf",
+  },
 };
 
 /* Imagini + VIDEO pentru PAGINA de produs - se încarcă tot automat din:
@@ -1743,6 +2432,8 @@ const PRODUCT_INFO = {
      - slideshow:       p1-slide1.jpg, p1-slide2.jpg ...  (poți pune și
                         p1-slide3.mp4 - un slide poate fi VIDEO)
      - galerie (jos):   p1-1.jpg, p1-2.jpg ...
+     - poză pe culoare: p1-color-gri.jpg  (legată de culoarea cu key: "gri"
+                        din colors - apare când se alege culoarea)
    Video acceptat: .mp4, .webm  (autoplay, fără sunet, în buclă). */
 const detailImages = import.meta.glob(
   "./assets/produse/detalii/*.{jpg,jpeg,png,webp,mp4,webm}",
@@ -1767,7 +2458,14 @@ function detailFor(num) {
     .sort(([a], [b]) => numFrom(a) - numFrom(b))
     .map(([, src]) => src);
 
-  return { heroImg, slides, gallery };
+  // pozele pe culori: p1-color-<key>.png -> { key: src }
+  const colorImgs = Object.fromEntries(
+    entries
+      .map(([path, src]) => [path.match(new RegExp(`/p${num}-color-([\\w-]+)\\.`, "i"))?.[1], src])
+      .filter(([key]) => key)
+  );
+
+  return { heroImg, slides, gallery, colorImgs };
 }
 
 /* Extrage ID-ul și timpul de start dintr-un link YouTube. */
@@ -1792,7 +2490,9 @@ const PRODUCTS = Object.entries(productImages)
       ...parseYouTube(url),
     }));
     const slides = [...detail.slides, ...ytSlides].sort((a, b) => a.n - b.n);
-    return { num, img, ...detail, ...info, slides, price: SHOW_PRICES ? info.price : undefined };
+    // fiecare culoare primește poza ei (dacă există p{N}-color-<key>)
+    const colors = info.colors?.map((c) => ({ ...c, img: detail.colorImgs[c.key] }));
+    return { num, img, ...detail, ...info, slides, colors, price: SHOW_PRICES ? info.price : undefined };
   })
   .sort((a, b) => a.num - b.num);
 
@@ -1817,6 +2517,8 @@ const CATEGORIES = [
   { title: "Folii și plase pentru plante", nums: [1, 2] },
   { title: "Ventilatoare și pulverizatoare pentru seră", nums: [8, 3, 5, 4], cols: 2 },
   { title: "Tăvi de irigare și lădițe", nums: [6, 7, 9] },
+  { title: "Ghivece pentru plante", nums: [32, 33, 34, 35, 36, 37] },
+  { title: "Îngrijirea florilor și plantelor", nums: [38, 39, 40, 41, 42, 43] },
   { title: "Recomandări pentru nutriția plantelor", inMenu: false, nums: [12, 23, 25, 24, 27, 14, 16, 22, 17, 20] }, // adaugă aici numerele produselor de nutriție
   { title: "Recomandări pentru protecția plantelor", inMenu: false, nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
 ];
@@ -1944,9 +2646,13 @@ export default function App() {
 
   // ținem minte de unde a fost deschis produsul, ca „Înapoi” să ducă tot acolo
   const returnTo = useRef(null);
+  // culoarea aleasă pe cardurile din catalog: { nrProdus: indexCuloare }
+  const [cardColor, setCardColor] = useState({});
   const openProductPage = (p) => {
     returnTo.current = { num: p.num, y: window.scrollY };
-    setOpenProduct(p);
+    // dacă pe card s-a ales o culoare, pagina produsului se deschide pe ea
+    const picked = p.colors?.[cardColor[p.num]];
+    setOpenProduct(picked ? { ...p, defaultColor: picked.key } : p);
   };
 
   // de fiecare dată când se deschide un produs, pagina începe de sus
@@ -2252,7 +2958,11 @@ export default function App() {
                     >
                       <div className={`product-media${p.fit === "contain" ? " contain" : ""}`}>
                         {p.img ? (
-                          <img src={p.img} alt={p.name || `Produs ${p.num}`} loading="lazy" />
+                          <img
+                            src={p.colors?.[cardColor[p.num]]?.img || p.img}
+                            alt={p.name || `Produs ${p.num}`}
+                            loading="lazy"
+                          />
                         ) : (
                           <div className="product-ph" />
                         )}
@@ -2260,6 +2970,28 @@ export default function App() {
                       <div className="product-body">
                         <h3 className="product-name">{p.name || `Produs ${p.num}`}</h3>
                         {p.desc && <p className="product-desc">{p.desc}</p>}
+                        {/* bulinele de culoare: la click se schimbă poza cardului (fără să se deschidă produsul) */}
+                        {p.colors?.length > 0 && (
+                          <span className="product-colors" role="radiogroup" aria-label="Alege culoarea">
+                            {p.colors.map((c, ci) => (
+                              <button
+                                key={c.key}
+                                type="button"
+                                role="radio"
+                                aria-checked={cardColor[p.num] === ci}
+                                aria-label={c.name}
+                                title={c.name}
+                                className={cardColor[p.num] === ci ? "active" : ""}
+                                style={{ background: c.hex }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCardColor((s) => ({ ...s, [p.num]: ci }));
+                                }}
+                                onKeyDown={(e) => e.stopPropagation()}
+                              />
+                            ))}
+                          </span>
+                        )}
                         {p.price && <span className="product-price">{p.price}</span>}
                       </div>
                     </article>

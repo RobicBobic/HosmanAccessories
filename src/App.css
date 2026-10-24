@@ -449,6 +449,42 @@ body { top: 0 !important; position: static !important; }
 .pp-specs td { color: var(--muted); font-weight: 500; }
 .pp-note { color: var(--muted); font-size: 13px; margin-top: 12px; }
 
+/* CULORI: alegerea culorii pe pagina de produs */
+.pp-colors {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.pp-colors-label { color: var(--muted); font-size: 15px; font-weight: 600; }
+.pp-colors-label strong { color: var(--green-d); font-weight: 800; }
+.pp-colors-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp-color {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px 6px 6px; border-radius: 999px; cursor: pointer;
+  border: 2px solid var(--line); background: var(--card); color: var(--ink);
+  font: 600 14px 'Saira', system-ui, sans-serif;
+  transition: border-color .15s ease, background .15s ease;
+}
+.pp-color:hover { background: var(--soft); }
+.pp-color.active { border-color: var(--green); background: var(--soft); }
+.pp-color:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.pp-color-dot { width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); flex: 0 0 auto; }
+.pp-colors-note { color: var(--muted); font-size: 13px; }
+.pp-colors-group { display: flex; flex-direction: column; gap: 8px; }
+.pp-colors-group-label { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* bulinele de culoare de pe cardul din catalog */
+.product-colors { display: flex; flex-wrap: wrap; gap: 7px; }
+.product-colors button {
+  width: 22px; height: 22px; padding: 0; border: 0; border-radius: 999px; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.product-colors button:hover { transform: scale(1.12); }
+.product-colors button.active { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), 0 0 0 2px #fff, 0 0 0 4px var(--green); }
+.product-colors button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+.pp-steps-after-title { margin-top: 30px; }
+
 /* tabel dimensiuni disponibile */
 .pp-sizes-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
 .pp-sizes { width: 100%; border-collapse: collapse; min-width: 520px; }

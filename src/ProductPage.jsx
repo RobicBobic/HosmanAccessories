@@ -123,6 +123,16 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
   const p = product || {};
   const title = p.name || `Produs ${p.num}`;
 
+  // CULORI: culoarea aleasă schimbă poza de sus și primul slide (dacă are poză)
+  const [colorIdx, setColorIdx] = useState(() =>
+    Math.max(0, p.colors?.findIndex((c) => c.key === p.defaultColor) ?? 0)
+  );
+  const color = p.colors?.[colorIdx];
+  // fâșia de sus apare doar dacă produsul are poză de header (p{N}-hero)
+  const heroImg = p.heroImg ? color?.img || p.heroImg : null;
+  const baseSlides = p.slides?.length ? p.slides : p.img ? [{ src: p.img, video: false }] : [];
+  const slides = color?.img ? [{ src: color.img, video: false }, ...baseSlides.slice(1)] : baseSlides;
+
   return (
     <div className="hosman product-page" id="acasa">
       {/* bară sus cu buton înapoi + logo */}
@@ -159,7 +169,7 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
 
       {/* HERO: text + imagine diagonală */}
       <section
-        className={`pp-hero${p.heroImg ? "" : " pp-hero--noimg"}`}
+        className={`pp-hero${heroImg ? "" : " pp-hero--noimg"}`}
         style={p.heroFit === "contain" ? { background: "#fff" } : undefined}
       >
         <div className="pp-hero-inner h-wrap">
@@ -168,11 +178,11 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
           {p.intro && <p className="pp-intro">{p.intro}</p>}
         </div>
         {/* fâșia cu imagine apare doar dacă produsul are o imagine de header */}
-        {p.heroImg && (
+        {heroImg && (
           <div
             className="pp-hero-img"
             style={{
-              backgroundImage: `url('${p.heroImg}')`,
+              backgroundImage: `url('${heroImg}')`,
               ...(p.heroPos ? { backgroundPosition: p.heroPos } : {}),
               ...(p.heroFit === "contain"
                 ? {
@@ -191,15 +201,59 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
         <div className="pp-highlights-inner h-wrap">
           <div className="pp-roll">
             <RollSlideshow
-              items={p.slides?.length ? p.slides : p.img ? [{ src: p.img, video: false }] : []}
-              alt={title}
+              key={colorIdx} // la schimbarea culorii, slideshow-ul pornește de la poza culorii
+              items={slides}
+              alt={color ? `${title} - ${color.name}` : title}
               fit={p.fit}
               sound={p.sound !== false}
             />
           </div>
 
-          {(p.features?.length > 0 || p.origin) && (
+          {(p.features?.length > 0 || p.origin || p.colors?.length > 0) && (
             <div className="pp-side">
+              {p.colors?.length > 0 && (
+                <div className="pp-colors">
+                  <span className="pp-colors-label">
+                    Culoare: <strong>{color.name}</strong>
+                  </span>
+                  {/* două grupuri: culori standard și culori la comandă (custom: true) */}
+                  {[
+                    { label: "Culori standard", custom: false },
+                    { label: "Culori la comandă", custom: true },
+                  ].map((grp) => {
+                    const list = p.colors
+                      .map((c, i) => ({ ...c, i }))
+                      .filter((c) => !!c.custom === grp.custom);
+                    if (list.length === 0) return null;
+                    const showLabel = p.colors.some((c) => c.custom);
+                    return (
+                      <div key={grp.label} className="pp-colors-group">
+                        {showLabel && <span className="pp-colors-group-label">{grp.label}</span>}
+                        <div className="pp-colors-list" role="radiogroup" aria-label={grp.label}>
+                          {list.map((c) => (
+                            <button
+                              key={c.key}
+                              type="button"
+                              role="radio"
+                              aria-checked={c.i === colorIdx}
+                              className={`pp-color${c.i === colorIdx ? " active" : ""}`}
+                              onClick={() => setColorIdx(c.i)}
+                              title={c.name}
+                            >
+                              <span className="pp-color-dot" style={{ background: c.hex }} />
+                              <span className="pp-color-name">{c.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {!color.img && p.colors.some((c) => c.img) && (
+                    <p className="pp-colors-note">Poza pentru această culoare va fi adăugată în curând.</p>
+                  )}
+                </div>
+              )}
+
               {p.features?.length > 0 && (
                 <ul className="pp-features">
                   {p.features.map((f, i) => (
@@ -293,6 +347,9 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
                 </li>
               ))}
             </ol>
+            {p.stepsAfterTitle && p.stepsAfter?.length > 0 && (
+              <h3 className="pp-h3 pp-steps-after-title">{p.stepsAfterTitle}</h3>
+            )}
             {p.stepsAfter?.length > 0 && (
               <ul className="pp-list pp-steps-after">
                 {p.stepsAfter.map((s, i) => (
@@ -424,6 +481,37 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
           </div>
         </section>
       )}
+
+      {/* TABELE LIBERE (ex. modele disponibile): table = { title, cols[], rows[[...]] }
+          sau mai multe: tables = [{ ... }, { ... }] */}
+      {(p.tables || (p.table ? [p.table] : []))
+        .filter((t) => t.rows?.length > 0)
+        .map((t, ti) => (
+          <section className="pp-block" key={ti}>
+            <div className="h-wrap">
+              <h3 className="pp-h3">{t.title || "Modele disponibile"}</h3>
+              <div className="pp-sizes-wrap">
+                <table className="pp-sizes">
+                  <thead>
+                    <tr>
+                      {t.cols.map((c) => <th key={c}>{c}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {t.rows.map((r, idx) => (
+                      <tr key={idx}>
+                        {r.map((v, j) => (
+                          <td key={j}>{j === 0 ? <strong>{v}</strong> : v}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {t.note && <p className="pp-list-note">{t.note}</p>}
+            </div>
+          </section>
+        ))}
 
       {/* FLYER */}
       {p.flyer && (
