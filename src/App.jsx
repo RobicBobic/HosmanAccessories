@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useLayoutEffect, useRef } from "react";
 
 /* Derulare INSTANT (fără animație). Site-ul are „scroll-behavior: smooth”,
    iar derularea animată se oprea uneori la mijlocul paginii când se schimba
@@ -15,8 +15,9 @@ function jumpTo(top = 0) {
   }
   root.style.scrollBehavior = prev;
 }
-import { ChevronLeft, ChevronRight, Menu, Search, Phone, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu, Search, Phone, X, Sprout, ArrowRight } from "lucide-react";
 import ProductPage from "./ProductPage";
+import { assignSlugs, productPath, slugify } from "./slug";
 import ContactButton from "./ContactButton";
 import "./App.css";
 
@@ -2423,6 +2424,54 @@ const PRODUCT_INFO = {
     ],
     // flyer: "/flyere/produs43.pdf",
   },
+  44: {
+    name: "Substrat profesional QTS, 250 L",
+    origin: { country: "Latvia", code: "lv" },
+    fit: "contain", // poza e pe fundal alb -> se vede întreagă, fără zoom-crop
+    desc: "Substrat profesional pe bază de turbă, cu îngrășământ NPK și agent de umectare, pentru răsaduri, flori, legume, arbuști și pomi. Sac de 250 L.",
+    // --- pagina de detalii ---
+    intro: "QTS Substrate sunt substraturi profesionale pe bază de turbă, adaptate nevoilor diferitelor specii de plante. Nu doar pH-ul și conținutul de nutrienți sunt potrivite exact, ci și structura substratului, ca să răspundă cerințelor fiecărei culturi. Substratul conține îngrășământ NPK și agent de umectare, așa că absoarbe ușor apa și hrănește plantele încă de la început.",
+    features: ["Pe bază de turbă", "Cu îngrășământ NPK", "Cu agent de umectare", "Sac de 250 L"],
+
+    applicationsTitle: "Potrivit pentru",
+    applications: [
+      "Tăvi, răsaduri, butași și ghivece presate sau din hârtie",
+      "Plante de grădină, flori și legume",
+      "Plante perene, arbuști și pomi",
+      "Legume, plante aromatice, fructe de pădure și flori",
+    ],
+
+    advantages: [
+      "Substrat 100% din turbă, pentru o structură aerată și uniformă",
+      "Conține îngrășământ NPK, deci plantele au hrană de la început",
+      "Agentul de umectare ajută substratul să absoarbă apa rapid și uniform",
+      "pH adaptat plantelor (6,0 în apă)",
+      "Variante diferite pentru înmulțire, ghivece și pepiniere",
+      "Ambalaj mare, de 250 L, potrivit pentru sere și producători",
+    ],
+
+    specs: [
+      { k: "Brand", v: "QTS Substrates (Compaqpeat)" },
+      { k: "Denumire", v: "QTS Professional" },
+      { k: "Tip", v: "Substrat profesional pe bază de turbă" },
+      { k: "Compoziție", v: "100% turbă, îngrășământ NPK, agent de umectare" },
+      { k: "pH (H₂O)", v: "6,0" },
+      { k: "Volum", v: "250 L (±3–5%)" },
+      { k: "Țara de origine", v: "Letonia" },
+    ],
+
+    table: {
+      title: "Variante QTS",
+      cols: ["Variantă", "Utilizare", "Conductivitate (µS/cm)", "N (mg/l)", "P₂O₅ (mg/l)", "K₂O (mg/l)"],
+      rows: [
+        ["QTS Propagation", "Tăvi, răsaduri, butași, ghivece presate", "190", "70", "80", "80"],
+        ["QTS Potting Soil", "Plante de grădină, flori și legume", "375", "140", "160", "180"],
+        ["QTS Tree Nursery", "Plante perene, arbuști și pomi", "375", "140", "160", "180"],
+      ],
+      note: "Valorile sunt din declarația europeană de pe sac. Se pot face și substraturi la comandă (QTS Customized), adaptate apei de irigare și sistemului de udare.",
+    },
+    // flyer: "/flyere/produs44.pdf",
+  },
 };
 
 /* Imagini + VIDEO pentru PAGINA de produs - se încarcă tot automat din:
@@ -2449,9 +2498,19 @@ function detailFor(num) {
     new RegExp(`/p${num}-hero\\.`, "i").test(path)
   )?.[1];
 
+  // variantele colorate ale unui slide: p1-slide2-gri.webp -> slide 2, culoarea „gri”
+  const variantsOf = (n) => Object.fromEntries(
+    entries
+      .map(([path, src]) => [path.match(new RegExp(`/p${num}-slide${n}-([\\w-]+)\\.`, "i"))?.[1], src])
+      .filter(([key]) => key)
+  );
+
   const slides = entries
     .filter(([path]) => new RegExp(`/p${num}-slide(\\d+)\\.`, "i").test(path))
-    .map(([path, src]) => ({ n: numFrom(path), src, video: isVideo(path) }));
+    .map(([path, src]) => {
+      const n = numFrom(path);
+      return { n, src, video: isVideo(path), variants: variantsOf(n) };
+    });
 
   const gallery = entries
     .filter(([path]) => new RegExp(`/p${num}-(\\d+)\\.`, "i").test(path) && !isVideo(path))
@@ -2517,29 +2576,199 @@ const CATEGORIES = [
   { title: "Folii și plase pentru plante", nums: [1, 2] },
   { title: "Ventilatoare și pulverizatoare pentru seră", nums: [8, 3, 5, 4], cols: 2 },
   { title: "Tăvi de irigare și lădițe", nums: [6, 7, 9] },
+  { title: "Substraturi pentru plante", nums: [44] },
   { title: "Ghivece pentru plante", nums: [32, 33, 34, 35, 36, 37] },
   { title: "Îngrijirea florilor și plantelor", nums: [38, 39, 40, 41, 42, 43] },
   { title: "Recomandări pentru nutriția plantelor", inMenu: false, nums: [12, 23, 25, 24, 27, 14, 16, 22, 17, 20] }, // adaugă aici numerele produselor de nutriție
   { title: "Recomandări pentru protecția plantelor", inMenu: false, nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
 ];
 
+/* ============================================================
+   RĂSADURI DE FLORI - calendarul de primire a comenzilor.
+   ------------------------------------------------------------
+   from / to = [zi, lună] (lunile 1-12). Anul nu contează: perioada
+   se repetă în fiecare an. Plantele pentru care se primesc comenzi
+   chiar acum sunt evidențiate automat, după data de azi.
+   Adaugi / scoți o plantă -> adaugi / ștergi un rând.
+   POZE: pui poza în src/assets/rasaduri/ (ex. bujori.webp) și scrii
+   foto: "bujori" la planta respectivă. banner.webp = poza mare de sus.
+   ============================================================ */
+const rasaduriModules = import.meta.glob(
+  "./assets/rasaduri/*.{jpg,jpeg,png,webp}",
+  { eager: true, import: "default" }
+);
+const RASADURI_FOTO = Object.fromEntries(
+  Object.entries(rasaduriModules).map(([path, src]) => [path.match(/([\w-]+)\.\w+$/)[1], src])
+);
+const RASADURI = [
+  { name: "Crizantemă", latin: "Chrysanthemum", from: [15, 12], to: [15, 1], foto: "crizantema" },
+  // o singură plantă cu mai multe etape: pe card se alege săptămâna (poza și perioada se schimbă)
+  { name: "Eustoma", latin: "Lisianthus", etape: [
+    { label: "Săptămâna 7", from: [15, 10], to: [30, 10], foto: "eustoma-7" },
+    { label: "Săptămâna 11", from: [1, 11], to: [15, 11], foto: "eustoma-11" },
+    { label: "Săptămâna 15", from: [15, 11], to: [30, 11], foto: "eustoma-15" },
+    { label: "Săptămâna 19", from: [1, 12], to: [15, 12], foto: "eustoma-19" },
+    { label: "Săptămâna 23", from: [3, 1], to: [15, 1], foto: "eustoma-23" },
+  ] },
+  { name: "Ciclamen", latin: "Cyclamen", from: [1, 3], to: [15, 3], foto: "ciclamen" },
+  { name: "Lalele", latin: "Tulipa", from: [20, 2], to: [10, 3], foto: "lalele" },
+  { name: "Zambile", latin: "Hyacinthus", from: [10, 3], to: [30, 5], foto: "zambile" },
+  { name: "Narcise", latin: "Narcissus", from: [10, 3], to: [30, 5], foto: "narcise" },
+  { name: "Brândușe", latin: "Crocus", from: [10, 3], to: [30, 5], foto: "branduse" },
+  { name: "Primule", latin: "Primula", from: [3, 5], to: [25, 5], foto: "primule" },
+  { name: "Cinerarie", latin: "Cineraria", from: [3, 5], to: [25, 5], foto: "cinerarie" },
+  { name: "Senecio", latin: "Senecio", from: [3, 5], to: [25, 5], foto: "senecio" },
+  { name: "Mușcate I", latin: "Pelargonium", from: [5, 6], to: [30, 6], foto: "muscate-1" },
+  { name: "Surfinia", latin: "Petunia × hybrida", from: [25, 8], to: [15, 9], foto: "surfinia" },
+  { name: "Mușcate II", latin: "Pelargonium", from: [25, 8], to: [15, 9], foto: "muscate-2" },
+  { name: "Verbena", latin: "Verbena", from: [25, 8], to: [15, 9], foto: "verbena" },
+  { name: "Petunie", latin: "Petunia", from: [25, 8], to: [15, 9], foto: "petunie" },
+  { name: "Osteospermum", latin: "Osteospermum", from: [25, 8], to: [15, 9], foto: "osteospermum" },
+  { name: "Fuchsia (cerceluș)", latin: "Fuchsia", from: [15, 9], to: [10, 10], foto: "fuchsia" },
+  { name: "Panseluțe", latin: "Viola", from: [15, 9], to: [10, 10], foto: "panselute" },
+  { name: "Garoafe", latin: "Dianthus", from: [15, 9], to: [10, 10], foto: "garoafe" },
+  { name: "Crini", latin: "Lilium", from: [10, 6], to: [10, 7], foto: "crini" },
+  { name: "Bujori", latin: "Paeonia", from: [15, 2], to: [15, 3], foto: "bujori" },
+];
+const LUNI = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie",
+  "august", "septembrie", "octombrie", "noiembrie", "decembrie"];
+const fmtZi = ([d, m]) => `${d} ${LUNI[m - 1]}`;
+// e azi în perioadă? (merge și peste anul nou, ex. 15 decembrie - 15 ianuarie)
+function comenziDeschise(r, azi = new Date()) {
+  const v = (azi.getMonth() + 1) * 100 + azi.getDate();
+  const a = r.from[1] * 100 + r.from[0];
+  const b = r.to[1] * 100 + r.to[0];
+  return a <= b ? v >= a && v <= b : v >= a || v <= b;
+}
+
+// câte zile mai sunt până se deschid comenzile (0 = deschise acum)
+function zilePanaLa(r, azi = new Date()) {
+  if (comenziDeschise(r, azi)) return 0;
+  const zi = new Date(azi.getFullYear(), azi.getMonth(), azi.getDate());
+  let start = new Date(zi.getFullYear(), r.from[1] - 1, r.from[0]);
+  if (start < zi) start = new Date(zi.getFullYear() + 1, r.from[1] - 1, r.from[0]);
+  return Math.round((start - zi) / 86400000);
+}
+// zile rămase până se închid comenzile (pentru ordinea celor deschise acum)
+function zilePanaLaFinal(r, azi = new Date()) {
+  const zi = new Date(azi.getFullYear(), azi.getMonth(), azi.getDate());
+  let end = new Date(zi.getFullYear(), r.to[1] - 1, r.to[0]);
+  if (end < zi) end = new Date(zi.getFullYear() + 1, r.to[1] - 1, r.to[0]);
+  return Math.round((end - zi) / 86400000);
+}
+// etapa cea mai apropiată a unei plante (cea deschisă acum sau următoarea)
+function etapaApropiata(plant) {
+  if (!plant.etape) return 0;
+  let best = 0;
+  plant.etape.forEach((e, i) => { if (zilePanaLa(e) < zilePanaLa(plant.etape[best])) best = i; });
+  return best;
+}
+// ordinea cronologică: întâi cele deschise acum (care se închid mai repede primele),
+// apoi după data la care se deschid comenzile
+function rasaduriInOrdine() {
+  const cheie = (p) => {
+    const r = p.etape ? p.etape[etapaApropiata(p)] : p;
+    const z = zilePanaLa(r);
+    return z === 0 ? zilePanaLaFinal(r) - 1000 : z;
+  };
+  return [...RASADURI].sort((a, b) => cheie(a) - cheie(b));
+}
+
 // Lista de categorii cu numărul de produse (pentru meniul „Catalog produse” și bara laterală)
 const ALL_PRODUCTS = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
 // inMenu: false = categoria nu apare în meniul „Catalog produse” și nici în secțiunea „Catalog” (produsele rămân pe pagină)
+// plantele pentru care se primesc comenzi azi (pentru anunțul din capul site-ului)
+const RASADURI_ACUM = rasaduriInOrdine().flatMap((p) =>
+  p.etape
+    ? p.etape.filter((e) => comenziDeschise(e)).map((e) => ({ name: `${p.name} (${e.label.toLowerCase()})`, to: e.to, foto: e.foto }))
+    : comenziDeschise(p) ? [{ name: p.name, to: p.to, foto: p.foto }] : []
+);
+
+// după ce categorie apar „Răsaduri de flori” (în meniu, în cuprins și pe pagină)
+const RASADURI_DUPA = "Ghivece pentru plante";
 const CAT_LINKS = CATEGORIES.map((cat, ci) => ({
   title: cat.title,
   id: `cat-${ci + 1}`,
   inMenu: cat.inMenu !== false,
   count: cat.nums.filter((n) => ALL_PRODUCTS.some((p) => p.num === n)).length,
-})).filter((c) => c.count > 0 && c.inMenu);
+}))
+  .filter((c) => c.count > 0 && c.inMenu)
+  .flatMap((c) => c.title === RASADURI_DUPA
+    ? [c, { title: "Răsaduri de flori", id: "rasaduri", inMenu: true, count: RASADURI.length }]
+    : [c]);
 
 // căutare fără diacritice: „protectia” găsește „protecția”
 const norm = (t) =>
   (t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+/* ADRESE: fiecare produs are adresa lui, sub categoria lui:
+     /categorie/folii-si-plase-pentru-plante/folie-alb-negru
+   (se fac din nume; o culoare aleasă se adaugă ca ?culoare=gri).
+   Produsele fără categorie rămân la /produs/... */
+const SLUGS = assignSlugs(ALL_PRODUCTS);
+ALL_PRODUCTS.forEach((p) => {
+  p.slug = SLUGS[p.num];
+  const cat = CATEGORIES.find((c) => c.nums.includes(p.num));
+  p.path = cat ? `/categorie/${slugify(cat.title)}/${p.slug}` : productPath(p.slug);
+});
+const urlFor = (p, colorKey) =>
+  p.path + (colorKey ? `?culoare=${encodeURIComponent(colorKey)}` : "");
+
+// produsul din adresa curentă (sau null). Merg și adresele vechi /produs/...
+function productFromUrl() {
+  const path = window.location.pathname.replace(/\/+$/, "");
+  const m = path.match(/^\/categorie\/[^/]+\/([^/]+)$/) || path.match(/^\/produs\/([^/]+)$/);
+  if (!m) return null;
+  const p = ALL_PRODUCTS.find((x) => x.slug === decodeURIComponent(m[1]));
+  if (!p) return null;
+  const color = new URLSearchParams(window.location.search).get("culoare");
+  return color && p.colors?.some((c) => c.key === color) ? { ...p, defaultColor: color } : p;
+}
+
+/* SECȚIUNI: adrese curate pentru categorii, în loc de „#”:
+   /catalog, /categorie/ghivece-pentru-plante, /categorie/rasaduri-de-flori ... */
+const SECTIONS = [
+  { id: "catalog", title: "Catalog", path: "/catalog" },
+  ...CATEGORIES.map((c, ci) => ({ id: `cat-${ci + 1}`, title: c.title })),
+  { id: "rasaduri", title: "Răsaduri de flori" },
+].map((s) => ({ ...s, path: s.path || `/categorie/${slugify(s.title)}` }));
+const sectionPath = (id) => SECTIONS.find((s) => s.id === id)?.path || "/";
+function sectionFromUrl() {
+  const path = window.location.pathname.replace(/\/+$/, "");
+  return SECTIONS.find((s) => s.path === path) || null;
+}
+// derulare până la secțiune (ține cont de scroll-margin-top din CSS);
+// smooth = false -> salt instant (la deschiderea directă a adresei)
+function scrollToSection(id, smooth = true) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+  const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - margin);
+  if (smooth) window.scrollTo({ top, behavior: "smooth" });
+  else jumpTo(top);
+}
+
+// titlul paginii și descrierea pentru Google, pe fiecare produs
+const SITE = "https://www.hosmanflowers.md";
+const HOME_META = {
+  title: document.title,
+  desc: document.querySelector('meta[name="description"]')?.content || "",
+};
+function setPageMeta(p) {
+  const s = p ? null : sectionFromUrl();
+  document.title = p
+    ? `${p.name || `Produs ${p.num}`} | Hosman Flowers`
+    : s ? `${s.title} | Hosman Flowers` : HOME_META.title;
+  const desc = document.querySelector('meta[name="description"]');
+  if (desc) desc.content = p?.desc || HOME_META.desc;
+  const canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.href = SITE + (p ? p.path : s ? s.path : "/");
+}
+
 export default function App() {
   const [active, setActive] = useState(0);
-  const [openProduct, setOpenProduct] = useState(null);
+  // la deschidere: dacă adresa e /produs/..., pornim direct pe produsul acela
+  const [openProduct, setOpenProduct] = useState(productFromUrl);
   const [lang, setLangState] = useState("ro");
   const [catOpen, setCatOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -2575,6 +2804,13 @@ export default function App() {
     const t = setInterval(() => setActive((p) => (p + 1) % SLIDES.length), 5000);
     return () => clearInterval(t);
   }, []);
+
+  // pozele din slider se încarcă pe rând: cea vizibilă + următoarea; odată încărcate, rămân
+  const heroLoaded = useRef(new Set()).current;
+  if (SLIDES.length > 0) {
+    heroLoaded.add(active);
+    heroLoaded.add((active + 1) % SLIDES.length);
+  }
 
   // ---- COMUTATOR DE LIMBĂ (Google Translate, ascuns) ----
   useEffect(() => {
@@ -2621,25 +2857,9 @@ export default function App() {
       document.cookie = `googtrans=/ro/${l};path=/;`;
       document.cookie = `googtrans=/ro/${l};path=/;domain=.${host};`;
     }
-    // ține minte pe ce produs eram, ca să revenim tot acolo după reîncărcare
-    if (openProduct) sessionStorage.setItem("hosmanOpenProduct", String(openProduct.num));
-    else sessionStorage.removeItem("hosmanOpenProduct");
+    // adresa (/produs/...) rămâne la reîncărcare, deci revenim pe același produs
     window.location.reload();
   };
-
-  // după schimbarea limbii (reîncărcare), redeschide produsul unde eram
-  useEffect(() => {
-    const saved = sessionStorage.getItem("hosmanOpenProduct");
-    if (saved) {
-      sessionStorage.removeItem("hosmanOpenProduct");
-      const src = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
-      const p = src.find((x) => x.num === Number(saved));
-      if (p) {
-        returnTo.current = { num: p.num };
-        setOpenProduct(p);
-      }
-    }
-  }, []);
 
   const goTo = (i) =>
     SLIDES.length > 0 && setActive((i + SLIDES.length) % SLIDES.length);
@@ -2648,12 +2868,39 @@ export default function App() {
   const returnTo = useRef(null);
   // culoarea aleasă pe cardurile din catalog: { nrProdus: indexCuloare }
   const [cardColor, setCardColor] = useState({});
+  // etapa aleasă la răsadurile cu mai multe etape (ex. Eustoma): { numePlantă: indexEtapă }
+  const [rasadEtapa, setRasadEtapa] = useState({});
   const openProductPage = (p) => {
     returnTo.current = { num: p.num, y: window.scrollY };
     // dacă pe card s-a ales o culoare, pagina produsului se deschide pe ea
     const picked = p.colors?.[cardColor[p.num]];
     setOpenProduct(picked ? { ...p, defaultColor: picked.key } : p);
+    window.history.pushState({ produs: p.num }, "", urlFor(p, picked?.key));
   };
+
+  // titlul și descrierea paginii (pentru Google și pentru tab-ul browserului)
+  useEffect(() => { setPageMeta(openProduct); }, [openProduct]);
+
+  // la deschiderea site-ului:
+  // - adresă de produs / categorie care nu există -> adresa paginii principale
+  // - adresă de categorie (/categorie/...) -> derulăm direct la secțiunea ei
+  useEffect(() => {
+    const path = window.location.pathname;
+    const p = productFromUrl();
+    if ((path.startsWith("/produs/") || path.startsWith("/categorie/")) && !p && !sectionFromUrl()) {
+      window.history.replaceState(null, "", "/");
+      return;
+    }
+    // adresă veche /produs/... sau categorie greșită -> adresa nouă, sub categoria produsului
+    if (p && path.replace(/\/+$/, "") !== p.path) {
+      window.history.replaceState(null, "", p.path + window.location.search);
+    }
+    const s = sectionFromUrl();
+    if (!s || productFromUrl()) return;
+    const t1 = setTimeout(() => scrollToSection(s.id, false), 50);
+    const t2 = setTimeout(() => scrollToSection(s.id, false), 500); // după ce se așază pozele
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
   // de fiecare dată când se deschide un produs, pagina începe de sus
   useLayoutEffect(() => {
@@ -2668,7 +2915,47 @@ export default function App() {
   useEffect(() => {
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
   }, []);
+  // „Înapoi la catalog”: dacă produsul a fost deschis din site, e ca butonul
+  // Înapoi al browserului; dacă s-a intrat direct pe adresa produsului, mergem la pagina principală
   const closeProductPage = () => {
+    if (window.history.state?.produs) {
+      window.history.back(); // restul îl face ascultătorul „popstate” de mai jos
+    } else {
+      window.history.replaceState(null, "", "/");
+      showHome();
+    }
+  };
+
+  // butoanele Înapoi / Înainte ale browserului
+  const onPopRef = useRef(null);
+  onPopRef.current = () => {
+    const p = productFromUrl();
+    if (p) { setOpenProduct(p); return; }
+    if (openProduct) { showHome(); return; } // de pe un produs înapoi pe pagina principală
+    // pe pagina principală: Înapoi / Înainte între secțiuni
+    setPageMeta(null);
+    const s = sectionFromUrl();
+    if (s) scrollToSection(s.id);
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // click pe o categorie: adresă curată (/categorie/...) + derulare lină până la ea
+  const goSection = (e, id) => {
+    e.preventDefault();
+    setCatOpen(false);
+    const path = sectionPath(id);
+    if (window.location.pathname !== path) window.history.pushState({ sectiune: id }, "", path);
+    setPageMeta(null);
+    scrollToSection(id);
+  };
+  useEffect(() => {
+    const onPop = () => onPopRef.current();
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  // pagina principală, derulată înapoi la produsul pe care s-a apăsat
+  const showHome = () => {
     const back = returnTo.current;
     setOpenProduct(null);
     // după ce revine pagina principală, ne întoarcem la produsul pe care s-a apăsat
@@ -2695,11 +2982,88 @@ export default function App() {
   if (openProduct) {
     return (
       <>
-        <ProductPage product={openProduct} onBack={closeProductPage} lang={lang} onChangeLang={changeLang} />
+        <ProductPage
+          key={`${openProduct.num}-${openProduct.defaultColor || ""}`}
+          product={openProduct}
+          onBack={closeProductPage}
+          lang={lang}
+          onChangeLang={changeLang}
+        />
         <ContactButton />
       </>
     );
   }
+
+  // RĂSADURI DE FLORI: cardurile, în ordine cronologică (apar imediat după ghivece)
+  const renderRasaduri = () => (
+              <div className="catalog-cat rasaduri" id="rasaduri">
+                <h2 className="catalog-title">Răsaduri de flori</h2>
+                <p className="rasaduri-intro">
+                  Răsadurile se comandă din timp. Pe fiecare card găsești perioada în care
+                  primim comenzi. Comenzi la{" "}
+                  <a href="tel:+37379434108" className="notranslate" translate="no">+373 794 34 108</a>.
+                </p>
+
+                {RASADURI_FOTO.banner && (
+                  <img
+                    className="rasaduri-banner"
+                    src={RASADURI_FOTO.banner}
+                    alt="Răsaduri de Eustoma la săptămânile 7, 11, 15, 19 și 23"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+
+                {/* cardurile, la fel ca la celelalte produse */}
+                <div className="catalog-grid">
+                  {rasaduriInOrdine().map((plant) => {
+                    // planta cu etape (ex. Eustoma): etapa aleasă pe card, implicit cea deschisă acum / următoarea
+                    const etape = plant.etape;
+                    const idx = etape ? rasadEtapa[plant.name] ?? etapaApropiata(plant) : 0;
+                    const r = etape ? { ...plant, ...etape[idx] } : plant;
+                    const open = comenziDeschise(r);
+                    const img = RASADURI_FOTO[r.foto];
+                    return (
+                      <article className="product rasad" key={plant.name}>
+                        <div className="product-media contain">
+                          {img ? (
+                            <img src={img} alt={etape ? `${plant.name}, ${r.label}` : plant.name} loading="lazy" decoding="async" />
+                          ) : (
+                            <div className="product-ph rasad-ph"><Sprout size={52} aria-hidden="true" /></div>
+                          )}
+                          {open && <span className="rasad-badge">Comenzi deschise</span>}
+                        </div>
+                        <div className="product-body">
+                          <h3 className="product-name">{plant.name}</h3>
+                          <p className="product-desc"><i className="notranslate" translate="no">{plant.latin}</i></p>
+                          {etape && (
+                            <div className="rasad-etape" role="radiogroup" aria-label="Alege săptămâna">
+                              {etape.map((e, ei) => (
+                                <button
+                                  key={e.label}
+                                  type="button"
+                                  role="radio"
+                                  aria-checked={ei === idx}
+                                  className={`${ei === idx ? "active" : ""}${comenziDeschise(e) ? " open" : ""}`}
+                                  onClick={() => setRasadEtapa((s) => ({ ...s, [plant.name]: ei }))}
+                                  title={e.label}
+                                >
+                                  {e.label.replace("Săptămâna ", "Săpt. ")}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                          <p className="rasad-period">
+                            Perioada de comandă:<br />
+                            <strong>{fmtZi(r.from)} – {fmtZi(r.to)}</strong>
+                          </p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+  );
 
   return (
     <>
@@ -2707,12 +3071,46 @@ export default function App() {
       {/* element ascuns pentru Google Translate */}
       <div id="google_translate_element" style={{ display: "none" }} />
 
-      {/* CADRU VERDE SUS: header + hero */}
+      {/* CADRU VERDE SUS: anunț răsaduri + header + hero */}
       <div className="topwrap">
+        {/* ANUNȚ: apare singur cât timp se primesc comenzi pentru vreo plantă */}
+        {RASADURI_ACUM.length > 0 && (
+          <a
+            className="season-bar"
+            href={sectionPath("rasaduri")}
+            onClick={(e) => goSection(e, "rasaduri")}
+          >
+            {/* pozele plantelor (cel mult 4); dacă nu au poză, iconița de răsad */}
+            {RASADURI_ACUM.some((r) => RASADURI_FOTO[r.foto]) ? (
+              <span className="season-bar-pics" aria-hidden="true">
+                {RASADURI_ACUM.filter((r) => RASADURI_FOTO[r.foto]).slice(0, 4).map((r) => (
+                  <img key={r.name} src={RASADURI_FOTO[r.foto]} alt="" />
+                ))}
+              </span>
+            ) : (
+              <Sprout size={20} aria-hidden="true" className="season-bar-ic" />
+            )}
+            <span className="season-bar-text">
+              <strong>A început sezonul de comenzi!</strong>{" "}
+              Acum primim comenzi pentru răsaduri de{" "}
+              {RASADURI_ACUM.map((r, i) => (
+                <Fragment key={r.name}>
+                  {i > 0 && (i === RASADURI_ACUM.length - 1 ? " și " : ", ")}
+                  <b>{r.name}</b> (până pe {fmtZi(r.to)})
+                </Fragment>
+              ))}
+              .
+            </span>
+            <span className="season-bar-cta">
+              Vezi răsadurile <ArrowRight size={16} aria-hidden="true" />
+            </span>
+          </a>
+        )}
+
         <header className="site-header">
           <img
             className="brand-logo"
-            src="/logo.png"
+            src="/logo.webp"
             alt="Hosman Flowers & Accessories"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
@@ -2755,7 +3153,7 @@ export default function App() {
             {catOpen && (
               <nav className="cat-dropdown" id="cat-dropdown" aria-label="Categorii">
                 {CAT_LINKS.map((c) => (
-                  <a key={c.id} href={`#${c.id}`} onClick={() => setCatOpen(false)}>
+                  <a key={c.id} href={sectionPath(c.id)} onClick={(e) => goSection(e, c.id)}>
                     <span>{c.title}</span>
                     <ChevronRight size={18} aria-hidden="true" />
                   </a>
@@ -2816,7 +3214,7 @@ export default function App() {
         <div className="hero-row">
           <nav className="cat-side" aria-label="Categorii de produse">
             {CAT_LINKS.map((c) => (
-              <a key={c.id} href={`#${c.id}`}>
+              <a key={c.id} href={sectionPath(c.id)} onClick={(e) => goSection(e, c.id)}>
                 <span>{c.title}</span>
                 <ChevronRight size={18} aria-hidden="true" />
               </a>
@@ -2825,11 +3223,12 @@ export default function App() {
 
         <section className="hero">
           <div className="hero-slides">
+            {/* se descarcă doar poza vizibilă și următoarea (plus cele deja văzute) */}
             {SLIDES.map((s, idx) => (
               <div
                 key={s.num}
                 className={`hero-slide ${idx === active ? "active" : ""}`}
-                style={{ backgroundImage: `url('${s.img}')` }}
+                style={heroLoaded.has(idx) ? { backgroundImage: `url('${s.img}')` } : undefined}
               />
             ))}
           </div>
@@ -2851,7 +3250,7 @@ export default function App() {
               Soluții complete pentru horticultură: de la substraturi și accesorii
               pentru sere până la produse pentru nutriția și protecția plantelor.
             </p>
-            <a href="#catalog" className="hero-btn">Vezi catalogul</a>
+            <a href={sectionPath("catalog")} className="hero-btn" onClick={(e) => goSection(e, "catalog")}>Vezi catalogul</a>
           </div>
 
           {SLIDES.length > 1 && (
@@ -2881,7 +3280,7 @@ export default function App() {
             <div className="marquee-track">
               {[...PARTNERS, ...PARTNERS].map((p, i) => {
                 const logo = (
-                  <img className="partner-logo" src={p.src} alt={`Partener ${p.num}`} />
+                  <img className="partner-logo" src={p.src} alt={`Partener ${p.num}`} loading="lazy" decoding="async" />
                 );
                 return p.url ? (
                   <a
@@ -2918,12 +3317,20 @@ export default function App() {
                 const items = cat.nums.map((n) => list.find((p) => p.num === n)).filter(Boolean);
                 if (items.length === 0) return null;
                 return (
-                  <a className="cat-index-card" href={`#cat-${ci + 1}`} key={cat.title}>
-                    <span className="cat-index-name">{cat.title}</span>
-                    <span className="cat-index-count">
-                      {items.length} {items.length === 1 ? "produs" : "produse"}
-                    </span>
-                  </a>
+                  <Fragment key={cat.title}>
+                    <a className="cat-index-card" href={sectionPath(`cat-${ci + 1}`)} onClick={(e) => goSection(e, `cat-${ci + 1}`)}>
+                      <span className="cat-index-name">{cat.title}</span>
+                      <span className="cat-index-count">
+                        {items.length} {items.length === 1 ? "produs" : "produse"}
+                      </span>
+                    </a>
+                    {cat.title === RASADURI_DUPA && (
+                      <a className="cat-index-card" href={sectionPath("rasaduri")} onClick={(e) => goSection(e, "rasaduri")}>
+                        <span className="cat-index-name">Răsaduri de flori</span>
+                        <span className="cat-index-count">{RASADURI.length} soiuri</span>
+                      </a>
+                    )}
+                  </Fragment>
                 );
               })}
             </div>
@@ -2942,7 +3349,8 @@ export default function App() {
                 ? "catalog-grid catalog-grid--center"
                 : "catalog-grid";
             return (
-              <div className="catalog-cat" id={`cat-${ci + 1}`} key={cat.title}>
+              <Fragment key={cat.title}>
+              <div className="catalog-cat" id={`cat-${ci + 1}`}>
                 <h2 className="catalog-title">{cat.title}</h2>
                 <div className={gridClass}>
                   {items.map((p) => (
@@ -2968,12 +3376,26 @@ export default function App() {
                         )}
                       </div>
                       <div className="product-body">
-                        <h3 className="product-name">{p.name || `Produs ${p.num}`}</h3>
+                        {/* link adevărat spre pagina produsului (pentru Google și pentru „Deschide în tab nou”) */}
+                        <h3 className="product-name">
+                          <a
+                            href={p.path}
+                            onClick={(e) => {
+                              if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) { e.stopPropagation(); return; }
+                              e.preventDefault();
+                              e.stopPropagation();
+                              openProductPage(p);
+                            }}
+                          >
+                            {p.name || `Produs ${p.num}`}
+                          </a>
+                        </h3>
                         {p.desc && <p className="product-desc">{p.desc}</p>}
-                        {/* bulinele de culoare: la click se schimbă poza cardului (fără să se deschidă produsul) */}
-                        {p.colors?.length > 0 && (
+                        {/* bulinele de culoare: doar culorile din stoc (fără cele „la comandă”);
+                            la click se schimbă poza cardului (fără să se deschidă produsul) */}
+                        {p.colors?.some((c) => !c.custom) && (
                           <span className="product-colors" role="radiogroup" aria-label="Alege culoarea">
-                            {p.colors.map((c, ci) => (
+                            {p.colors.map((c, ci) => c.custom ? null : (
                               <button
                                 key={c.key}
                                 type="button"
@@ -2998,8 +3420,12 @@ export default function App() {
                   ))}
                 </div>
               </div>
+              {/* răsadurile vin imediat după ghivece */}
+              {cat.title === RASADURI_DUPA && renderRasaduri()}
+              </Fragment>
             );
           })}
+
         </div>
       </section>
 

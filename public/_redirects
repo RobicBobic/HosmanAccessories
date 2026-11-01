@@ -10,3 +10,8 @@
 /ru/*                /   301
 /en/*                /   301
 /ro/*                /   301
+
+# Paginile de produs (/produs/...) sunt afișate de site (React) -> servim index.html
+/produs/*            /index.html   200
+/categorie/*         /index.html   200
+/catalog             /index.html   200

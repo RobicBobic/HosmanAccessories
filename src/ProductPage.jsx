@@ -131,7 +131,20 @@ export default function ProductPage({ product, onBack, lang = "ro", onChangeLang
   // fâșia de sus apare doar dacă produsul are poză de header (p{N}-hero)
   const heroImg = p.heroImg ? color?.img || p.heroImg : null;
   const baseSlides = p.slides?.length ? p.slides : p.img ? [{ src: p.img, video: false }] : [];
-  const slides = color?.img ? [{ src: color.img, video: false }, ...baseSlides.slice(1)] : baseSlides;
+  // la culoarea aleasă: primul slide = poza culorii, iar restul = varianta lor în
+  // aceeași culoare (pN-slideK-<culoare>). Un slide fără variantă pentru culoarea
+  // aleasă se ascunde, ca să nu apară ghiveci de altă culoare.
+  const slides = !color
+    ? baseSlides
+    : [
+        color.img ? { src: color.img, video: false } : baseSlides[0],
+        ...baseSlides.slice(1).flatMap((s) => {
+          const hasVariants = s.variants && Object.keys(s.variants).length > 0;
+          if (!hasVariants) return [s];
+          const v = s.variants[color.key];
+          return v ? [{ ...s, src: v }] : [];
+        }),
+      ].filter(Boolean);
 
   return (
     <div className="hosman product-page" id="acasa">

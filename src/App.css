@@ -271,6 +271,7 @@ body { top: 0 !important; position: static !important; }
 
 .product-body { padding: 18px 6px 30px; display: flex; flex-direction: column; gap: 10px; }
 .product-name { color: var(--ink); font-size: 21px; font-weight: 800; line-height: 1.15; }
+.product-name a { color: inherit; }
 .product-desc { color: var(--muted); font-size: 15px; font-weight: 500; line-height: 1.45; max-width: 42ch; }
 .product-price { margin-top: 2px; color: var(--green); font-weight: 800; font-size: 18px; }
 
@@ -484,6 +485,78 @@ body { top: 0 !important; position: static !important; }
 .product-colors button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
 .pp-steps-after-title { margin-top: 30px; }
+
+/* =================================================================
+   RĂSADURI DE FLORI - calendarul de comenzi
+   ================================================================= */
+.rasaduri { scroll-margin-top: 24px; }
+.hosman .rasaduri .catalog-title { margin-bottom: 10px; }
+.hosman .rasaduri-intro { text-align: center; color: var(--muted); font-size: 15.5px; font-weight: 500; max-width: 560px; margin: 0 auto 22px; }
+
+/* ANUNȚ SEZON RĂSADURI (sus de tot, pe verde) */
+.season-bar {
+  display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap;
+  margin-bottom: 10px; padding: 12px 18px; border-radius: 16px;
+  background: var(--green-dd); color: #fff;
+  font-size: 15px; font-weight: 500; line-height: 1.4;
+  transition: background .15s ease;
+}
+.season-bar:hover { background: #2c3c14; }
+.season-bar-ic { flex: 0 0 auto; color: #c9e39a; }
+.season-bar-pics { flex: 0 0 auto; display: flex; }
+.season-bar-pics img {
+  width: 58px; height: 58px; border-radius: 12px; object-fit: contain;
+  background: #fff; border: 2px solid #fff;
+  box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.5);
+}
+.season-bar-pics img + img { margin-left: -14px; }
+@media (max-width: 719px) {
+  .season-bar-pics img { width: 48px; height: 48px; }
+}
+.season-bar-text { flex: 1 1 260px; min-width: 0; }
+.season-bar-text strong { font-weight: 800; }
+.season-bar-text b { font-weight: 700; color: #e4f2c8; }
+.season-bar-cta {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
+  background: #fff; color: var(--green-d); font-weight: 700; font-size: 14px;
+  padding: 7px 14px; border-radius: 999px; white-space: nowrap;
+}
+@media (max-width: 719px) {
+  .season-bar { font-size: 14px; padding: 11px 14px; }
+  .season-bar-cta { margin-left: 30px; }
+}
+.hosman .rasaduri-intro a { color: var(--green-d); font-weight: 700; }
+.rasaduri-banner {
+  display: block; width: 100%; height: auto; aspect-ratio: 2 / 1;
+  background: #fff; border-radius: 18px; border: 1px solid var(--line);
+  margin-bottom: 22px; object-fit: contain;
+}
+
+/* cardurile de răsaduri: același aspect ca produsele, dar nu se deschid */
+.product.rasad { cursor: default; }
+.product.rasad:hover { transform: none; }
+.product.rasad .product-media { position: relative; }
+.rasad-ph { display: grid; place-items: center; color: var(--green); }
+.rasad-ph svg { opacity: .55; }
+.rasad-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  background: var(--green); color: #fff; font-size: 12.5px; font-weight: 700;
+  padding: 5px 12px; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 4px 12px -4px rgba(20, 40, 28, 0.45);
+}
+.rasad-etape { display: flex; flex-wrap: wrap; gap: 6px; }
+.rasad-etape button {
+  position: relative;
+  font: 700 13px 'Saira', system-ui, sans-serif; color: var(--green-d);
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 999px;
+  padding: 5px 11px; cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+}
+.rasad-etape button:hover { background: var(--soft); }
+.rasad-etape button.active { background: var(--green); border-color: var(--green); color: #fff; }
+.rasad-etape button.open:not(.active) { border-color: var(--green); }
+.rasad-etape button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.hosman .rasad-period { color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.45; }
+.rasad-period strong { color: var(--green-d); font-weight: 800; font-size: 15.5px; }
 
 /* tabel dimensiuni disponibile */
 .pp-sizes-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
