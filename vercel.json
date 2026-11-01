@@ -1,0 +1,19 @@
+{
+  "redirects": [
+    { "source": "/shop/:path*", "destination": "/", "permanent": true },
+    { "source": "/contacts/:path*", "destination": "/", "permanent": true },
+    { "source": "/product/:path*", "destination": "/", "permanent": true },
+    { "source": "/product-category/:path*", "destination": "/", "permanent": true },
+    { "source": "/blog/:path*", "destination": "/", "permanent": true },
+    { "source": "/category/:path*", "destination": "/", "permanent": true },
+    { "source": "/ru/:path*", "destination": "/", "permanent": true },
+    { "source": "/en/:path*", "destination": "/", "permanent": true },
+    { "source": "/ro/:path*", "destination": "/", "permanent": true },
+    { "source": "/categorie/ingrijirea-florilor-si-plantelor", "destination": "/categorie/recomandari-pentru-ingrijirea-florilor-si-plantelor", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/produs/:path*", "destination": "/index.html" },
+    { "source": "/categorie/:path*", "destination": "/index.html" },
+    { "source": "/catalog", "destination": "/index.html" }
+  ]
+}
