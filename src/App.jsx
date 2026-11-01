@@ -2578,7 +2578,7 @@ const CATEGORIES = [
   { title: "Tăvi de irigare și lădițe", nums: [6, 7, 9] },
   { title: "Substraturi pentru plante", nums: [44] },
   { title: "Ghivece pentru plante", nums: [32, 33, 34, 35, 36, 37] },
-  { title: "Îngrijirea florilor și plantelor", nums: [38, 39, 40, 41, 42, 43] },
+  { title: "Recomandări pentru îngrijirea florilor și plantelor", nums: [38, 39, 40, 41, 42, 43] },
   { title: "Recomandări pentru nutriția plantelor", inMenu: false, nums: [12, 23, 25, 24, 27, 14, 16, 22, 17, 20] }, // adaugă aici numerele produselor de nutriție
   { title: "Recomandări pentru protecția plantelor", inMenu: false, nums: [10, 11, 13, 18, 29, 30, 19, 31, 21, 26, 28, 15] },
 ];

@@ -12,6 +12,8 @@
 /ro/*                /   301
 
 # Paginile de produs (/produs/...) sunt afișate de site (React) -> servim index.html
+/categorie/ingrijirea-florilor-si-plantelor   /categorie/recomandari-pentru-ingrijirea-florilor-si-plantelor   301
+
 /produs/*            /index.html   200
 /categorie/*         /index.html   200
 /catalog             /index.html   200
