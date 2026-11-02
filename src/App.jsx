@@ -2847,15 +2847,18 @@ export default function App() {
 
   const changeLang = (l) => {
     if (l === lang) return;
-    const host = window.location.hostname;
+    // Google Translate pune cookie-ul și pe domeniul principal (.hosmanflowers.md),
+    // nu doar pe www, așa că îl ștergem/scriem pe toate variantele de domeniu
+    const parts = window.location.hostname.split(".");
+    const domains = [""];
+    for (let i = 0; i < parts.length - 1; i++) {
+      const d = parts.slice(i).join(".");
+      domains.push(`domain=${d};`, `domain=.${d};`);
+    }
     const expired = "expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    if (l === "ro") {
-      // revenim la textul original (română): ștergem cookie-ul
-      document.cookie = `googtrans=;${expired};path=/;`;
-      document.cookie = `googtrans=;${expired};path=/;domain=.${host};`;
-    } else {
-      document.cookie = `googtrans=/ro/${l};path=/;`;
-      document.cookie = `googtrans=/ro/${l};path=/;domain=.${host};`;
+    domains.forEach((d) => { document.cookie = `googtrans=;${expired};path=/;${d}`; });
+    if (l !== "ro") {
+      domains.forEach((d) => { document.cookie = `googtrans=/ro/${l};path=/;${d}`; });
     }
     // adresa (/produs/...) rămâne la reîncărcare, deci revenim pe același produs
     window.location.reload();
