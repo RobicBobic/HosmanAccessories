@@ -71,8 +71,20 @@
   </head>
   <body>
     <div id="root">
-      <!-- Conținut static pentru Google: e afișat instant în HTML și e înlocuit de React când se încarcă site-ul -->
-      <main style="font-family:Saira,system-ui,sans-serif;max-width:900px;margin:0 auto;padding:24px;color:#3C4D22">
+      <!-- Ecran de încărcare: vizitatorul vede logo-ul până pornește site-ul (React îl înlocuiește) -->
+      <style>
+        .boot-splash { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: #fff; z-index: 1; }
+        .boot-splash img { width: 160px; height: 160px; object-fit: contain; }
+        .boot-spin { width: 34px; height: 34px; border: 3px solid #dfe8cf; border-top-color: #628131; border-radius: 50%; animation: boot-spin .8s linear infinite; }
+        @keyframes boot-spin { to { transform: rotate(360deg); } }
+        .boot-seo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+      </style>
+      <div class="boot-splash" aria-hidden="true">
+        <img src="/logo.webp" alt="" width="160" height="160" />
+        <div class="boot-spin"></div>
+      </div>
+      <!-- Conținut static pentru Google (ascuns vizual): e înlocuit de React când se încarcă site-ul -->
+      <main class="boot-seo">
         <img src="/logo.webp" alt="Hosman Flowers &amp; Accessories" width="180" height="180" />
         <h1>Hosman Flowers &amp; Accessories</h1>
         <p>Soluții complete pentru horticultură: de la substraturi și accesorii pentru sere până la produse pentru nutriția și protecția plantelor.</p>
@@ -92,6 +104,30 @@
         <p>Telefon: <a href="tel:+37379434108">+373 794 34 108</a></p>
       </main>
     </div>
+    <!-- Dacă browserul a păstrat o versiune veche a paginii și fișierele site-ului nu se mai găsesc
+         (după o actualizare), reîncărcăm pagina o singură dată ca să ia versiunea nouă -->
+    <script>
+      (function () {
+        var reloadOnce = function () {
+          try {
+            if (sessionStorage.getItem("hf-reloaded")) return;
+            sessionStorage.setItem("hf-reloaded", "1");
+          } catch (e) { return; }
+          location.reload();
+        };
+        window.addEventListener("error", function (e) {
+          var t = e.target;
+          if (t && (t.tagName === "SCRIPT" || t.tagName === "LINK") && /\/assets\//.test(t.src || t.href || "")) reloadOnce();
+        }, true);
+        window.addEventListener("vite:preloadError", reloadOnce);
+        // dacă site-ul a pornit normal, resetăm semnalul pentru data viitoare
+        window.addEventListener("load", function () {
+          setTimeout(function () {
+            if (!document.querySelector(".boot-splash")) { try { sessionStorage.removeItem("hf-reloaded"); } catch (e) {} }
+          }, 3000);
+        });
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
