@@ -2584,11 +2584,11 @@ const CATEGORIES = [
 ];
 
 /* ============================================================
-   RĂSADURI DE FLORI - calendarul de primire a comenzilor.
+   RĂSADURI DE FLORI - pe sezoane.
    ------------------------------------------------------------
-   from / to = [zi, lună] (lunile 1-12). Anul nu contează: perioada
-   se repetă în fiecare an. Plantele pentru care se primesc comenzi
-   chiar acum sunt evidențiate automat, după data de azi.
+   sezon = ["primăvară" / "vară" / "toamnă" / "iarnă"] (se pot pune mai multe).
+   Plantele din anotimpul de acum sunt evidențiate automat („De sezon”),
+   apar primele în listă și în anunțul din capul site-ului.
    Adaugi / scoți o plantă -> adaugi / ștergi un rând.
    POZE: pui poza în src/assets/rasaduri/ (ex. bujori.webp) și scrii
    foto: "bujori" la planta respectivă. banner.webp = poza mare de sus.
@@ -2600,89 +2600,389 @@ const rasaduriModules = import.meta.glob(
 const RASADURI_FOTO = Object.fromEntries(
   Object.entries(rasaduriModules).map(([path, src]) => [path.match(/([\w-]+)\.\w+$/)[1], src])
 );
-const RASADURI = [
-  { name: "Crizantemă", latin: "Chrysanthemum", from: [15, 12], to: [15, 1], foto: "crizantema" },
-  // o singură plantă cu mai multe etape: pe card se alege săptămâna (poza și perioada se schimbă)
-  { name: "Eustoma", latin: "Lisianthus", etape: [
-    { label: "Săptămâna 7", from: [15, 10], to: [30, 10], foto: "eustoma-7" },
-    { label: "Săptămâna 11", from: [1, 11], to: [15, 11], foto: "eustoma-11" },
-    { label: "Săptămâna 15", from: [15, 11], to: [30, 11], foto: "eustoma-15" },
-    { label: "Săptămâna 19", from: [1, 12], to: [15, 12], foto: "eustoma-19" },
-    { label: "Săptămâna 23", from: [3, 1], to: [15, 1], foto: "eustoma-23" },
+/* Soiurile de crizanteme multiflora (tabelul de pe card).
+   nou: true = soi nou (apare cu „Nou”). Detaliile opționale (crescator,
+   grupa, inflorire, vigoare, descriere) apar sub numele soiului. */
+const CRIZANTEME_SOIURI = [
+  { soi: "ELDA white", culoare: "alb", crescator: "Gediflora", grupa: "5,5", inflorire: "40", vigoare: "2", descriere: "Floare albă, decorativă" },
+  { soi: "ELDA yellow", culoare: "galben" },
+  { soi: "LARIVA red", culoare: "roșu" },
+  { soi: "STAVISKI purple", culoare: "purpuriu" },
+  { soi: "STAVISKI red", culoare: "roșu" },
+  { soi: "STAVISKI white", culoare: "alb" },
+  { soi: "BANDOL yellow", culoare: "galben" },
+  { soi: "BANGA jaune", culoare: "galben" },
+  { soi: "DURAS red", culoare: "roșu" },
+  { soi: "FABULA lilas", culoare: "liliachiu" },
+  { soi: "FREJUS orange", culoare: "portocaliu", nou: true },
+  { soi: "FREJUS pink", culoare: "roz" },
+  { soi: "FREJUS purple", culoare: "purpuriu", nou: true },
+  { soi: "HOURRA dark rose", culoare: "roz închis" },
+  { soi: "HOURRA orange", culoare: "portocaliu" },
+  { soi: "JASODA dark yellow", culoare: "galben închis" },
+  { soi: "JASODA mauve", culoare: "mov" },
+  { soi: "JASODA purple", culoare: "purpuriu" },
+  { soi: "MATINA yellow", culoare: "galben" },
+  { soi: "NANCY white", culoare: "alb" },
+  { soi: "PELTA mangue", culoare: "portocaliu (mango)" },
+  { soi: "POKAI red", culoare: "roșu" },
+  { soi: "POKAI violet", culoare: "violet" },
+  { soi: "REMOS pink", culoare: "roz" },
+  { soi: "ROVAN improved", culoare: "roșu închis" },
+  { soi: "SANCTA creme", culoare: "crem" },
+  { soi: "SARLAT bronze", culoare: "bronz" },
+  { soi: "SORINI mauve", culoare: "mov" },
+  { soi: "SORINI pink", culoare: "roz" },
+  { soi: "SORINI red", culoare: "roșu" },
+  { soi: "BASTIA purple", culoare: "purpuriu" },
+  { soi: "BLANCHETT pink", culoare: "roz" },
+  { soi: "BLANCHETT white", culoare: "alb" },
+  { soi: "CALLIA white", culoare: "alb" },
+  { soi: "CIOTAT red gold", culoare: "roșu cu auriu" },
+  { soi: "DAYDREAM white", culoare: "alb" },
+  { soi: "DIVA pearl", culoare: "alb perlat" },
+  { soi: "DIVA violet", culoare: "violet" },
+  { soi: "DIVA yellow", culoare: "galben" },
+  { soi: "ICELAND white", culoare: "alb", nou: true },
+  { soi: "LUMIA blanc", culoare: "alb" },
+  { soi: "MAKRUT", culoare: "galben-verzui" },
+  { soi: "OSTERIA yellow", culoare: "galben" },
+  { soi: "PETRUS dore", culoare: "auriu", nou: true },
+  { soi: "PETRUS jaune", culoare: "galben" },
+  { soi: "PILOU violet", culoare: "violet" },
+  { soi: "TIFIL blanc", culoare: "alb" },
+  { soi: "URBI blanc", culoare: "alb" },
+  { soi: "SCOOTER purple", culoare: "purpuriu" },
+  { soi: "SIBLI fuchsia purple", culoare: "fucsia" },
+  { soi: "VEGAS violet", culoare: "violet" },
+  { soi: "COGNAC orange", culoare: "portocaliu", nou: true },
+  { soi: "FLORA jaune", culoare: "galben" },
+  { soi: "LINKY vert", culoare: "verde", nou: true },
+  { soi: "MILLAU red", culoare: "roșu", nou: true },
+  { soi: "MURANO white", culoare: "alb" },
+  { soi: "PICTO violet blanc", culoare: "violet cu alb", nou: true },
+  { soi: "SALTO violet", culoare: "violet" },
+  { soi: "SALTO rouge", culoare: "roșu", nou: true },
+  { soi: "NAZIMI white", culoare: "alb-crem" },
+  { soi: "OURASI yellow", culoare: "galben" },
+  { soi: "STAVISKI pink", culoare: "roz" },
+  { soi: "STAVISKI yellow", culoare: "galben" },
+  { soi: "TERANO white", culoare: "alb" },
+  { soi: "ADURO orange", culoare: "portocaliu" },
+  { soi: "ADURO purple", culoare: "purpuriu" },
+  { soi: "ADURO violet", culoare: "violet" },
+  { soi: "ARTEMIS white", culoare: "alb" },
+  { soi: "HOURRA white", culoare: "alb" },
+  { soi: "JASODA dark orange", culoare: "portocaliu închis" },
+  { soi: "JASODA dark pink", culoare: "roz închis" },
+  { soi: "JASODA red", culoare: "roșu" },
+  { soi: "JASODA white", culoare: "alb" },
+  { soi: "JASODA yellow", culoare: "galben" },
+  { soi: "VICHY white", culoare: "alb" },
+  { soi: "BARIA orange", culoare: "portocaliu" },
+  { soi: "BARIA yellow", culoare: "galben" },
+  { soi: "BLANCHETT yellow", culoare: "galben" },
+  { soi: "CAHORS rose", culoare: "roz" },
+  { soi: "CALLIA rose", culoare: "roz" },
+].sort((a, b) => a.soi.localeCompare(b.soi));
+
+// Soiurile de crizanteme multiflora de vară (același format ca mai sus)
+const CRIZANTEME_VARA_SOIURI = [
+  { soi: "FONTI dark pink", culoare: "roz închis", crescator: "Gediflora", grupa: "4", inflorire: "35", vigoare: "3", descriere: "Floare roz închis, decorativă" },
+  { soi: "FONTI white", culoare: "alb" },
+  { soi: "FONTI yellow", culoare: "galben" },
+  { soi: "LESCONIL", culoare: "alb-crem" },
+  { soi: "AMIKO violet", culoare: "violet" },
+  { soi: "AMIKO white", culoare: "alb" },
+  { soi: "AMIKO yellow", culoare: "galben" },
+  { soi: "BAOLI lemon", culoare: "galben-lămâie" },
+  { soi: "BAOLI white", culoare: "alb" },
+  { soi: "CIPRIANI pink", culoare: "roz" },
+  { soi: "CIPRIANI white", culoare: "alb", nou: true },
+  { soi: "KOORI pink", culoare: "roz" },
+  { soi: "KOORI purple", culoare: "purpuriu" },
+  { soi: "KOORI red", culoare: "roșu" },
+  { soi: "OPALE white", culoare: "alb" },
+  { soi: "UMBRA dark pink", culoare: "roz închis" },
+  { soi: "CONACO gold", culoare: "auriu" },
+  { soi: "GRAPEBERRY purple", culoare: "purpuriu" },
+  { soi: "GRAPEBERRY red", culoare: "roșu" },
+].sort((a, b) => a.soi.localeCompare(b.soi));
+
+// Soiurile de crizanteme medii (același format; culoare: null = culoarea nu e cunoscută încă)
+const CRIZANTEME_MEDII_SOIURI = [
+  { soi: "MONA purple white", culoare: "purpuriu cu alb", crescator: "Selecta one", grupa: "8", ultimaTaiere: "21.08", dirijare: "22.08", vigoare: "2", descriere: "Floare purpuriu cu alb, decorativă" },
+  { soi: "MONA red yellow", culoare: "roșu cu galben" },
+  { soi: "MONA white pink", culoare: "alb cu roz" },
+  { soi: "SWING dark rose", culoare: "roz închis" },
+  { soi: "SWING salmon", culoare: "somon" },
+  { soi: "SWING white", culoare: "alb" },
+  { soi: "SWING yellow", culoare: "galben" },
+  { soi: "WARSAW", culoare: "ciclam" },
+  { soi: "ADRIANNA white", culoare: "alb" },
+  { soi: "AMOUR", culoare: "alb" },
+  { soi: "AMOUR cream", culoare: "crem" },
+  { soi: "AMOUR yellow", culoare: "galben" },
+  { soi: "ARTISTIC POMONA", culoare: "portocaliu" },
+  { soi: "CURE purple", culoare: "purpuriu" },
+  { soi: "DELAWARE", culoare: "alb" },
+  { soi: "DISCOFOX pink", culoare: "roz", nou: true },
+  { soi: "DYNAMIC dark pink", culoare: "roz închis", nou: true },
+  { soi: "DYNAMIC orange", culoare: "portocaliu", nou: true },
+  { soi: "GREEN PARAKEET", culoare: "verde" },
+  { soi: "LUNA", culoare: null },
+  { soi: "MILWAUKEE", culoare: null },
+  { soi: "MOUNT CONNOR", culoare: "roz" },
+  { soi: "MOUNT GERLACH", culoare: "alb" },
+  { soi: "MOUNT LISTOU", culoare: "alb-gălbui" },
+  { soi: "MOUNT LISTOU yellow", culoare: "galben" },
+  { soi: "NEWPORT", culoare: null },
+  { soi: "WILLOWBROOK", culoare: null },
+  { soi: "ZIZINHO", culoare: "galben", nou: true },
+  { soi: "ARTISTIC ARMIN", culoare: "roz cu alb" },
+  { soi: "ARTISTIC ARMIN red", culoare: "roșu cu galben" },
+  { soi: "ARTISTIC JEFF pink", culoare: "roz" },
+  { soi: "BEATLES dark pink", culoare: "roz închis" },
+  { soi: "BEATLES sunny", culoare: "galben" },
+  { soi: "BEATLES white", culoare: "alb", nou: true },
+  { soi: "CIAO BONNY", culoare: "purpuriu cu alb" },
+  { soi: "JACKSON bronze", culoare: "bronz" },
+  { soi: "JACKSON pink", culoare: "roz" },
+  { soi: "JACKSON purple", culoare: "purpuriu" },
+  { soi: "JACKSON sunny", culoare: "galben" },
+  { soi: "JACKSON white", culoare: "alb" },
+  { soi: "KODIAK", culoare: "alb" },
+  { soi: "KODIAK yellow", culoare: "galben" },
+  { soi: "LOKI pink", culoare: "roz" },
+  { soi: "LOKI red", culoare: "roșu" },
+  { soi: "LYSANDRA", culoare: null },
+  { soi: "MARLEY", culoare: "mov" },
+  { soi: "MOUNT AUBERT creme", culoare: "crem" },
+  { soi: "MOUNT PICHU", culoare: "ciclam" },
+  { soi: "MOUNT CORBET", culoare: null },
+  { soi: "MOUNT CORBET yellow", culoare: "galben" },
+  { soi: "SIA", culoare: null },
+  { soi: "SOLO", culoare: "roz" },
+  { soi: "SPIRIT", culoare: "alb" },
+  { soi: "SUNNA", culoare: "galben", nou: true },
+  { soi: "TEMPO TIME", culoare: "galben" },
+  { soi: "AURELIO", culoare: "alb" },
+].sort((a, b) => a.soi.localeCompare(b.soi));
+
+// Soiurile de crizanteme mari (același format; culoare: null = culoarea nu e cunoscută încă)
+const CRIZANTEME_MARI_SOIURI = [
+  { soi: "KOMODO blanc", culoare: "alb", crescator: "Bernard", grupa: "11", ultimaTaiere: "10.07", dirijare: "2.08", vigoare: "3", descriere: "Floare albă, sferică, se ramifică foarte bine" },
+  { soi: "KOMODO creme", culoare: "crem" },
+  { soi: "GREENSTAR", culoare: null },
+  { soi: "SUNBERRY blanc", culoare: "alb" },
+  { soi: "SUNBERRY creme", culoare: "crem" },
+  { soi: "AGORA blanc", culoare: "alb" },
+  { soi: "AGORA jaune", culoare: "galben" },
+  { soi: "AGORA mauve", culoare: "mov" },
+  { soi: "ATLANTA dore", culoare: "auriu" },
+  { soi: "ELECTRO blanc", culoare: "alb", nou: true },
+  { soi: "JADE green", culoare: "verde-gălbui" },
+  { soi: "MIMIZAN", culoare: "galben-auriu" },
+  { soi: "ODALYS", culoare: null },
+  { soi: "OTTAWA rose", culoare: "roz" },
+  { soi: "TORONTO rose", culoare: "roz" },
+  { soi: "WOODSTOCK orange", culoare: "portocaliu" },
+  { soi: "WOODSTOCK pink", culoare: "roz" },
+  { soi: "BAMAKO violet", culoare: "violet" },
+  { soi: "CYRANO violet", culoare: "violet", nou: true },
+  { soi: "ETINCELOR", culoare: "galben-auriu" },
+  { soi: "ESTREDA", culoare: "roz", nou: true },
+  { soi: "IDAHO orange", culoare: "portocaliu", nou: true },
+  { soi: "IRISA", culoare: "mov" },
+  { soi: "JOKAPI dore", culoare: "auriu" },
+  { soi: "JOKAPI jaune", culoare: "galben" },
+  { soi: "MONTREAL rose", culoare: "roz", nou: true },
+  { soi: "NAGANO rouge", culoare: "roșu-arămiu" },
+  { soi: "PIKNEIGE blanc", culoare: "alb" },
+  { soi: "TACOMA rouge", culoare: "roșu-arămiu", nou: true },
+  { soi: "SNOWBALL blanc", culoare: "alb" },
+  { soi: "BILKIS", culoare: "alb" },
+  { soi: "CARACAS jaune", culoare: "galben" },
+  { soi: "EDENBLUE", culoare: "mov" },
+  { soi: "LINDA blanc", culoare: "alb" },
+  { soi: "LINDA jaune", culoare: "galben" },
+  { soi: "SANTOSH", culoare: null },
+  { soi: "SONORA rouge", culoare: "galben cu roșu" },
+  { soi: "CHICAGO", culoare: "portocaliu-arămiu" },
+  { soi: "FAIBELLE", culoare: "roz pal" },
+  { soi: "INTREPID", culoare: null },
+  { soi: "LACANAU jaune", culoare: "galben" },
+  { soi: "MINIDECO bonbon", culoare: "roz" },
+  { soi: "NIKITA blanc", culoare: "alb" },
+  { soi: "ORLANDO dore", culoare: "auriu-portocaliu" },
+  { soi: "PANICE", culoare: "piersică" },
+  { soi: "SALAMBO rose", culoare: "roz" },
+  { soi: "SUNKISS mangue", culoare: "portocaliu (mango)" },
+  { soi: "SUNKISS purple", culoare: "ciclam" },
+  { soi: "SUNKISS rose", culoare: "roz" },
+  { soi: "OLERON citron", culoare: "galben-lămâie", nou: true },
+  { soi: "VALYS", culoare: "alb" },
+].sort((a, b) => a.soi.localeCompare(b.soi));
+
+// Soiurile de crizanteme deosebite (la amestecuri: culorile din amestec)
+const CRIZANTEME_DEOSEBITE_SOIURI = [
+  { soi: "WOODSTOCK orange", culoare: "galben-portocaliu", crescator: "Bernard", grupa: "10,5", ultimaTaiere: "15.07", dirijare: "4.08", tipFloare: "sferică", utilizare: "la ghiveci", vigoare: "2", descriere: "Floare portocalie cu margini verzi, originală" },
+  { soi: "WOODSTOCK pink", culoare: "roz pal" },
+  { soi: "ARTISTIC POMONA", culoare: "portocaliu-corai" },
+  { soi: "MARINA jaune", culoare: "galben" },
+  { soi: "SWING mix", culoare: "amestec: alb, roz, somon, galben" },
+  { soi: "ROSELA cuivre", culoare: "arămiu" },
+  { soi: "ROSELA jaune VIF", culoare: "galben intens" },
+  { soi: "ROSELA rose", culoare: "roz" },
+  { soi: "ROSELA blanc", culoare: "alb" },
+  { soi: "ROSELA mix", culoare: "amestec: galben, roz, portocaliu, crem" },
+  { soi: "MINIDECO bonbon", culoare: "roz" },
+  { soi: "GALAXY white", culoare: "alb" },
+  { soi: "YANA", culoare: "roz" },
+  { soi: "YANA white", culoare: "alb" },
+  { soi: "MONA mix", culoare: "amestec: mov, portocaliu, roz-lila" },
+  { soi: "JACKSON mix", culoare: "amestec: ciclam, alb, roz" },
+  { soi: "JACKSON mix", culoare: "amestec: portocaliu, roz, alb" },
+  { soi: "LINDA blanc", culoare: "alb-gălbui" },
+  { soi: "LINDA jaune", culoare: "galben" },
+  { soi: "ELINA peach", culoare: "piersică-corai" },
+  { soi: "ELINA pink", culoare: "roz", nou: true },
+  { soi: "ELINA white", culoare: "crem", nou: true },
+  { soi: "ELINA mix", culoare: "amestec: roz, corai, crem" },
+  { soi: "JASODA mix", culoare: "amestec: roșu, alb, mov" },
+  { soi: "JASODA mix", culoare: "amestec: galben, alb, roz" },
+  { soi: "JASODA mix", culoare: "amestec: galben, alb, portocaliu" },
+  { soi: "JASODA mix", culoare: "amestec: arămiu, galben, roz" },
+  { soi: "DIVA mix", culoare: "amestec: galben, alb, violet" },
+  { soi: "AMIKO mix", culoare: "amestec: crem, galben, ciclam" },
+  { soi: "STAVISKI mix", culoare: "amestec: roz, roșu, galben" },
+  { soi: "STAVISKI mix", culoare: "amestec: alb, ciclam, galben" },
+  { soi: "SUNKISS rose", culoare: "roz pal" },
+  { soi: "SUNKISS mangue", culoare: "portocaliu (mango)" },
+  { soi: "SUNKISS purple", culoare: "ciclam" },
+].sort((a, b) => a.soi.localeCompare(b.soi));
+
+// Soiurile de bujori (numele soiului cu MAJUSCULE, ca la crizanteme)
+// Soiurile de ranunculus (extra = alte detalii, afișate în ordine)
+const RANUNCULUS_SOIURI = [
+  { soi: "CERET", culoare: "portocaliu", descriere: "Floare puternică și elegantă, de un portocaliu unic, cu tulpini drepte; atrage toate privirile (seria Romance™)", extra: [
+    "Disponibil: din săptămâna 34",
+    "Mărimea tuberculului: nr. 1",
+    "Înflorire: februarie – aprilie (în funcție de locație)",
+    "Durata culturii: 8–12 săptămâni de creștere, 10 săptămâni de înflorire",
+    "Temperatura: cultură la rece, fără îngheț",
+    "Plante pe m²: 16 (4 rânduri pe strat)",
+    "Recoltare: când floarea e deschisă și colorată",
+    "Se poate forța: da",
+    "Ciupire: nu",
+    "Rezistent la iarnă: nu",
   ] },
-  { name: "Ciclamen", latin: "Cyclamen", from: [1, 3], to: [15, 3], foto: "ciclamen" },
-  { name: "Lalele", latin: "Tulipa", from: [20, 2], to: [10, 3], foto: "lalele" },
-  { name: "Zambile", latin: "Hyacinthus", from: [10, 3], to: [30, 5], foto: "zambile" },
-  { name: "Narcise", latin: "Narcissus", from: [10, 3], to: [30, 5], foto: "narcise" },
-  { name: "Brândușe", latin: "Crocus", from: [10, 3], to: [30, 5], foto: "branduse" },
-  { name: "Primule", latin: "Primula", from: [3, 5], to: [25, 5], foto: "primule" },
-  { name: "Cinerarie", latin: "Cineraria", from: [3, 5], to: [25, 5], foto: "cinerarie" },
-  { name: "Senecio", latin: "Senecio", from: [3, 5], to: [25, 5], foto: "senecio" },
-  { name: "Mușcate I", latin: "Pelargonium", from: [5, 6], to: [30, 6], foto: "muscate-1" },
-  { name: "Surfinia", latin: "Petunia × hybrida", from: [25, 8], to: [15, 9], foto: "surfinia" },
-  { name: "Mușcate II", latin: "Pelargonium", from: [25, 8], to: [15, 9], foto: "muscate-2" },
-  { name: "Verbena", latin: "Verbena", from: [25, 8], to: [15, 9], foto: "verbena" },
-  { name: "Petunie", latin: "Petunia", from: [25, 8], to: [15, 9], foto: "petunie" },
-  { name: "Osteospermum", latin: "Osteospermum", from: [25, 8], to: [15, 9], foto: "osteospermum" },
-  { name: "Fuchsia (cerceluș)", latin: "Fuchsia", from: [15, 9], to: [10, 10], foto: "fuchsia" },
-  { name: "Panseluțe", latin: "Viola", from: [15, 9], to: [10, 10], foto: "panselute" },
-  { name: "Garoafe", latin: "Dianthus", from: [15, 9], to: [10, 10], foto: "garoafe" },
-  { name: "Crini", latin: "Lilium", from: [10, 6], to: [10, 7], foto: "crini" },
-  { name: "Bujori", latin: "Paeonia", from: [15, 2], to: [15, 3], foto: "bujori" },
 ];
-const LUNI = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie",
-  "august", "septembrie", "octombrie", "noiembrie", "decembrie"];
-const fmtZi = ([d, m]) => `${d} ${LUNI[m - 1]}`;
-// e azi în perioadă? (merge și peste anul nou, ex. 15 decembrie - 15 ianuarie)
-function comenziDeschise(r, azi = new Date()) {
-  const v = (azi.getMonth() + 1) * 100 + azi.getDate();
-  const a = r.from[1] * 100 + r.from[0];
-  const b = r.to[1] * 100 + r.to[0];
-  return a <= b ? v >= a && v <= b : v >= a || v <= b;
+
+const BUJORI_SOIURI = [
+  { soi: "BELLA DONNA", culoare: "roz deschis", descriere: "Bujor roz deschis, cu forma florii perfectă, tulpini puternice și boboci frumos formați", categorie: "Lactiflora", tipFloare: "dublă", perioadaInflorire: "târzie", inaltime: "95 cm", anIntroducere: "1935" },
+];
+
+// grupează culorile pe soi: numele soiului = cuvintele scrise cu MAJUSCULE de la început,
+// culoarea = restul („ELDA white” + „ELDA yellow” -> ELDA; „MOUNT LISTOU yellow” -> MOUNT LISTOU)
+function grupeazaSoiuri(list) {
+  const map = new Map();
+  for (const s of list) {
+    const words = s.soi.split(" ");
+    let n = 0;
+    while (n < words.length && words[n] === words[n].toUpperCase()) n++;
+    const serie = words.slice(0, Math.max(n, 1)).join(" ");
+    const rest = words.slice(Math.max(n, 1));
+    if (!map.has(serie)) map.set(serie, { soi: serie, culori: [] });
+    map.get(serie).culori.push({ ...s, varianta: rest.join(" ") });
+  }
+  return [...map.values()];
 }
 
-// câte zile mai sunt până se deschid comenzile (0 = deschise acum)
-function zilePanaLa(r, azi = new Date()) {
-  if (comenziDeschise(r, azi)) return 0;
-  const zi = new Date(azi.getFullYear(), azi.getMonth(), azi.getDate());
-  let start = new Date(zi.getFullYear(), r.from[1] - 1, r.from[0]);
-  if (start < zi) start = new Date(zi.getFullYear() + 1, r.from[1] - 1, r.from[0]);
-  return Math.round((start - zi) / 86400000);
+/* sezon = anotimpul plantei: "primăvară", "vară", "toamnă" sau "iarnă" (se pot pune mai multe).
+   Plantele din anotimpul de acum sunt evidențiate pe card și apar în anunțul de sus. */
+const RASADURI = [
+  { name: "Crizanteme multiflora", alias: "crizanteme de toamnă, de grădină", latin: "Chrysanthemum", sezon: ["toamnă"], foto: "crizantema", soiuri: grupeazaSoiuri(CRIZANTEME_SOIURI) },
+  { name: "Crizanteme multiflora de vară", alias: "crizanteme de grădină", latin: "Chrysanthemum", sezon: ["vară"], foto: "crizantema-vara", soiuri: grupeazaSoiuri(CRIZANTEME_VARA_SOIURI) },
+  { name: "Crizanteme medii", latin: "Chrysanthemum", sezon: ["toamnă"], foto: "crizanteme-medii", soiuri: grupeazaSoiuri(CRIZANTEME_MEDII_SOIURI) },
+  { name: "Crizanteme mari", latin: "Chrysanthemum", sezon: ["toamnă"], foto: "crizanteme-mari", soiuri: grupeazaSoiuri(CRIZANTEME_MARI_SOIURI) },
+  { name: "Crizanteme deosebite", latin: "Chrysanthemum", sezon: ["toamnă"], foto: "crizanteme-deosebite", soiuri: grupeazaSoiuri(CRIZANTEME_DEOSEBITE_SOIURI) },
+  // o singură plantă cu mai multe etape: pe card se alege săptămâna (se schimbă poza)
+  { name: "Eustoma", latin: "Lisianthus", sezon: ["vară"], etape: [
+    { label: "Săptămâna 7", foto: "eustoma-7" },
+    { label: "Săptămâna 11", foto: "eustoma-11" },
+    { label: "Săptămâna 15", foto: "eustoma-15" },
+    { label: "Săptămâna 19", foto: "eustoma-19" },
+    { label: "Săptămâna 23", foto: "eustoma-23" },
+  ] },
+  { name: "Ciclamen", latin: "Cyclamen", sezon: ["toamnă", "iarnă"], foto: "ciclamen" },
+  { name: "Lalele", latin: "Tulipa", sezon: ["primăvară"], foto: "lalele" },
+  { name: "Zambile", latin: "Hyacinthus", sezon: ["primăvară"], foto: "zambile" },
+  { name: "Narcise", latin: "Narcissus", sezon: ["primăvară"], foto: "narcise" },
+  { name: "Brândușe", latin: "Crocus", sezon: ["primăvară"], foto: "branduse" },
+  { name: "Primule", latin: "Primula", sezon: ["primăvară"], foto: "primule" },
+  { name: "Cinerarie", latin: "Cineraria", sezon: ["primăvară"], foto: "cinerarie" },
+  { name: "Senecio", latin: "Senecio", sezon: ["vară"], foto: "senecio" },
+  { name: "Mușcate I", latin: "Pelargonium", sezon: ["vară"], foto: "muscate-1" },
+  { name: "Surfinia", latin: "Petunia × hybrida", sezon: ["vară"], foto: "surfinia" },
+  { name: "Mușcate II", latin: "Pelargonium", sezon: ["vară"], foto: "muscate-2" },
+  { name: "Verbena", latin: "Verbena", sezon: ["vară"], foto: "verbena" },
+  { name: "Petunie", latin: "Petunia", sezon: ["vară"], foto: "petunie" },
+  { name: "Osteospermum", latin: "Osteospermum", sezon: ["vară"], foto: "osteospermum" },
+  { name: "Fuchsia (cerceluș)", latin: "Fuchsia", sezon: ["vară"], foto: "fuchsia" },
+  { name: "Panseluțe", latin: "Viola", sezon: ["primăvară", "toamnă"], foto: "panselute" },
+  { name: "Garoafe", latin: "Dianthus", sezon: ["vară"], foto: "garoafe" },
+  { name: "Crini", latin: "Lilium", sezon: ["vară"], foto: "crini" },
+  // galerie = pozele în plus de pe card (se răsfoiesc cu săgețile), din src/assets/rasaduri/
+  { name: "Ranunculus", latin: "Ranunculus asiaticus", sezon: ["primăvară"], foto: "ranunculus",
+    galerie: ["ranunculus-1", "ranunculus-2", "ranunculus-3"],
+    culori: [
+      { nume: "galben", hex: "#F4D03F" },
+      { nume: "violet", hex: "#8E44AD" },
+      { nume: "portocaliu", hex: "#FF8C1A" },
+      { nume: "roz", hex: "#FF8AC4" },
+    ],
+    soiuri: grupeazaSoiuri(RANUNCULUS_SOIURI) },
+  { name: "Bujori", latin: "Paeonia", sezon: ["primăvară"], foto: "bujori",
+    galerie: ["bujori-1", "bujori-2", "bujori-3", "bujori-4", "bujori-5", "bujori-6", "bujori-7", "bujori-8", "bujori-9", "bujori-10", "bujori-11"],
+    // culorile disponibile (bulinele de pe card și din fereastra cu soiuri); hex: "multi" = multicolor
+    culori: [
+      { nume: "crem", hex: "#F3F1DA" },
+      { nume: "galben", hex: "#F4D03F" },
+      { nume: "verde", hex: "#3CC83C" },
+      { nume: "multicolor", hex: "multi" },
+      { nume: "portocaliu", hex: "#FF8C1A" },
+      { nume: "mov", hex: "#C2187F" },
+      { nume: "roșu", hex: "#FF1020" },
+      { nume: "roz", hex: "#FF8AC4" },
+      { nume: "alb", hex: "#FFFFFF" },
+    ],
+    soiuri: grupeazaSoiuri(BUJORI_SOIURI) },
+];
+const ANOTIMPURI = ["iarnă", "primăvară", "vară", "toamnă"];
+// anotimpul de azi: decembrie-februarie iarnă, martie-mai primăvară, iunie-august vară, septembrie-noiembrie toamnă
+function anotimpulDeAzi(azi = new Date()) {
+  return ANOTIMPURI[Math.floor(((azi.getMonth() + 1) % 12) / 3)];
 }
-// zile rămase până se închid comenzile (pentru ordinea celor deschise acum)
-function zilePanaLaFinal(r, azi = new Date()) {
-  const zi = new Date(azi.getFullYear(), azi.getMonth(), azi.getDate());
-  let end = new Date(zi.getFullYear(), r.to[1] - 1, r.to[0]);
-  if (end < zi) end = new Date(zi.getFullYear() + 1, r.to[1] - 1, r.to[0]);
-  return Math.round((end - zi) / 86400000);
+const ANOTIMP_ACUM = anotimpulDeAzi();
+const deSezon = (p) => p.sezon?.includes(ANOTIMP_ACUM);
+// câte anotimpuri mai sunt până la sezonul plantei (0 = e sezonul ei acum)
+function anotimpuriPanaLa(p) {
+  const acum = ANOTIMPURI.indexOf(ANOTIMP_ACUM);
+  const d = (p.sezon || []).map((s) => (ANOTIMPURI.indexOf(s) - acum + 4) % 4);
+  return d.length ? Math.min(...d) : 99;
 }
-// etapa cea mai apropiată a unei plante (cea deschisă acum sau următoarea)
-function etapaApropiata(plant) {
-  if (!plant.etape) return 0;
-  let best = 0;
-  plant.etape.forEach((e, i) => { if (zilePanaLa(e) < zilePanaLa(plant.etape[best])) best = i; });
-  return best;
-}
-// ordinea cronologică: întâi cele deschise acum (care se închid mai repede primele),
-// apoi după data la care se deschid comenzile
+// ordinea: întâi plantele de sezon, apoi cele din anotimpurile următoare
 function rasaduriInOrdine() {
-  const cheie = (p) => {
-    const r = p.etape ? p.etape[etapaApropiata(p)] : p;
-    const z = zilePanaLa(r);
-    return z === 0 ? zilePanaLaFinal(r) - 1000 : z;
-  };
-  return [...RASADURI].sort((a, b) => cheie(a) - cheie(b));
+  return [...RASADURI].sort((a, b) => anotimpuriPanaLa(a) - anotimpuriPanaLa(b));
 }
 
 // Lista de categorii cu numărul de produse (pentru meniul „Catalog produse” și bara laterală)
 const ALL_PRODUCTS = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
 // inMenu: false = categoria nu apare în meniul „Catalog produse” și nici în secțiunea „Catalog” (produsele rămân pe pagină)
-// plantele pentru care se primesc comenzi azi (pentru anunțul din capul site-ului)
-const RASADURI_ACUM = rasaduriInOrdine().flatMap((p) =>
-  p.etape
-    ? p.etape.filter((e) => comenziDeschise(e)).map((e) => ({ name: `${p.name} (${e.label.toLowerCase()})`, to: e.to, foto: e.foto }))
-    : comenziDeschise(p) ? [{ name: p.name, to: p.to, foto: p.foto }] : []
-);
+// plantele de sezon acum (pentru anunțul din capul site-ului)
+const RASADURI_ACUM = rasaduriInOrdine().filter(deSezon)
+  .map((p) => ({ name: p.name, foto: p.foto || p.etape?.[0]?.foto }));
 
 // după ce categorie apar „Răsaduri de flori” (în meniu, în cuprins și pe pagină)
 const RASADURI_DUPA = "Ghivece pentru plante";
@@ -2873,6 +3173,33 @@ export default function App() {
   const [cardColor, setCardColor] = useState({});
   // etapa aleasă la răsadurile cu mai multe etape (ex. Eustoma): { numePlantă: indexEtapă }
   const [rasadEtapa, setRasadEtapa] = useState({});
+  // poza afișată pe cardurile cu galerie (ex. Bujori): { numePlantă: indexPoză }
+  const [rasadFoto, setRasadFoto] = useState({});
+  // cardul cu galerie pe care stă mouse-ul: pozele se schimbă singure cât timp mouse-ul e pe poză
+  const [galerieHover, setGalerieHover] = useState(null);
+  useEffect(() => {
+    if (!galerieHover) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const plant = RASADURI.find((p) => p.name === galerieHover);
+    const poze = plant?.galerie ? [plant.foto, ...plant.galerie].filter((f) => RASADURI_FOTO[f]) : [];
+    if (poze.length < 2) return;
+    // încarcă dinainte pozele, ca schimbarea să fie fără pauze
+    poze.forEach((f) => { const im = new Image(); im.src = RASADURI_FOTO[f]; });
+    const id = setInterval(() => {
+      setRasadFoto((s) => ({ ...s, [galerieHover]: ((s[galerieHover] ?? 0) + 1) % poze.length }));
+    }, 1500);
+    return () => clearInterval(id);
+  }, [galerieHover]);
+  // planta al cărei tabel de soiuri e deschis (ex. Crizanteme multiflora)
+  const [soiuriPlant, setSoiuriPlant] = useState(null);
+  useEffect(() => {
+    if (!soiuriPlant) return;
+    const onKey = (e) => { if (e.key === "Escape") setSoiuriPlant(null); };
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  }, [soiuriPlant]);
   const openProductPage = (p) => {
     returnTo.current = { num: p.num, y: window.scrollY };
     // dacă pe card s-a ales o culoare, pagina produsului se deschide pe ea
@@ -3002,8 +3329,8 @@ export default function App() {
               <div className="catalog-cat rasaduri" id="rasaduri">
                 <h2 className="catalog-title">Răsaduri de flori</h2>
                 <p className="rasaduri-intro">
-                  Răsadurile se comandă din timp. Pe fiecare card găsești perioada în care
-                  primim comenzi. Comenzi la{" "}
+                  Răsadurile se comandă din timp. Pe fiecare card găsești sezonul plantei,
+                  iar florile de sezon sunt primele. Comenzi la{" "}
                   <a href="tel:+37379434108" className="notranslate" translate="no">+373 794 34 108</a>.
                 </p>
 
@@ -3020,25 +3347,53 @@ export default function App() {
                 {/* cardurile, la fel ca la celelalte produse */}
                 <div className="catalog-grid">
                   {rasaduriInOrdine().map((plant) => {
-                    // planta cu etape (ex. Eustoma): etapa aleasă pe card, implicit cea deschisă acum / următoarea
+                    // planta cu etape (ex. Eustoma): etapa aleasă pe card, implicit prima
                     const etape = plant.etape;
-                    const idx = etape ? rasadEtapa[plant.name] ?? etapaApropiata(plant) : 0;
+                    const idx = etape ? rasadEtapa[plant.name] ?? 0 : 0;
                     const r = etape ? { ...plant, ...etape[idx] } : plant;
-                    const open = comenziDeschise(r);
-                    const img = RASADURI_FOTO[r.foto];
+                    const open = deSezon(plant);
+                    // galerie (ex. Bujori): poza principală + pozele din galerie, răsfoite cu săgețile
+                    const poze = plant.galerie ? [r.foto, ...plant.galerie].filter((f) => RASADURI_FOTO[f]) : null;
+                    const fi = poze ? (rasadFoto[plant.name] ?? 0) : 0;
+                    const img = RASADURI_FOTO[poze ? poze[fi] : r.foto];
+                    const mutaPoza = (pas) => setRasadFoto((s) => ({ ...s, [plant.name]: (fi + pas + poze.length) % poze.length }));
                     return (
                       <article className="product rasad" key={plant.name}>
-                        <div className="product-media contain">
+                        <div
+                          className="product-media contain"
+                          onMouseEnter={poze ? () => setGalerieHover(plant.name) : undefined}
+                          onMouseLeave={poze ? () => setGalerieHover(null) : undefined}
+                        >
                           {img ? (
-                            <img src={img} alt={etape ? `${plant.name}, ${r.label}` : plant.name} loading="lazy" decoding="async" />
+                            <img
+                              src={img}
+                              className={fi > 0 ? "rasad-foto-cover" : undefined}
+                              alt={etape ? `${plant.name}, ${r.label}` : poze ? `${plant.name}, poza ${fi + 1}` : plant.name}
+                              loading="lazy"
+                              decoding="async"
+                            />
                           ) : (
                             <div className="product-ph rasad-ph"><Sprout size={52} aria-hidden="true" /></div>
                           )}
-                          {open && <span className="rasad-badge">Comenzi deschise</span>}
+                          {poze && poze.length > 1 && (
+                            <>
+                              <button type="button" className="rasad-galerie-btn prev" onClick={() => mutaPoza(-1)} aria-label="Poza anterioară">
+                                <ChevronLeft size={20} />
+                              </button>
+                              <button type="button" className="rasad-galerie-btn next" onClick={() => mutaPoza(1)} aria-label="Poza următoare">
+                                <ChevronRight size={20} />
+                              </button>
+                              <span className="rasad-galerie-nr">{fi + 1} / {poze.length}</span>
+                            </>
+                          )}
+                          {open && <span className="rasad-badge">De sezon</span>}
                         </div>
                         <div className="product-body">
                           <h3 className="product-name">{plant.name}</h3>
-                          <p className="product-desc"><i className="notranslate" translate="no">{plant.latin}</i></p>
+                          <p className="product-desc">
+                            {plant.alias && <>{plant.alias[0].toUpperCase() + plant.alias.slice(1)} · </>}
+                            <i className="notranslate" translate="no">{plant.latin}</i>
+                          </p>
                           {etape && (
                             <div className="rasad-etape" role="radiogroup" aria-label="Alege săptămâna">
                               {etape.map((e, ei) => (
@@ -3047,7 +3402,7 @@ export default function App() {
                                   type="button"
                                   role="radio"
                                   aria-checked={ei === idx}
-                                  className={`${ei === idx ? "active" : ""}${comenziDeschise(e) ? " open" : ""}`}
+                                  className={ei === idx ? "active" : ""}
                                   onClick={() => setRasadEtapa((s) => ({ ...s, [plant.name]: ei }))}
                                   title={e.label}
                                 >
@@ -3057,14 +3412,103 @@ export default function App() {
                             </div>
                           )}
                           <p className="rasad-period">
-                            Perioada de comandă:<br />
-                            <strong>{fmtZi(r.from)} – {fmtZi(r.to)}</strong>
+                            Sezon:{" "}
+                            <strong>{plant.sezon?.length ? plant.sezon.join(", ") : "se anunță în curând"}</strong>
                           </p>
+                          {plant.soiuri && (
+                            <button type="button" className="rasad-soiuri-btn" onClick={() => setSoiuriPlant(plant)}>
+                              Vezi soiurile ({plant.soiuri.length})
+                            </button>
+                          )}
                         </div>
                       </article>
                     );
                   })}
                 </div>
+
+                {soiuriPlant && (
+                  <div className="soiuri-overlay" onClick={() => setSoiuriPlant(null)}>
+                    <div
+                      className="soiuri-modal"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="soiuri-title"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="soiuri-head">
+                        <div>
+                          <h3 id="soiuri-title">{soiuriPlant.name}</h3>
+                          <p>
+                            {soiuriPlant.soiuri.length} soiuri, {soiuriPlant.soiuri.reduce((n, s) => n + s.culori.length, 0)} culori
+                            {soiuriPlant.alias ? ` · ${soiuriPlant.alias}` : ""}
+                          </p>
+                        </div>
+                        <button type="button" className="soiuri-close" onClick={() => setSoiuriPlant(null)} aria-label="Închide" autoFocus>
+                          <X size={22} />
+                        </button>
+                      </div>
+                      {soiuriPlant.culori && (
+                        <div className="soiuri-culori-disp">
+                          <span className="soiuri-culori-titlu">Culori disponibile:</span>
+                          {soiuriPlant.culori.map((c) => (
+                            <span className="soi-culoare" key={c.nume}>
+                              <span className={`culoare-bulina mica${c.hex === "multi" ? " multi" : ""}`} style={c.hex === "multi" ? undefined : { background: c.hex }} aria-hidden="true" />
+                              {c.nume}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="soiuri-body">
+                        <table className="soiuri-table">
+                          <thead>
+                            <tr><th>Soi</th><th>Culori</th></tr>
+                          </thead>
+                          <tbody>
+                            {soiuriPlant.soiuri.map((g) => (
+                              <tr key={g.soi}>
+                                <td className="soi-nume notranslate" translate="no"><strong>{g.soi}</strong></td>
+                                <td>
+                                  <div className="soi-culori">
+                                    {g.culori.filter((c) => c.culoare).map((c, ci) => (
+                                      <span className="soi-culoare" key={`${c.soi}-${ci}`}>
+                                        {c.culoare}
+                                        {c.nou && <span className="soi-nou">Nou</span>}
+                                      </span>
+                                    ))}
+                                    {!g.culori.some((c) => c.culoare) && <span className="soi-fara-culoare">—</span>}
+                                  </div>
+                                  {g.culori
+                                    .filter((c) => c.crescator || c.grupa || c.inflorire || c.ultimaTaiere || c.dirijare || c.tipFloare || c.utilizare || c.vigoare || c.descriere || c.categorie || c.perioadaInflorire || c.inaltime || c.anIntroducere || c.extra)
+                                    .map((c) => (
+                                      <span className="soi-detalii" key={c.soi}>
+                                        <span className="notranslate" translate="no">{c.soi}</span>:{" "}
+                                        {[
+                                          c.descriere,
+                                          c.crescator && `Crescător: ${c.crescator}`,
+                                          c.grupa && `Grupa de reacție: ${c.grupa} săpt.`,
+                                          c.inflorire && `Înflorire naturală: săpt. ${c.inflorire}`,
+                                          c.ultimaTaiere && `Ultima tăiere: ${c.ultimaTaiere}`,
+                                          c.dirijare && `Începutul dirijării înfloririi: ${c.dirijare}`,
+                                          c.tipFloare && `Tipul florii: ${c.tipFloare}`,
+                                          c.utilizare && `Cultivare: ${c.utilizare}`,
+                                          c.categorie && `Categorie: ${c.categorie}`,
+                                          c.perioadaInflorire && `Înflorire: ${c.perioadaInflorire}`,
+                                          c.inaltime && `Înălțime: ${c.inaltime}`,
+                                          c.anIntroducere && `Introdus în: ${c.anIntroducere}`,
+                                          ...(c.extra || []),
+                                          c.vigoare && `Vigoare: ${c.vigoare}`,
+                                        ].filter(Boolean).join(" · ")}
+                                      </span>
+                                    ))}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
   );
 
@@ -3094,12 +3538,12 @@ export default function App() {
               <Sprout size={20} aria-hidden="true" className="season-bar-ic" />
             )}
             <span className="season-bar-text">
-              <strong>A început sezonul de comenzi!</strong>{" "}
-              Acum primim comenzi pentru răsaduri de{" "}
+              <strong>Flori de {ANOTIMP_ACUM}!</strong>{" "}
+              Acum e sezonul pentru{" "}
               {RASADURI_ACUM.map((r, i) => (
                 <Fragment key={r.name}>
                   {i > 0 && (i === RASADURI_ACUM.length - 1 ? " și " : ", ")}
-                  <b>{r.name}</b> (până pe {fmtZi(r.to)})
+                  <b>{r.name}</b>
                 </Fragment>
               ))}
               .

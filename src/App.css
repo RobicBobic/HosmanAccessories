@@ -537,6 +537,45 @@ body { top: 0 !important; position: static !important; }
 .product.rasad:hover { transform: none; }
 .product.rasad .product-media { position: relative; }
 .rasad-ph { display: grid; place-items: center; color: var(--green); }
+/* bulinele cu culorile disponibile (ex. Bujori), în fereastra cu soiuri */
+.culoare-bulina {
+  display: inline-block; flex: none; width: 18px; height: 18px; border-radius: 50%;
+  border: 1px solid rgba(60, 77, 34, 0.25);
+}
+.culoare-bulina.mica { width: 13px; height: 13px; margin-right: 6px; }
+.culoare-bulina.multi {
+  background: conic-gradient(#FF1020, #FF8C1A, #F4D03F, #3CC83C, #C2187F, #FF8AC4, #FF1020);
+}
+.soiuri-culori-disp {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 12px 20px; border-bottom: 1px solid var(--line);
+}
+.soiuri-culori-titlu { font-size: 14px; font-weight: 700; color: var(--ink); margin-right: 4px; }
+@media (max-width: 640px) {
+  .culoare-bulina { width: 14px; height: 14px; }
+}
+
+/* galeria de pe card (ex. Bujori): săgeți + numărul pozei */
+.product-media.contain img.rasad-foto-cover { object-fit: cover; padding: 0; }
+.rasad-galerie-btn {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  display: grid; place-items: center; width: 34px; height: 34px;
+  border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(255, 255, 255, 0.88); color: var(--green-d);
+  box-shadow: 0 4px 12px -4px rgba(20, 40, 28, 0.45);
+}
+.rasad-galerie-btn:hover { background: #fff; }
+.rasad-galerie-btn:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.rasad-galerie-btn.prev { left: 8px; }
+.rasad-galerie-btn.next { right: 8px; }
+.rasad-galerie-nr {
+  position: absolute; bottom: 8px; right: 8px; z-index: 2;
+  background: rgba(20, 30, 12, 0.6); color: #fff; font-size: 12px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px;
+}
+@media (max-width: 640px) {
+  .rasad-galerie-btn { width: 28px; height: 28px; }
+}
 .rasad-ph svg { opacity: .55; }
 .rasad-badge {
   position: absolute; top: 10px; left: 10px; z-index: 2;
@@ -557,6 +596,63 @@ body { top: 0 !important; position: static !important; }
 .rasad-etape button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .hosman .rasad-period { color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.45; }
 .rasad-period strong { color: var(--green-d); font-weight: 800; font-size: 15.5px; }
+
+/* butonul „Vezi soiurile” și fereastra cu tabelul de soiuri */
+.rasad-soiuri-btn {
+  align-self: flex-start; margin-top: 4px;
+  font: 700 14px 'Saira', system-ui, sans-serif; color: #fff;
+  background: var(--green); border: 0; border-radius: 999px;
+  padding: 8px 16px; cursor: pointer; transition: background .15s;
+}
+.rasad-soiuri-btn:hover { background: var(--green-d); }
+.rasad-soiuri-btn:focus-visible { outline: 2px solid var(--green-d); outline-offset: 2px; }
+.soiuri-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20, 30, 12, 0.55);
+  display: grid; place-items: center; padding: 16px;
+}
+.soiuri-modal {
+  background: var(--card); border-radius: 18px; width: min(560px, 100%);
+  max-height: min(85vh, 760px); display: flex; flex-direction: column;
+  box-shadow: 0 24px 60px -20px rgba(20, 40, 28, 0.5); overflow: hidden;
+}
+.soiuri-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 18px 20px 14px; border-bottom: 1px solid var(--line);
+}
+.soiuri-head h3 { margin: 0; color: var(--ink); font-size: 20px; font-weight: 800; }
+.soiuri-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; font-weight: 500; }
+.soiuri-close {
+  flex: none; display: grid; place-items: center; width: 38px; height: 38px;
+  border: 0; border-radius: 50%; background: var(--soft); color: var(--green-d); cursor: pointer;
+}
+.soiuri-close:hover { background: var(--line); }
+.soiuri-body { overflow-y: auto; }
+.soiuri-table { width: 100%; border-collapse: collapse; }
+.soiuri-table thead th {
+  position: sticky; top: 0; text-align: left; background: var(--green); color: #fff;
+  font-weight: 700; font-size: 14px; padding: 11px 20px;
+}
+.soiuri-table tbody td {
+  padding: 10px 20px; font-size: 14.5px; color: var(--ink);
+  border-top: 1px solid var(--line); vertical-align: top;
+}
+.soiuri-table tbody tr:nth-child(even) { background: var(--soft); }
+.soiuri-table td.soi-nume { white-space: nowrap; width: 1%; padding-top: 13px; }
+.soi-culori { display: flex; flex-wrap: wrap; gap: 6px; }
+.soi-culoare {
+  display: inline-flex; align-items: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+  padding: 3px 10px; font-size: 13.5px; line-height: 1.35; white-space: nowrap;
+}
+.soi-culoare .soi-nou { margin-left: 6px; }
+.soi-fara-culoare { color: var(--muted); padding: 3px 0; }
+.soi-nou {
+  display: inline-block; margin-left: 8px; vertical-align: 1px;
+  background: var(--green); color: #fff; font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+}
+.soi-detalii { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 
 /* tabel dimensiuni disponibile */
 .pp-sizes-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
@@ -725,6 +821,7 @@ body { top: 0 !important; position: static !important; }
   .product-name { font-size: 15px; }
   .product-desc { font-size: 12.5px; line-height: 1.35; }
   .product-price { font-size: 15px; }
+  .rasad-soiuri-btn { font-size: 12.5px; padding: 6px 12px; }
 }
 
 /* =================================================================
