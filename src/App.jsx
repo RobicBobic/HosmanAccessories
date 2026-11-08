@@ -2972,9 +2972,23 @@ function anotimpuriPanaLa(p) {
   const d = (p.sezon || []).map((s) => (ANOTIMPURI.indexOf(s) - acum + 4) % 4);
   return d.length ? Math.min(...d) : 99;
 }
-// ordinea: întâi plantele de sezon, apoi cele din anotimpurile următoare
+// plantele care apar primele în listă, în această ordine (noutățile); restul urmează după sezon
+const RASADURI_PRIMELE = [
+  "Crizanteme multiflora",
+  "Crizanteme multiflora de vară",
+  "Crizanteme medii",
+  "Crizanteme mari",
+  "Crizanteme deosebite",
+  "Bujori",
+  "Ranunculus",
+];
+// ordinea: întâi cele din RASADURI_PRIMELE, apoi plantele de sezon, apoi cele din anotimpurile următoare
 function rasaduriInOrdine() {
-  return [...RASADURI].sort((a, b) => anotimpuriPanaLa(a) - anotimpuriPanaLa(b));
+  const cheie = (p) => {
+    const i = RASADURI_PRIMELE.indexOf(p.name);
+    return i >= 0 ? i - 1000 : anotimpuriPanaLa(p);
+  };
+  return [...RASADURI].sort((a, b) => cheie(a) - cheie(b));
 }
 
 // Lista de categorii cu numărul de produse (pentru meniul „Catalog produse” și bara laterală)
@@ -3000,6 +3014,66 @@ const CAT_LINKS = CATEGORIES.map((cat, ci) => ({
 // căutare fără diacritice: „protectia” găsește „protecția”
 const norm = (t) =>
   (t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+/* FILTRE pe paginile de categorie. Se fac singure din datele produselor:
+   apar doar caracteristicile (din \u201especs\u201d) care au cel pu\u021bin 2 valori diferite \u00een categorie. */
+const FILTRU_CHEI = ["Brand", "Form\u0103", "Material", "Formulare", "\u021aara de origine"];
+const FILTRE_GOALE = { q: "", facete: {}, culoare: "", sort: "", sezon: "" };
+const specVal = (p, k) => p.specs?.find((s) => s.k === k)?.v;
+const pretNum = (p) => {
+  const m = (p.price || "").replace(/\s/g, "").match(/\d+(?:[.,]\d+)?/);
+  return m ? parseFloat(m[0].replace(",", ".")) : null;
+};
+const textProdus = (p) =>
+  norm([p.name, p.desc, ...(p.features || []), ...(p.specs || []).map((s) => `${s.k} ${s.v}`)].join(" "));
+// ce filtre au sens pentru o list\u0103 de produse
+function filtreCategorie(items) {
+  // valorile se unesc fără să conteze literele mari/mici („Duru” = „DURU”); se afișează prima formă găsită
+  const facete = FILTRU_CHEI.map((k) => {
+    const m = new Map();
+    items.forEach((p) => { const v = specVal(p, k); if (v && !m.has(norm(v))) m.set(norm(v), v); });
+    return { k, vals: [...m.values()] };
+  }).filter((f) => f.vals.length >= 2 && f.vals.length <= 8 && f.vals.every((v) => v.length <= 40));
+  // filtrul de culoare are sens doar dacă cel puțin 2 produse au culori de ales
+  const cuCulori = items.filter((p) => p.colors?.some((c) => !c.custom));
+  const culori = cuCulori.length >= 2
+    ? [...new Map(cuCulori.flatMap((p) => p.colors.filter((c) => !c.custom).map((c) => [c.name, c.hex]))).entries()]
+        .map(([name, hex]) => ({ name, hex }))
+    : [];
+  const cuPret = items.filter((p) => pretNum(p) != null).length >= 2;
+  return { facete, culori: culori.length >= 2 ? culori : [], cuPret };
+}
+function aplicaFiltre(items, f) {
+  let r = items;
+  const q = norm(f.q.trim());
+  if (q) r = r.filter((p) => textProdus(p).includes(q));
+  for (const [k, v] of Object.entries(f.facete)) if (v) r = r.filter((p) => norm(specVal(p, k)) === norm(v));
+  if (f.culoare) r = r.filter((p) => p.colors?.some((c) => !c.custom && c.name === f.culoare));
+  const nume = (p) => p.name || "";
+  if (f.sort === "az") r = [...r].sort((a, b) => nume(a).localeCompare(nume(b), "ro"));
+  if (f.sort === "za") r = [...r].sort((a, b) => nume(b).localeCompare(nume(a), "ro"));
+  if (f.sort === "pret-asc" || f.sort === "pret-desc") {
+    const dir = f.sort === "pret-asc" ? 1 : -1;
+    r = [...r].sort((a, b) => {
+      const pa = pretNum(a), pb = pretNum(b);
+      if (pa == null) return pb == null ? 0 : 1; // f\u0103r\u0103 pre\u021b -> la final
+      if (pb == null) return -1;
+      return (pa - pb) * dir;
+    });
+  }
+  return r;
+}
+// r\u0103sadurile: c\u0103utare (\u0219i dup\u0103 soiuri) + anotimp
+function filtreazaRasaduri(list, f) {
+  const q = norm(f.q.trim());
+  return list.filter((p) => {
+    if (f.sezon === "acum" && !deSezon(p)) return false;
+    if (f.sezon && f.sezon !== "acum" && !p.sezon?.includes(f.sezon)) return false;
+    if (!q) return true;
+    const text = norm([p.name, p.latin, p.alias, ...(p.soiuri || []).map((g) => g.soi)].join(" "));
+    return text.includes(q);
+  });
+}
 
 /* ADRESE: fiecare produs are adresa lui, sub categoria lui:
      /categorie/folii-si-plase-pentru-plante/folie-alb-negru
@@ -3033,6 +3107,8 @@ const SECTIONS = [
   { id: "rasaduri", title: "Răsaduri de flori" },
 ].map((s) => ({ ...s, path: s.path || `/categorie/${slugify(s.title)}` }));
 const sectionPath = (id) => SECTIONS.find((s) => s.id === id)?.path || "/";
+// categoriile au pagina lor (doar produsele categoriei); „catalog” rămâne derulare pe pagina principală
+const isCatSection = (id) => id === "rasaduri" || id.startsWith("cat-");
 function sectionFromUrl() {
   const path = window.location.pathname.replace(/\/+$/, "");
   return SECTIONS.find((s) => s.path === path) || null;
@@ -3069,6 +3145,80 @@ export default function App() {
   const [active, setActive] = useState(0);
   // la deschidere: dacă adresa e /produs/..., pornim direct pe produsul acela
   const [openProduct, setOpenProduct] = useState(productFromUrl);
+  // pagina de categorie deschisă (id-ul secțiunii, ex. "cat-3" sau "rasaduri"); null = pagina principală
+  const [catPage, setCatPage] = useState(() => {
+    const s = sectionFromUrl();
+    return s && isCatSection(s.id) && !productFromUrl() ? s.id : null;
+  });
+  // la schimbarea categoriei, pagina începe de sus
+  useLayoutEffect(() => { if (catPage) jumpTo(0); }, [catPage]);
+  // filtrele de pe pagina de categorie (se golesc la schimbarea categoriei)
+  const [filtre, setFiltre] = useState(FILTRE_GOALE);
+  useEffect(() => { setFiltre(FILTRE_GOALE); }, [catPage]);
+  const setFiltru = (k, v) => setFiltre((f) => ({ ...f, [k]: v }));
+  const filtreActive = (f) =>
+    !!(f.q.trim() || f.culoare || f.sort || f.sezon || Object.values(f.facete).some(Boolean));
+  // un buton-filtru („chip”); la al doilea click se dezactivează
+  const chip = (label, activ, onClick, extra) => (
+    <button key={label} type="button" className={`filtru-chip${activ ? " active" : ""}`} aria-pressed={activ} onClick={onClick}>
+      {extra}{label}
+    </button>
+  );
+  const infoRezultate = (n, cuvant) => (
+    <div className="filtre-info">
+      <span>{n} {cuvant(n)}</span>
+      {filtreActive(filtre) && (
+        <button type="button" className="filtre-reset" onClick={() => setFiltre(FILTRE_GOALE)}>
+          <X size={14} aria-hidden="true" /> Șterge filtrele
+        </button>
+      )}
+    </div>
+  );
+  // bara de filtre pentru produse
+  const renderBaraFiltre = (opt, n) => (
+    <div className="filtre" role="group" aria-label="Filtrează produsele">
+      {/* sus: filtrele în stânga, ordonarea în dreapta */}
+      <div className="filtre-sus">
+      <div className="filtre-grupuri">
+      {opt.facete.map((fa) => (
+        <div className="filtre-grup" key={fa.k}>
+          <span className="filtre-label">{fa.k}:</span>
+          {fa.vals.map((v) => chip(v, filtre.facete[fa.k] === v, () =>
+            setFiltre((f) => ({ ...f, facete: { ...f.facete, [fa.k]: f.facete[fa.k] === v ? "" : v } }))))}
+        </div>
+      ))}
+      {opt.culori.length > 0 && (
+        <div className="filtre-grup">
+          <span className="filtre-label">Culoare:</span>
+          {opt.culori.map((c) => chip(c.name, filtre.culoare === c.name,
+            () => setFiltru("culoare", filtre.culoare === c.name ? "" : c.name),
+            <span className="filtru-bulina" style={{ background: c.hex }} aria-hidden="true" />))}
+        </div>
+      )}
+      </div>
+        <select className="filtre-sort" value={filtre.sort} onChange={(e) => setFiltru("sort", e.target.value)} aria-label="Ordonează">
+          <option value="">Ordine recomandată</option>
+          <option value="az">Nume A–Z</option>
+          <option value="za">Nume Z–A</option>
+          {opt.cuPret && <option value="pret-asc">Preț crescător</option>}
+          {opt.cuPret && <option value="pret-desc">Preț descrescător</option>}
+        </select>
+      </div>
+      {infoRezultate(n, (k) => (k === 1 ? "produs" : "produse"))}
+    </div>
+  );
+  // bara de filtre pentru răsaduri
+  const renderBaraRasaduri = (n) => (
+    <div className="filtre" role="group" aria-label="Filtrează răsadurile">
+      <div className="filtre-grup">
+        <span className="filtre-label">Sezon:</span>
+        {chip("De sezon acum", filtre.sezon === "acum", () => setFiltru("sezon", filtre.sezon === "acum" ? "" : "acum"))}
+        {["primăvară", "vară", "toamnă", "iarnă"].map((s) =>
+          chip(s[0].toUpperCase() + s.slice(1), filtre.sezon === s, () => setFiltru("sezon", filtre.sezon === s ? "" : s)))}
+      </div>
+      {infoRezultate(n, (k) => (k === 1 ? "floare" : "flori"))}
+    </div>
+  );
   const [lang, setLangState] = useState("ro");
   const [catOpen, setCatOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -3227,6 +3377,7 @@ export default function App() {
     }
     const s = sectionFromUrl();
     if (!s || productFromUrl()) return;
+    if (isCatSection(s.id)) return; // pagina de categorie începe de sus
     const t1 = setTimeout(() => scrollToSection(s.id, false), 50);
     const t2 = setTimeout(() => scrollToSection(s.id, false), 500); // după ce se așază pozele
     return () => { clearTimeout(t1); clearTimeout(t2); };
@@ -3262,21 +3413,48 @@ export default function App() {
     const p = productFromUrl();
     if (p) { setOpenProduct(p); return; }
     if (openProduct) { showHome(); return; } // de pe un produs înapoi pe pagina principală
-    // pe pagina principală: Înapoi / Înainte între secțiuni
+    // Înapoi / Înainte între pagina principală și paginile de categorie
     setPageMeta(null);
     const s = sectionFromUrl();
+    if (s && isCatSection(s.id)) { setCatPage(s.id); return; }
+    if (catPage) {
+      setCatPage(null);
+      requestAnimationFrame(() => (s ? scrollToSection(s.id, false) : jumpTo(0)));
+      return;
+    }
     if (s) scrollToSection(s.id);
     else window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // click pe o categorie: adresă curată (/categorie/...) + derulare lină până la ea
+  // click pe o categorie: se deschide pagina ei (/categorie/...);
+  // „catalog” derulează pagina principală până la catalog
   const goSection = (e, id) => {
     e.preventDefault();
     setCatOpen(false);
     const path = sectionPath(id);
     if (window.location.pathname !== path) window.history.pushState({ sectiune: id }, "", path);
     setPageMeta(null);
+    if (isCatSection(id)) {
+      if (id === catPage) jumpTo(0);
+      else setCatPage(id);
+      return;
+    }
+    if (catPage) {
+      setCatPage(null);
+      requestAnimationFrame(() => scrollToSection(id, false));
+      return;
+    }
     scrollToSection(id);
+  };
+
+  // înapoi pe pagina principală (din pagina unei categorii)
+  const goHome = (e) => {
+    e.preventDefault();
+    setCatOpen(false);
+    if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
+    setCatPage(null);
+    setPageMeta(null);
+    requestAnimationFrame(() => jumpTo(0));
   };
   useEffect(() => {
     const onPop = () => onPopRef.current();
@@ -3325,7 +3503,11 @@ export default function App() {
   }
 
   // RĂSADURI DE FLORI: cardurile, în ordine cronologică (apar imediat după ghivece)
-  const renderRasaduri = () => (
+  // cuFiltre = pe pagina „Răsaduri de flori” apare bara de filtre
+  const renderRasaduri = (cuFiltre) => {
+    const toate = rasaduriInOrdine();
+    const lista = cuFiltre ? filtreazaRasaduri(toate, filtre) : toate;
+    return (
               <div className="catalog-cat rasaduri" id="rasaduri">
                 <h2 className="catalog-title">Răsaduri de flori</h2>
                 <p className="rasaduri-intro">
@@ -3344,9 +3526,15 @@ export default function App() {
                   />
                 )}
 
+                {/* filtrele (doar pe pagina „Răsaduri de flori”), chiar deasupra cardurilor */}
+                {cuFiltre && renderBaraRasaduri(lista.length)}
+                {cuFiltre && lista.length === 0 && (
+                  <p className="filtre-gol">Nicio floare nu corespunde filtrelor alese.</p>
+                )}
+
                 {/* cardurile, la fel ca la celelalte produse */}
                 <div className="catalog-grid">
-                  {rasaduriInOrdine().map((plant) => {
+                  {lista.map((plant) => {
                     // planta cu etape (ex. Eustoma): etapa aleasă pe card, implicit prima
                     const etape = plant.etape;
                     const idx = etape ? rasadEtapa[plant.name] ?? 0 : 0;
@@ -3510,7 +3698,141 @@ export default function App() {
                   </div>
                 )}
               </div>
-  );
+    );
+  };
+
+  // o categorie din catalog (cardurile produselor); cuRasaduri = după ghivece vin și răsadurile;
+  // cuFiltre = pe pagina categoriei apare bara de filtre (dacă sunt cel puțin 3 produse)
+  const renderCategorie = (cat, ci, cuRasaduri, cuFiltre) => {
+            const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
+            const toate = cat.nums
+              .map((n) => list.find((p) => p.num === n))
+              .filter(Boolean);
+            if (toate.length === 0) return null;
+            const opt = cuFiltre && toate.length >= 3 ? filtreCategorie(toate) : null;
+            const items = opt ? aplicaFiltre(toate, filtre) : toate;
+            const gridClass =
+              cat.cols === 2
+                ? "catalog-grid catalog-grid--2col"
+                : items.length < 3
+                ? "catalog-grid catalog-grid--center"
+                : "catalog-grid";
+            return (
+              <Fragment key={cat.title}>
+              <div className="catalog-cat" id={`cat-${ci + 1}`}>
+                <h2 className="catalog-title">{cat.title}</h2>
+                {opt && renderBaraFiltre(opt, items.length)}
+                {opt && items.length === 0 && (
+                  <p className="filtre-gol">Niciun produs nu corespunde filtrelor alese.</p>
+                )}
+                <div className={gridClass}>
+                  {items.map((p) => (
+                    <article
+                      className="product"
+                      id={`prod-${p.num}`}
+                      key={p.num}
+                      onClick={() => openProductPage(p)}
+                      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openProductPage(p)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Vezi detalii: ${p.name || `Produs ${p.num}`}`}
+                    >
+                      <div className={`product-media${p.fit === "contain" ? " contain" : ""}`}>
+                        {p.img ? (
+                          <img
+                            src={p.colors?.[cardColor[p.num]]?.img || p.img}
+                            alt={p.name || `Produs ${p.num}`}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="product-ph" />
+                        )}
+                      </div>
+                      <div className="product-body">
+                        {/* link adevărat spre pagina produsului (pentru Google și pentru „Deschide în tab nou”) */}
+                        <h3 className="product-name">
+                          <a
+                            href={p.path}
+                            onClick={(e) => {
+                              if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) { e.stopPropagation(); return; }
+                              e.preventDefault();
+                              e.stopPropagation();
+                              openProductPage(p);
+                            }}
+                          >
+                            {p.name || `Produs ${p.num}`}
+                          </a>
+                        </h3>
+                        {p.desc && <p className="product-desc">{p.desc}</p>}
+                        {/* bulinele de culoare: doar culorile din stoc (fără cele „la comandă”);
+                            la click se schimbă poza cardului (fără să se deschidă produsul) */}
+                        {p.colors?.some((c) => !c.custom) && (
+                          <span className="product-colors" role="radiogroup" aria-label="Alege culoarea">
+                            {p.colors.map((c, ci) => c.custom ? null : (
+                              <button
+                                key={c.key}
+                                type="button"
+                                role="radio"
+                                aria-checked={cardColor[p.num] === ci}
+                                aria-label={c.name}
+                                title={c.name}
+                                className={cardColor[p.num] === ci ? "active" : ""}
+                                style={{ background: c.hex }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCardColor((s) => ({ ...s, [p.num]: ci }));
+                                }}
+                                onKeyDown={(e) => e.stopPropagation()}
+                              />
+                            ))}
+                          </span>
+                        )}
+                        {p.price && <span className="product-price">{p.price}</span>}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              {/* răsadurile vin imediat după ghivece */}
+              {cuRasaduri && cat.title === RASADURI_DUPA && renderRasaduri()}
+              </Fragment>
+            );
+  };
+
+  // PAGINA DE CATEGORIE: doar produsele categoriei, plus linkuri spre celelalte categorii
+  const renderCatPage = () => {
+    const s = SECTIONS.find((x) => x.id === catPage);
+    const ci = catPage.startsWith("cat-") ? Number(catPage.slice(4)) - 1 : -1;
+    return (
+      <section className="catalog cat-page" id="catalog">
+        <div className="h-wrap">
+          <nav className="cat-page-crumbs" aria-label="Navigare">
+            <a href="/" onClick={goHome}>
+              <ChevronLeft size={16} aria-hidden="true" /> Pagina principală
+            </a>
+            <span aria-hidden="true">/</span>
+            <span>{s?.title}</span>
+          </nav>
+
+          {ci >= 0 && CATEGORIES[ci] ? renderCategorie(CATEGORIES[ci], ci, false, true) : renderRasaduri(true)}
+
+          <div className="cat-page-other">
+            <h2 className="cat-page-other-title">Alte categorii</h2>
+            <div className="cat-index-grid">
+              {CAT_LINKS.filter((c) => c.id !== catPage).map((c) => (
+                <a key={c.id} className="cat-index-card" href={sectionPath(c.id)} onClick={(e) => goSection(e, c.id)}>
+                  <span className="cat-index-name">{c.title}</span>
+                  <span className="cat-index-count">
+                    {c.id === "rasaduri" ? `${c.count} soiuri` : `${c.count} ${c.count === 1 ? "produs" : "produse"}`}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  };
 
   return (
     <>
@@ -3519,7 +3841,7 @@ export default function App() {
       <div id="google_translate_element" style={{ display: "none" }} />
 
       {/* CADRU VERDE SUS: anunț răsaduri + header + hero */}
-      <div className="topwrap">
+      <div className={`topwrap${catPage ? " topwrap--compact" : ""}`}>
         {/* ANUNȚ: apare singur cât timp se primesc comenzi pentru vreo plantă */}
         {RASADURI_ACUM.length > 0 && (
           <a
@@ -3657,7 +3979,8 @@ export default function App() {
           </a>
         </div>
 
-        {/* BARA LATERALĂ CU CATEGORII + SLIDER */}
+        {/* BARA LATERALĂ CU CATEGORII + SLIDER (doar pe pagina principală) */}
+        {!catPage && (
         <div className="hero-row">
           <nav className="cat-side" aria-label="Categorii de produse">
             {CAT_LINKS.map((c) => (
@@ -3714,10 +4037,11 @@ export default function App() {
           )}
         </section>
         </div>
+        )}
       </div>
 
       {/* COLABORATORI - bandă în mișcare continuă */}
-      {PARTNERS.length > 0 && (
+      {!catPage && PARTNERS.length > 0 && (
         <section className="partners" id="colaboratori">
           <div className="h-wrap">
             <h2 className="partners-title">Lucrăm cu parteneri de încredere</h2>
@@ -3751,7 +4075,8 @@ export default function App() {
         </section>
       )}
 
-      {/* CATALOG pe categorii */}
+      {/* CATALOG pe categorii (sau pagina unei singure categorii) */}
+      {catPage ? renderCatPage() : (
       <section className="catalog" id="catalog">
         <div className="h-wrap">
           {/* CUPRINS: toate categoriile din catalog, cu link spre fiecare */}
@@ -3783,98 +4108,11 @@ export default function App() {
             </div>
           </div>
 
-          {CATEGORIES.map((cat, ci) => {
-            const list = PRODUCTS.length > 0 ? PRODUCTS : DEMO_PRODUCTS;
-            const items = cat.nums
-              .map((n) => list.find((p) => p.num === n))
-              .filter(Boolean);
-            if (items.length === 0) return null;
-            const gridClass =
-              cat.cols === 2
-                ? "catalog-grid catalog-grid--2col"
-                : items.length < 3
-                ? "catalog-grid catalog-grid--center"
-                : "catalog-grid";
-            return (
-              <Fragment key={cat.title}>
-              <div className="catalog-cat" id={`cat-${ci + 1}`}>
-                <h2 className="catalog-title">{cat.title}</h2>
-                <div className={gridClass}>
-                  {items.map((p) => (
-                    <article
-                      className="product"
-                      id={`prod-${p.num}`}
-                      key={p.num}
-                      onClick={() => openProductPage(p)}
-                      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openProductPage(p)}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Vezi detalii: ${p.name || `Produs ${p.num}`}`}
-                    >
-                      <div className={`product-media${p.fit === "contain" ? " contain" : ""}`}>
-                        {p.img ? (
-                          <img
-                            src={p.colors?.[cardColor[p.num]]?.img || p.img}
-                            alt={p.name || `Produs ${p.num}`}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="product-ph" />
-                        )}
-                      </div>
-                      <div className="product-body">
-                        {/* link adevărat spre pagina produsului (pentru Google și pentru „Deschide în tab nou”) */}
-                        <h3 className="product-name">
-                          <a
-                            href={p.path}
-                            onClick={(e) => {
-                              if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) { e.stopPropagation(); return; }
-                              e.preventDefault();
-                              e.stopPropagation();
-                              openProductPage(p);
-                            }}
-                          >
-                            {p.name || `Produs ${p.num}`}
-                          </a>
-                        </h3>
-                        {p.desc && <p className="product-desc">{p.desc}</p>}
-                        {/* bulinele de culoare: doar culorile din stoc (fără cele „la comandă”);
-                            la click se schimbă poza cardului (fără să se deschidă produsul) */}
-                        {p.colors?.some((c) => !c.custom) && (
-                          <span className="product-colors" role="radiogroup" aria-label="Alege culoarea">
-                            {p.colors.map((c, ci) => c.custom ? null : (
-                              <button
-                                key={c.key}
-                                type="button"
-                                role="radio"
-                                aria-checked={cardColor[p.num] === ci}
-                                aria-label={c.name}
-                                title={c.name}
-                                className={cardColor[p.num] === ci ? "active" : ""}
-                                style={{ background: c.hex }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setCardColor((s) => ({ ...s, [p.num]: ci }));
-                                }}
-                                onKeyDown={(e) => e.stopPropagation()}
-                              />
-                            ))}
-                          </span>
-                        )}
-                        {p.price && <span className="product-price">{p.price}</span>}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </div>
-              {/* răsadurile vin imediat după ghivece */}
-              {cat.title === RASADURI_DUPA && renderRasaduri()}
-              </Fragment>
-            );
-          })}
+          {CATEGORIES.map((cat, ci) => renderCategorie(cat, ci, true))}
 
         </div>
       </section>
+      )}
 
       {/* FOOTER */}
       <footer className="site-footer" id="contact">

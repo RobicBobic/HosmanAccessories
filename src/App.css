@@ -49,6 +49,11 @@ body { display: block; place-items: initial; }
   background: var(--green);
   padding: 10px 10px 0;
 }
+/* pe pagina de categorie (fără slider) cadrul verde se închide sub bara de căutare */
+.topwrap.topwrap--compact {
+  padding-bottom: 14px;
+  border-radius: 0 0 24px 24px;
+}
 
 /* ---------- HEADER ---------- */
 .site-header {
@@ -236,6 +241,72 @@ body { top: 0 !important; position: static !important; }
 
 /* spațiu între categoriile din catalog */
 .catalog-cat + .catalog-cat { margin-top: 48px; }
+
+/* pagina unei categorii: link spre pagina principală + alte categorii jos */
+.cat-page-crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin-bottom: 18px; font-size: 14.5px; font-weight: 600; color: var(--muted);
+}
+.cat-page-crumbs a {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--green-d); font-weight: 700;
+}
+.cat-page-crumbs a:hover { text-decoration: underline; }
+.cat-page-other { margin-top: 56px; }
+
+/* FILTRE pe pagina de categorie */
+.filtre {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 14px; margin: 0 auto 22px; max-width: 900px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.filtre-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.filtre-sus { display: flex; align-items: flex-start; gap: 14px; }
+.filtre-grupuri { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.filtre-sus .filtre-sort { margin-left: auto; flex: none; }
+/* telefon: ordonarea trece sub filtre, pe toată lățimea */
+@media (max-width: 640px) {
+  .filtre-sus { flex-direction: column; align-items: stretch; }
+  .filtre-sus .filtre-sort { margin-left: 0; width: 100%; }
+}
+.filtre-search { position: relative; flex: 1 1 240px; min-width: 0; }
+.filtre-search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.filtre-search input {
+  width: 100%; height: 42px; padding: 0 14px 0 38px;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--paper);
+  font: 500 16px 'Saira', system-ui, sans-serif; color: var(--ink); outline: none;
+}
+.filtre-search input:focus { border-color: var(--green); }
+.filtre-sort {
+  flex: 0 1 auto; height: 42px; padding: 0 14px;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--paper);
+  font: 600 14px 'Saira', system-ui, sans-serif; color: var(--ink); cursor: pointer;
+}
+.filtre-sort:focus { outline: none; border-color: var(--green); }
+.filtre-grup { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.filtre-label { font-size: 14px; font-weight: 700; color: var(--ink); margin-right: 4px; }
+.filtru-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 600 13.5px 'Saira', system-ui, sans-serif; color: var(--green-d);
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 999px;
+  padding: 5px 12px; cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+}
+.filtru-chip:hover { background: var(--soft); }
+.filtru-chip.active { background: var(--green); border-color: var(--green); color: #fff; }
+.filtru-chip:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.filtru-bulina { width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(60, 77, 34, 0.25); flex: none; }
+.filtre-info {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 14px; font-weight: 600; color: var(--muted);
+}
+.filtre-reset {
+  display: inline-flex; align-items: center; gap: 4px;
+  font: 700 13.5px 'Saira', system-ui, sans-serif; color: var(--green-d);
+  background: none; border: 0; cursor: pointer; padding: 2px 0;
+}
+.filtre-reset:hover { text-decoration: underline; }
+.hosman .filtre-gol { text-align: center; color: var(--muted); font-size: 15.5px; font-weight: 600; margin: 8px 0 24px; }
+.cat-page-other-title { color: var(--ink); font-size: 22px; font-weight: 800; margin-bottom: 16px; text-align: center; }
 
 /* categorie cu puține produse (sub 3) -> cardurile se centrează,
    păstrând aceeași lățime ca în grila de 3 coloane */
